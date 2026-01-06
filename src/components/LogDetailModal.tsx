@@ -1,5 +1,5 @@
-import { X, Calendar, MapPin, Plane, Lock, Globe, Heart, MessageCircle, Send, User } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { X, Calendar, MapPin, Plane, Lock, Globe, Heart, MessageCircle, Send, User, CornerDownRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase, Log, Profile, Comment } from '../lib/supabase';
 
 interface LogDetailModalProps {
@@ -12,6 +12,9 @@ interface LogDetailModalProps {
 
 interface CommentWithProfile extends Comment {
   profile: Profile;
+  likes_count?: number;
+  user_liked?: boolean;
+  replies?: CommentWithProfile[];
 }
 
 export default function LogDetailModal({ log, profile, currentUserId, onClose, showSocialFeatures = true }: LogDetailModalProps) {
@@ -20,6 +23,12 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   const [submittingComment, setSubmittingComment] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [userLiked, setUserLiked] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState('');
+  const [mentionSearch, setMentionSearch] = useState('');
+  const [mentionSuggestions, setMentionSuggestions] = useState<Profile[]>([]);
+  const [showMentions, setShowMentions] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -44,7 +53,37 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      setComments((data || []) as CommentWithProfile[]);
+
+      const commentsData = (data || []) as CommentWithProfile[];
+
+      const commentsWithLikes = await Promise.all(
+        commentsData.map(async (comment) => {
+          const [{ data: likes }, { data: userLike }] = await Promise.all([
+            supabase.from('comment_likes').select('id').eq('comment_id', comment.id),
+            supabase.from('comment_likes').select('id').eq('comment_id', comment.id).eq('user_id', currentUserId).maybeSingle(),
+          ]);
+
+          return {
+            ...comment,
+            likes_count: likes?.length || 0,
+            user_liked: !!userLike,
+          };
+        })
+      );
+
+      const topLevelComments = commentsWithLikes.filter(c => !c.parent_comment_id);
+      const commentMap = new Map(commentsWithLikes.map(c => [c.id, { ...c, replies: [] as CommentWithProfile[] }]));
+
+      commentsWithLikes.forEach(comment => {
+        if (comment.parent_comment_id) {
+          const parent = commentMap.get(comment.parent_comment_id);
+          if (parent) {
+            parent.replies!.push(comment);
+          }
+        }
+      });
+
+      setComments(topLevelComments.map(c => commentMap.get(c.id)!));
     } catch (err: any) {
       console.error('Error fetching comments:', err);
     }
@@ -80,30 +119,153 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
     }
   };
 
+  const toggleCommentLike = async (commentId: string, currentlyLiked: boolean) => {
+    try {
+      if (currentlyLiked) {
+        await supabase.from('comment_likes').delete().eq('comment_id', commentId).eq('user_id', currentUserId);
+      } else {
+        await supabase.from('comment_likes').insert({ comment_id: commentId, user_id: currentUserId });
+      }
+
+      setComments(prev => updateCommentLikes(prev, commentId, !currentlyLiked));
+    } catch (err: any) {
+      console.error('Error toggling comment like:', err);
+    }
+  };
+
+  const updateCommentLikes = (comments: CommentWithProfile[], commentId: string, liked: boolean): CommentWithProfile[] => {
+    return comments.map(comment => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          user_liked: liked,
+          likes_count: (comment.likes_count || 0) + (liked ? 1 : -1),
+        };
+      }
+      if (comment.replies && comment.replies.length > 0) {
+        return {
+          ...comment,
+          replies: updateCommentLikes(comment.replies, commentId, liked),
+        };
+      }
+      return comment;
+    });
+  };
+
+  const extractMentions = (text: string): string[] => {
+    const mentionRegex = /@(\w+)/g;
+    const mentions: string[] = [];
+    let match;
+    while ((match = mentionRegex.exec(text)) !== null) {
+      mentions.push(match[1]);
+    }
+    return mentions;
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNewComment(value);
+
+    const cursorPos = e.target.selectionStart || 0;
+    const textBeforeCursor = value.slice(0, cursorPos);
+    const lastAtSymbol = textBeforeCursor.lastIndexOf('@');
+
+    if (lastAtSymbol !== -1 && lastAtSymbol === cursorPos - 1) {
+      setShowMentions(true);
+      setMentionSearch('');
+      await searchUsers('');
+    } else if (lastAtSymbol !== -1) {
+      const searchTerm = textBeforeCursor.slice(lastAtSymbol + 1);
+      if (!searchTerm.includes(' ')) {
+        setMentionSearch(searchTerm);
+        setShowMentions(true);
+        await searchUsers(searchTerm);
+      } else {
+        setShowMentions(false);
+      }
+    } else {
+      setShowMentions(false);
+    }
+  };
+
+  const searchUsers = async (query: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .ilike('username', `%${query}%`)
+        .limit(5);
+
+      if (error) throw error;
+      setMentionSuggestions(data || []);
+    } catch (err: any) {
+      console.error('Error searching users:', err);
+    }
+  };
+
+  const insertMention = (username: string) => {
+    const cursorPos = inputRef.current?.selectionStart || 0;
+    const textBeforeCursor = newComment.slice(0, cursorPos);
+    const textAfterCursor = newComment.slice(cursorPos);
+    const lastAtSymbol = textBeforeCursor.lastIndexOf('@');
+
+    const newText = textBeforeCursor.slice(0, lastAtSymbol) + `@${username} ` + textAfterCursor;
+    setNewComment(newText);
+    setShowMentions(false);
+    inputRef.current?.focus();
+  };
+
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newComment.trim()) return;
 
     setSubmittingComment(true);
     try {
+      const mentions = extractMentions(newComment);
+
       const { data, error } = await supabase
         .from('comments')
         .insert({
           log_id: log.id,
           user_id: currentUserId,
           content: newComment.trim(),
+          mentions: mentions,
         })
         .select('*, profile:profiles(*)')
         .single();
 
       if (error) throw error;
 
-      setComments((prev) => [...prev, data as CommentWithProfile]);
+      await fetchComments();
       setNewComment('');
     } catch (err: any) {
       console.error('Error submitting comment:', err);
     } finally {
       setSubmittingComment(false);
+    }
+  };
+
+  const submitReply = async (parentId: string, content: string) => {
+    if (!content.trim()) return;
+
+    try {
+      const mentions = extractMentions(content);
+
+      await supabase
+        .from('comments')
+        .insert({
+          log_id: log.id,
+          user_id: currentUserId,
+          content: content.trim(),
+          parent_comment_id: parentId,
+          mentions: mentions,
+        });
+
+      await fetchComments();
+      setReplyingTo(null);
+      setReplyContent('');
+    } catch (err: any) {
+      console.error('Error submitting reply:', err);
     }
   };
 
@@ -132,6 +294,90 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
     if (diffDays < 7) return `${diffDays}d ago`;
     return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
+
+  const renderComment = (comment: CommentWithProfile, isReply = false) => (
+    <div key={comment.id} className={isReply ? 'ml-7' : ''}>
+      <div className="flex gap-2">
+        <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+          {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="bg-slate-50 rounded-lg p-2">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-xs font-semibold text-slate-800 truncate">
+                {comment.profile?.display_name || comment.profile?.username}
+              </span>
+              <span className="text-xs text-slate-500 flex-shrink-0">
+                {formatTimeAgo(comment.created_at)}
+              </span>
+            </div>
+            <p className="text-xs text-slate-700 break-words whitespace-pre-wrap">{comment.content}</p>
+          </div>
+
+          <div className="flex items-center gap-3 mt-1 px-2">
+            <button
+              onClick={() => toggleCommentLike(comment.id, comment.user_liked || false)}
+              className={`flex items-center gap-1 text-xs transition ${
+                comment.user_liked ? 'text-red-600 font-semibold' : 'text-slate-500 hover:text-red-600'
+              }`}
+            >
+              <Heart className={`w-3.5 h-3.5 ${comment.user_liked ? 'fill-red-600' : ''}`} />
+              {comment.likes_count ? <span>{comment.likes_count}</span> : null}
+            </button>
+
+            {!isReply && (
+              <button
+                onClick={() => {
+                  setReplyingTo(comment.id);
+                  setReplyContent(`@${comment.profile?.username} `);
+                }}
+                className="text-xs text-slate-500 hover:text-slate-700 transition font-medium"
+              >
+                Reply
+              </button>
+            )}
+          </div>
+
+          {replyingTo === comment.id && (
+            <div className="mt-2">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
+                  placeholder="Write a reply..."
+                  autoFocus
+                  className="flex-1 px-2 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                />
+                <button
+                  onClick={() => submitReply(comment.id, replyContent)}
+                  disabled={!replyContent.trim()}
+                  className="px-2 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 flex-shrink-0"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => {
+                    setReplyingTo(null);
+                    setReplyContent('');
+                  }}
+                  className="px-2 py-1.5 text-slate-600 hover:text-slate-800 transition text-xs"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="mt-2 space-y-2">
+              {comment.replies.map((reply) => renderComment(reply, true))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-end sm:items-center justify-center z-50 sm:p-4" onClick={onClose}>
@@ -210,52 +456,60 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                   </button>
                   <div className="flex items-center gap-1.5 text-slate-500">
                     <MessageCircle className="w-5 h-5" />
-                    <span className="text-sm">{comments.length}</span>
+                    <span className="text-sm">{comments.reduce((acc, c) => acc + 1 + (c.replies?.length || 0), 0)}</span>
                   </div>
                 </div>
 
                 <div className="border-t border-slate-200 pt-3">
                   <h3 className="font-semibold text-slate-800 mb-2 text-sm">Comments</h3>
-                  <div className="space-y-2 mb-3">
+                  <div className="space-y-3 mb-3">
                     {comments.length === 0 ? (
                       <p className="text-center text-slate-500 text-xs py-3">No comments yet</p>
                     ) : (
-                      comments.map((comment) => (
-                        <div key={comment.id} className="flex gap-2">
-                          <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                            {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
-                          </div>
-                          <div className="flex-1 bg-slate-50 rounded-lg p-2 min-w-0">
-                            <div className="flex items-center gap-2 mb-0.5">
-                              <span className="text-xs font-semibold text-slate-800 truncate">
-                                {comment.profile?.display_name || comment.profile?.username}
-                              </span>
-                              <span className="text-xs text-slate-500 flex-shrink-0">
-                                {formatTimeAgo(comment.created_at)}
-                              </span>
-                            </div>
-                            <p className="text-xs text-slate-700 break-words">{comment.content}</p>
-                          </div>
-                        </div>
-                      ))
+                      comments.map((comment) => renderComment(comment))
                     )}
                   </div>
 
-                  <form onSubmit={submitComment} className="flex gap-2 sticky bottom-0 bg-white pt-2">
-                    <input
-                      type="text"
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      placeholder="Write a comment..."
-                      className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-                    />
-                    <button
-                      type="submit"
-                      disabled={!newComment.trim() || submittingComment}
-                      className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-                    >
-                      <Send className="w-4 h-4" />
-                    </button>
+                  <form onSubmit={submitComment} className="sticky bottom-0 bg-white pt-2">
+                    <div className="relative">
+                      {showMentions && mentionSuggestions.length > 0 && (
+                        <div className="absolute bottom-full mb-1 w-full bg-white border border-slate-300 rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
+                          {mentionSuggestions.map((user) => (
+                            <button
+                              key={user.id}
+                              type="button"
+                              onClick={() => insertMention(user.username)}
+                              className="w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition flex items-center gap-2"
+                            >
+                              <div className="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                                {user.username[0].toUpperCase()}
+                              </div>
+                              <div>
+                                <div className="font-semibold">{user.display_name || user.username}</div>
+                                <div className="text-slate-500">@{user.username}</div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex gap-2">
+                        <input
+                          ref={inputRef}
+                          type="text"
+                          value={newComment}
+                          onChange={handleInputChange}
+                          placeholder="Write a comment... (use @ to mention)"
+                          className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                        />
+                        <button
+                          type="submit"
+                          disabled={!newComment.trim() || submittingComment}
+                          className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </>
