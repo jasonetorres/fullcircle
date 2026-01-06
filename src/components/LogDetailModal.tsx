@@ -22,6 +22,13 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   const [userLiked, setUserLiked] = useState(false);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  useEffect(() => {
     if (showSocialFeatures) {
       fetchComments();
       fetchLikes();
@@ -127,134 +134,132 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b border-slate-200 p-4 flex items-center justify-between z-10">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-end sm:items-center justify-center z-50 sm:p-4" onClick={onClose}>
+      <div className="bg-white sm:rounded-xl shadow-2xl max-w-4xl w-full h-full sm:h-auto sm:max-h-[85vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="flex-shrink-0 bg-white border-b border-slate-200 p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {profile.avatar_url ? (
                 <img src={profile.avatar_url} alt={profile.username} className="w-full h-full rounded-full object-cover" />
               ) : (
                 profile.username?.[0]?.toUpperCase() || <User className="w-4 h-4" />
               )}
             </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-800">{profile.display_name || profile.username}</p>
-              <p className="text-xs text-slate-500">@{profile.username}</p>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-slate-800 truncate">{profile.display_name || profile.username}</p>
+              <p className="text-xs text-slate-500 truncate">@{profile.username}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition flex-shrink-0">
             <X className="w-6 h-6" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          <div className="lg:flex">
-            {log.image_url && (
-              <div className="lg:w-2/3 bg-slate-100 flex items-center justify-center">
-                <img src={log.image_url} alt={log.title} className="w-full h-auto max-h-[70vh] object-contain" />
-              </div>
-            )}
+          {log.image_url && (
+            <div className="bg-slate-100 flex items-center justify-center">
+              <img src={log.image_url} alt={log.title} className="w-full h-auto max-h-[40vh] object-contain" />
+            </div>
+          )}
 
-            <div className={`${log.image_url ? 'lg:w-1/3' : 'w-full'} p-6`}>
-              <div className="flex items-center gap-2 text-sm text-slate-600 mb-3">
-                <Calendar className="w-4 h-4" />
-                <span>{formatDate(log.event_date)}</span>
-                {log.is_public ? (
-                  <Globe className="w-4 h-4 text-green-600 ml-auto" />
-                ) : (
-                  <Lock className="w-4 h-4 text-slate-400 ml-auto" />
-                )}
-              </div>
-
-              <h2 className="text-2xl font-bold text-slate-800 mb-3">{log.title}</h2>
-
-              {log.description && (
-                <p className="text-slate-700 mb-4 leading-relaxed whitespace-pre-wrap">{log.description}</p>
-              )}
-
-              <div className="flex flex-wrap gap-2 mb-4">
-                {log.location && (
-                  <div className="flex items-center gap-1 text-sm text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full">
-                    <MapPin className="w-4 h-4" />
-                    <span>{log.location}</span>
-                  </div>
-                )}
-                {log.trip_name && (
-                  <div className="flex items-center gap-1 text-sm text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full">
-                    <Plane className="w-4 h-4" />
-                    <span>{log.trip_name}</span>
-                  </div>
-                )}
-              </div>
-
-              {showSocialFeatures && log.is_public && (
-                <>
-                  <div className="flex items-center gap-4 pt-4 border-t border-slate-200 mb-4">
-                    <button
-                      onClick={toggleLike}
-                      className={`flex items-center gap-2 transition ${
-                        userLiked
-                          ? 'text-red-600 font-semibold'
-                          : 'text-slate-500 hover:text-red-600'
-                      }`}
-                    >
-                      <Heart className={`w-5 h-5 ${userLiked ? 'fill-red-600' : ''}`} />
-                      <span>{likesCount}</span>
-                    </button>
-                    <div className="flex items-center gap-2 text-slate-500">
-                      <MessageCircle className="w-5 h-5" />
-                      <span>{comments.length}</span>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-slate-200 pt-4">
-                    <h3 className="font-semibold text-slate-800 mb-3">Comments</h3>
-                    <div className="space-y-3 mb-4 max-h-48 overflow-y-auto">
-                      {comments.length === 0 ? (
-                        <p className="text-center text-slate-500 text-sm py-4">No comments yet</p>
-                      ) : (
-                        comments.map((comment) => (
-                          <div key={comment.id} className="flex gap-2">
-                            <div className="w-7 h-7 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                              {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
-                            </div>
-                            <div className="flex-1 bg-slate-50 rounded-lg p-2">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="text-xs font-semibold text-slate-800">
-                                  {comment.profile?.display_name || comment.profile?.username}
-                                </span>
-                                <span className="text-xs text-slate-500">
-                                  {formatTimeAgo(comment.created_at)}
-                                </span>
-                              </div>
-                              <p className="text-sm text-slate-700">{comment.content}</p>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-
-                    <form onSubmit={submitComment} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write a comment..."
-                        className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-                      />
-                      <button
-                        type="submit"
-                        disabled={!newComment.trim() || submittingComment}
-                        className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Send className="w-4 h-4" />
-                      </button>
-                    </form>
-                  </div>
-                </>
+          <div className="p-4">
+            <div className="flex items-center gap-2 text-xs text-slate-600 mb-2">
+              <Calendar className="w-3.5 h-3.5" />
+              <span className="truncate">{formatDate(log.event_date)}</span>
+              {log.is_public ? (
+                <Globe className="w-3.5 h-3.5 text-green-600 ml-auto flex-shrink-0" />
+              ) : (
+                <Lock className="w-3.5 h-3.5 text-slate-400 ml-auto flex-shrink-0" />
               )}
             </div>
+
+            <h2 className="text-xl font-bold text-slate-800 mb-2">{log.title}</h2>
+
+            {log.description && (
+              <p className="text-sm text-slate-700 mb-3 leading-relaxed whitespace-pre-wrap">{log.description}</p>
+            )}
+
+            <div className="flex flex-wrap gap-2 mb-3">
+              {log.location && (
+                <div className="flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full">
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{log.location}</span>
+                </div>
+              )}
+              {log.trip_name && (
+                <div className="flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full">
+                  <Plane className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{log.trip_name}</span>
+                </div>
+              )}
+            </div>
+
+            {showSocialFeatures && log.is_public && (
+              <>
+                <div className="flex items-center gap-4 py-3 border-t border-slate-200 mb-3">
+                  <button
+                    onClick={toggleLike}
+                    className={`flex items-center gap-1.5 transition ${
+                      userLiked
+                        ? 'text-red-600 font-semibold'
+                        : 'text-slate-500 hover:text-red-600'
+                    }`}
+                  >
+                    <Heart className={`w-5 h-5 ${userLiked ? 'fill-red-600' : ''}`} />
+                    <span className="text-sm">{likesCount}</span>
+                  </button>
+                  <div className="flex items-center gap-1.5 text-slate-500">
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-sm">{comments.length}</span>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-3">
+                  <h3 className="font-semibold text-slate-800 mb-2 text-sm">Comments</h3>
+                  <div className="space-y-2 mb-3">
+                    {comments.length === 0 ? (
+                      <p className="text-center text-slate-500 text-xs py-3">No comments yet</p>
+                    ) : (
+                      comments.map((comment) => (
+                        <div key={comment.id} className="flex gap-2">
+                          <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
+                          </div>
+                          <div className="flex-1 bg-slate-50 rounded-lg p-2 min-w-0">
+                            <div className="flex items-center gap-2 mb-0.5">
+                              <span className="text-xs font-semibold text-slate-800 truncate">
+                                {comment.profile?.display_name || comment.profile?.username}
+                              </span>
+                              <span className="text-xs text-slate-500 flex-shrink-0">
+                                {formatTimeAgo(comment.created_at)}
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-700 break-words">{comment.content}</p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <form onSubmit={submitComment} className="flex gap-2 sticky bottom-0 bg-white pt-2">
+                    <input
+                      type="text"
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      placeholder="Write a comment..."
+                      className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!newComment.trim() || submittingComment}
+                      className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                    >
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </form>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
