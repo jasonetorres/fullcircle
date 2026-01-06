@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { supabase, Profile as ProfileType, Log } from '../lib/supabase';
-import { MapPin, Calendar, Image as ImageIcon, Settings, User, Sparkles } from 'lucide-react';
+import { MapPin, Calendar, Settings, User, Sparkles, Download } from 'lucide-react';
 import { YearRecap } from './YearRecap';
+import LogDetailModal from './LogDetailModal';
 
 interface ProfileProps {
   userId: string;
@@ -29,6 +30,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   const [activeFilter, setActiveFilter] = useState<'all' | 'public' | 'private'>('all');
   const [showRecap, setShowRecap] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedLog, setSelectedLog] = useState<Log | null>(null);
 
   const isOwnProfile = userId === currentUserId;
 
@@ -121,12 +123,35 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
     });
+  };
+
+  const exportLogs = () => {
+    const exportData = logs.map(log => ({
+      date: log.event_date,
+      title: log.title,
+      description: log.description || '',
+      location: log.location || '',
+      trip: log.trip_name || '',
+      visibility: log.is_public ? 'Public' : 'Private',
+      image: log.image_url || '',
+    }));
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fullcircle-logs-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   if (loading) {
@@ -236,7 +261,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       </div>
 
       {isOwnProfile && (
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-4 items-center">
           <button
             onClick={() => setActiveFilter('all')}
             className={`px-3 py-1.5 text-sm rounded-full transition ${
@@ -267,6 +292,15 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           >
             Private
           </button>
+          {logs.length > 0 && (
+            <button
+              onClick={exportLogs}
+              className="ml-auto flex items-center gap-2 px-3 py-1.5 bg-white text-slate-600 hover:bg-slate-100 shadow-md rounded-full transition text-sm"
+            >
+              <Download className="w-4 h-4" />
+              Export
+            </button>
+          )}
         </div>
       )}
 
@@ -281,6 +315,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             <div
               key={log.id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group cursor-pointer"
+              onClick={() => setSelectedLog(log)}
             >
               {log.image_url ? (
                 <div className="aspect-square relative overflow-hidden bg-slate-100">
@@ -328,6 +363,16 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
         </div>
       )}
       </div>
+
+      {selectedLog && profile && (
+        <LogDetailModal
+          log={selectedLog}
+          profile={profile}
+          currentUserId={currentUserId}
+          onClose={() => setSelectedLog(null)}
+          showSocialFeatures={!isOwnProfile && selectedLog.is_public}
+        />
+      )}
     </>
   );
 }

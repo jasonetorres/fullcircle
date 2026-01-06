@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { supabase, Log, Profile, Like, Comment } from '../lib/supabase';
-import { Calendar, MapPin, Plane, Heart, MessageCircle, User, Send, X } from 'lucide-react';
+import { supabase, Log, Profile } from '../lib/supabase';
+import { Calendar, MapPin, Plane, Heart, MessageCircle, User } from 'lucide-react';
+import LogDetailModal from './LogDetailModal';
 
 interface FeedProps {
   userId: string;
@@ -13,17 +14,10 @@ interface FeedLog extends Log {
   user_liked: boolean;
 }
 
-interface CommentWithProfile extends Comment {
-  profile: Profile;
-}
-
 export default function Feed({ userId }: FeedProps) {
   const [logs, setLogs] = useState<FeedLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLog, setSelectedLog] = useState<FeedLog | null>(null);
-  const [comments, setComments] = useState<CommentWithProfile[]>([]);
-  const [newComment, setNewComment] = useState('');
-  const [submittingComment, setSubmittingComment] = useState(false);
 
   useEffect(() => {
     fetchFeed();
@@ -100,7 +94,8 @@ export default function Feed({ userId }: FeedProps) {
     }
   };
 
-  const toggleLike = async (log: FeedLog) => {
+  const toggleLike = async (log: FeedLog, e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       if (log.user_liked) {
         await supabase.from('likes').delete().eq('log_id', log.id).eq('user_id', userId);
@@ -126,52 +121,8 @@ export default function Feed({ userId }: FeedProps) {
     }
   };
 
-  const openComments = async (log: FeedLog) => {
-    setSelectedLog(log);
-    try {
-      const { data, error } = await supabase
-        .from('comments')
-        .select('*, profile:profiles(*)')
-        .eq('log_id', log.id)
-        .order('created_at', { ascending: true });
-
-      if (error) throw error;
-      setComments((data || []) as CommentWithProfile[]);
-    } catch (err: any) {
-      console.error('Error fetching comments:', err);
-    }
-  };
-
-  const submitComment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedLog || !newComment.trim()) return;
-
-    setSubmittingComment(true);
-    try {
-      const { data, error } = await supabase
-        .from('comments')
-        .insert({
-          log_id: selectedLog.id,
-          user_id: userId,
-          content: newComment.trim(),
-        })
-        .select('*, profile:profiles(*)')
-        .single();
-
-      if (error) throw error;
-
-      setComments((prev) => [...prev, data as CommentWithProfile]);
-      setNewComment('');
-      setLogs((prev) =>
-        prev.map((l) =>
-          l.id === selectedLog.id ? { ...l, comments_count: l.comments_count + 1 } : l
-        )
-      );
-    } catch (err: any) {
-      console.error('Error submitting comment:', err);
-    } finally {
-      setSubmittingComment(false);
-    }
+  const handleLogRefresh = () => {
+    fetchFeed();
   };
 
   const formatDate = (dateString: string) => {
@@ -184,20 +135,6 @@ export default function Feed({ userId }: FeedProps) {
     });
   };
 
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffMins < 1) return 'just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return formatDate(dateString);
-  };
 
   if (loading) {
     return (
@@ -223,7 +160,11 @@ export default function Feed({ userId }: FeedProps) {
     <>
       <div className="space-y-4 max-w-2xl mx-auto">
         {logs.map((log) => (
-          <div key={log.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div
+            key={log.id}
+            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition"
+            onClick={() => setSelectedLog(log)}
+          >
             <div className="p-3">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
@@ -243,7 +184,7 @@ export default function Feed({ userId }: FeedProps) {
               <h3 className="text-base font-bold text-slate-800 mb-1">{log.title}</h3>
 
               {log.description && (
-                <p className="text-sm text-slate-600 mb-2">{log.description}</p>
+                <p className="text-sm text-slate-600 mb-2 line-clamp-3">{log.description}</p>
               )}
 
               {log.image_url && (
@@ -271,7 +212,7 @@ export default function Feed({ userId }: FeedProps) {
 
               <div className="flex items-center gap-4 pt-2 border-t border-slate-100">
                 <button
-                  onClick={() => toggleLike(log)}
+                  onClick={(e) => toggleLike(log, e)}
                   className={`flex items-center gap-1 text-sm transition ${
                     log.user_liked
                       ? 'text-red-600 font-semibold'
@@ -281,13 +222,10 @@ export default function Feed({ userId }: FeedProps) {
                   <Heart className={`w-4 h-4 ${log.user_liked ? 'fill-red-600' : ''}`} />
                   <span>{log.likes_count}</span>
                 </button>
-                <button
-                  onClick={() => openComments(log)}
-                  className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition"
-                >
+                <div className="flex items-center gap-1 text-sm text-slate-500">
                   <MessageCircle className="w-4 h-4" />
                   <span>{log.comments_count}</span>
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -295,69 +233,16 @@ export default function Feed({ userId }: FeedProps) {
       </div>
 
       {selectedLog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-              <h3 className="font-bold text-slate-800">Comments</h3>
-              <button
-                onClick={() => {
-                  setSelectedLog(null);
-                  setComments([]);
-                  setNewComment('');
-                }}
-                className="text-slate-400 hover:text-slate-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {comments.length === 0 ? (
-                <p className="text-center text-slate-500 text-sm py-8">
-                  No comments yet. Be the first!
-                </p>
-              ) : (
-                comments.map((comment) => (
-                  <div key={comment.id} className="flex gap-2">
-                    <div className="w-7 h-7 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                      {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
-                    </div>
-                    <div className="flex-1 bg-slate-50 rounded-lg p-2">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-semibold text-slate-800">
-                          {comment.profile?.display_name || comment.profile?.username}
-                        </span>
-                        <span className="text-xs text-slate-500">
-                          {formatTimeAgo(comment.created_at)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-slate-700">{comment.content}</p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <form onSubmit={submitComment} className="p-4 border-t border-slate-200">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Write a comment..."
-                  className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-                />
-                <button
-                  type="submit"
-                  disabled={!newComment.trim() || submittingComment}
-                  className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <LogDetailModal
+          log={selectedLog}
+          profile={selectedLog.profile}
+          currentUserId={userId}
+          onClose={() => {
+            setSelectedLog(null);
+            handleLogRefresh();
+          }}
+          showSocialFeatures={true}
+        />
       )}
     </>
   );
