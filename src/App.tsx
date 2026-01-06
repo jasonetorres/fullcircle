@@ -164,7 +164,7 @@ function App() {
               <Timeline userId={user.id} refreshTrigger={refreshTrigger} />
             </>
           ) : activeTab === 'feed' ? (
-            <Feed userId={user.id} />
+            <Feed key={user.id} userId={user.id} />
           ) : activeTab === 'search' ? (
             <Search userId={user.id} />
           ) : (
