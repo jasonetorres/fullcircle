@@ -20,6 +20,12 @@
   #root {
     overflow-x: hidden;
     max-width: 100vw;
+    position: relative;
+  }
+
+  header {
+    position: -webkit-sticky;
+    position: sticky;
   }
 }
 

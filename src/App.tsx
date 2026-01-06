@@ -85,8 +85,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col overflow-x-hidden">
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+    <>
+      <header className="bg-white shadow-sm sticky top-0 z-50 w-full">
         <div className="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img
@@ -156,26 +156,28 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1">
-        <div className="max-w-4xl mx-auto px-4 py-4 pb-8">
-          {activeTab === 'myLogs' ? (
-            <>
-              <QuickLogForm onLogAdded={handleLogAdded} userId={user.id} />
-              <Timeline userId={user.id} refreshTrigger={refreshTrigger} />
-            </>
-          ) : activeTab === 'feed' ? (
-            <Feed key={user.id} userId={user.id} />
-          ) : activeTab === 'search' ? (
-            <Search userId={user.id} />
-          ) : (
-            <ProfileComponent
-              userId={user.id}
-              currentUserId={user.id}
-              onOpenSettings={() => setShowSettings(true)}
-            />
-          )}
-        </div>
-      </main>
+      <div className="min-h-screen bg-slate-50">
+        <main className="flex-1">
+          <div className="max-w-4xl mx-auto px-4 py-4 pb-8">
+            {activeTab === 'myLogs' ? (
+              <>
+                <QuickLogForm onLogAdded={handleLogAdded} userId={user.id} />
+                <Timeline userId={user.id} refreshTrigger={refreshTrigger} />
+              </>
+            ) : activeTab === 'feed' ? (
+              <Feed key={user.id} userId={user.id} />
+            ) : activeTab === 'search' ? (
+              <Search userId={user.id} />
+            ) : (
+              <ProfileComponent
+                userId={user.id}
+                currentUserId={user.id}
+                onOpenSettings={() => setShowSettings(true)}
+              />
+            )}
+          </div>
+        </main>
+      </div>
 
       {showSettings && (
         <AccountSettings
@@ -187,7 +189,7 @@ function App() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }
 
