@@ -92,7 +92,8 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
   const groupLogsByMonth = (logs: Log[]) => {
     const grouped: { [key: string]: Log[] } = {};
     logs.forEach((log) => {
-      const date = new Date(log.event_date);
+      const [year, month, day] = log.event_date.split('-');
+      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       const monthYear = date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
