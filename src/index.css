@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

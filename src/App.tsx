@@ -85,8 +85,8 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-slate-50 flex flex-col overflow-hidden">
-      <header className="bg-white shadow-sm flex-shrink-0">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img
@@ -156,8 +156,8 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+      <main className="flex-1">
+        <div className="max-w-4xl mx-auto px-4 py-4 pb-8">
           {activeTab === 'myLogs' ? (
             <>
               <QuickLogForm onLogAdded={handleLogAdded} userId={user.id} />
