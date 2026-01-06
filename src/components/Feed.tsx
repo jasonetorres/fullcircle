@@ -39,18 +39,27 @@ export default function Feed({ userId }: FeedProps) {
         .order('event_date', { ascending: false })
         .limit(50);
 
-      if (logsError) throw logsError;
+      if (logsError) {
+        console.error('Error fetching logs:', logsError);
+        throw logsError;
+      }
 
       if (!logsData || logsData.length === 0) {
         setLogs([]);
+        setLoading(false);
         return;
       }
 
       const userIds = [...new Set(logsData.map((log) => log.user_id))];
-      const { data: profilesData } = await supabase
+      const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .in('id', userIds);
+
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+        throw profilesError;
+      }
 
       const logIds = logsData.map((log) => log.id);
       const [{ data: likesData }, { data: commentsData }, { data: userLikesData }] =
@@ -73,13 +82,15 @@ export default function Feed({ userId }: FeedProps) {
         commentsCount.set(comment.log_id, (commentsCount.get(comment.log_id) || 0) + 1);
       });
 
-      const feedLogs: FeedLog[] = logsData.map((log) => ({
-        ...log,
-        profile: profilesMap.get(log.user_id)!,
-        likes_count: likesCount.get(log.id) || 0,
-        comments_count: commentsCount.get(log.id) || 0,
-        user_liked: userLikedSet.has(log.id),
-      }));
+      const feedLogs: FeedLog[] = logsData
+        .filter((log) => profilesMap.has(log.user_id))
+        .map((log) => ({
+          ...log,
+          profile: profilesMap.get(log.user_id)!,
+          likes_count: likesCount.get(log.id) || 0,
+          comments_count: commentsCount.get(log.id) || 0,
+          user_liked: userLikedSet.has(log.id),
+        }));
 
       setLogs(feedLogs);
     } catch (err: any) {
