@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { supabase, Profile } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
 import Auth from './components/Auth';
@@ -204,6 +205,7 @@ function App() {
           }}
         />
       )}
+      <SpeedInsights />
     </>
   );
 }
