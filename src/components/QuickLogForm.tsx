@@ -27,7 +27,7 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
     description: '',
     location: '',
     trip_name: '',
-    is_public: false,
+    is_public: true,
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +85,7 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
         description: '',
         location: '',
         trip_name: '',
-        is_public: false,
+        is_public: true,
       });
       setImageFile(null);
       setImagePreview(null);
