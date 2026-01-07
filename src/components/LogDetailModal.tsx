@@ -1,5 +1,6 @@
 import { X, Calendar, MapPin, Plane, Lock, Globe, Heart, MessageCircle, Send, User, CornerDownRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase, Log, Profile, Comment } from '../lib/supabase';
 
 interface LogDetailModalProps {
@@ -320,15 +321,21 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   const renderComment = (comment: CommentWithProfile, isReply = false) => (
     <div key={comment.id} className={isReply ? 'ml-7' : ''}>
       <div className="flex gap-2">
-        <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+        <Link
+          to={`/profile/${comment.user_id}`}
+          className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition"
+        >
           {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
-        </div>
+        </Link>
         <div className="flex-1 min-w-0">
           <div className="bg-slate-50 rounded-lg p-2">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-xs font-semibold text-slate-800 truncate">
+              <Link
+                to={`/profile/${comment.user_id}`}
+                className="text-xs font-semibold text-slate-800 truncate hover:opacity-80 transition"
+              >
                 {comment.profile?.display_name || comment.profile?.username}
-              </span>
+              </Link>
               <span className="text-xs text-slate-500 flex-shrink-0">
                 {formatTimeAgo(comment.created_at)}
               </span>
@@ -405,7 +412,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-end sm:items-center justify-center z-50 sm:p-4" onClick={onClose}>
       <div className="bg-white sm:rounded-xl shadow-2xl max-w-4xl w-full h-full sm:h-auto sm:max-h-[85vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="flex-shrink-0 bg-white border-b border-slate-200 p-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 min-w-0">
+          <Link to={`/profile/${profile.id}`} className="flex items-center gap-2 min-w-0 hover:opacity-80 transition">
             <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {profile.avatar_url ? (
                 <img src={profile.avatar_url} alt={profile.username} className="w-full h-full rounded-full object-cover" />
@@ -417,7 +424,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
               <p className="text-sm font-semibold text-slate-800 truncate">{profile.display_name || profile.username}</p>
               <p className="text-xs text-slate-500 truncate">@{profile.username}</p>
             </div>
-          </div>
+          </Link>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition flex-shrink-0">
             <X className="w-6 h-6" />
           </button>

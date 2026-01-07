@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase, Profile as ProfileType, Log } from '../lib/supabase';
-import { MapPin, Calendar, Settings, User, Sparkles, Download } from 'lucide-react';
+import { MapPin, Calendar, Settings, User, Sparkles, Download, UserPlus, UserMinus } from 'lucide-react';
 import { YearRecap } from './YearRecap';
 import LogDetailModal from './LogDetailModal';
 
@@ -31,6 +31,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   const [showRecap, setShowRecap] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedLog, setSelectedLog] = useState<Log | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
 
   const isOwnProfile = userId === currentUserId;
 
@@ -43,6 +45,9 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
     fetchProfile();
     fetchLogs();
     fetchStats();
+    if (!isOwnProfile && currentUserId) {
+      checkFollowStatus();
+    }
   }, [userId, activeFilter]);
 
   const fetchProfile = async () => {
@@ -119,6 +124,58 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       });
     } catch (err: any) {
       console.error('Error fetching stats:', err);
+    }
+  };
+
+  const checkFollowStatus = async () => {
+    if (!currentUserId) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('follows')
+        .select('id')
+        .eq('follower_id', currentUserId)
+        .eq('following_id', userId)
+        .maybeSingle();
+
+      if (error) throw error;
+      setIsFollowing(!!data);
+    } catch (err: any) {
+      console.error('Error checking follow status:', err);
+    }
+  };
+
+  const handleFollowToggle = async () => {
+    if (!currentUserId || followLoading) return;
+
+    setFollowLoading(true);
+    try {
+      if (isFollowing) {
+        const { error } = await supabase
+          .from('follows')
+          .delete()
+          .eq('follower_id', currentUserId)
+          .eq('following_id', userId);
+
+        if (error) throw error;
+        setIsFollowing(false);
+        setStats(prev => ({ ...prev, followers: prev.followers - 1 }));
+      } else {
+        const { error } = await supabase
+          .from('follows')
+          .insert({
+            follower_id: currentUserId,
+            following_id: userId,
+          });
+
+        if (error) throw error;
+        setIsFollowing(true);
+        setStats(prev => ({ ...prev, followers: prev.followers + 1 }));
+      }
+    } catch (err: any) {
+      console.error('Error toggling follow:', err);
+    } finally {
+      setFollowLoading(false);
     }
   };
 
@@ -200,14 +257,36 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 <h1 className="text-lg font-bold text-slate-800 truncate">
                   {profile.display_name || profile.username}
                 </h1>
-                {isOwnProfile && (
+                {isOwnProfile ? (
                   <button
                     onClick={onOpenSettings}
                     className="flex-shrink-0 text-slate-600 hover:text-slate-800 transition"
                   >
                     <Settings className="w-5 h-5" />
                   </button>
-                )}
+                ) : currentUserId ? (
+                  <button
+                    onClick={handleFollowToggle}
+                    disabled={followLoading}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                      isFollowing
+                        ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        : 'bg-slate-800 text-white hover:bg-slate-700'
+                    } ${followLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {isFollowing ? (
+                      <>
+                        <UserMinus className="w-4 h-4" />
+                        <span>Unfollow</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-4 h-4" />
+                        <span>Follow</span>
+                      </>
+                    )}
+                  </button>
+                ) : null}
               </div>
               <p className="text-sm text-slate-500 truncate">@{profile.username}</p>
             </div>

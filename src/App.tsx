@@ -12,6 +12,7 @@ import ProfileComponent from './components/Profile';
 import AccountSettings from './components/AccountSettings';
 import Notifications from './components/Notifications';
 import { PublicRecap } from './components/PublicRecap';
+import { PublicProfile } from './components/PublicProfile';
 import { LogOut, Home, Compass, Search as SearchIcon, User as UserIcon } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -217,6 +218,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/recap/:userId/:year" element={<PublicRecap />} />
+        <Route path="/profile/:userId" element={<PublicProfile />} />
         <Route path="*" element={<MainApp />} />
       </Routes>
     </BrowserRouter>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase, Log, Profile } from '../lib/supabase';
 import { Calendar, MapPin, Plane, Heart, MessageCircle, User } from 'lucide-react';
 import LogDetailModal from './LogDetailModal';
@@ -184,17 +185,25 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
           >
             <div className="p-3">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                <Link
+                  to={`/profile/${log.user_id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition"
+                >
                   {log.profile?.username?.[0]?.toUpperCase() || <User className="w-4 h-4" />}
-                </div>
-                <div className="flex-1 min-w-0">
+                </Link>
+                <Link
+                  to={`/profile/${log.user_id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex-1 min-w-0 hover:opacity-80 transition"
+                >
                   <p className="text-sm font-semibold text-slate-800 truncate">
                     {log.profile?.display_name || log.profile?.username || 'Unknown'}
                   </p>
                   <p className="text-xs text-slate-500 truncate">
                     @{log.profile?.username || 'unknown'}
                   </p>
-                </div>
+                </Link>
                 <div className="text-xs text-slate-500 flex-shrink-0">{formatDate(log.event_date)}</div>
               </div>
 
