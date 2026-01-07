@@ -150,8 +150,8 @@ export default function Notifications() {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[500px] flex flex-col">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+          <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-96 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[calc(100vh-5rem)] sm:max-h-[500px] flex flex-col overflow-hidden">
+            <div className="p-4 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
               <h3 className="font-semibold text-slate-800">Notifications</h3>
               {unreadCount > 0 && (
                 <button
@@ -163,7 +163,7 @@ export default function Notifications() {
               )}
             </div>
 
-            <div className="overflow-y-auto flex-1">
+            <div className="overflow-y-auto flex-1 overscroll-contain" style={{ scrollbarWidth: 'thin' }}>
               {loading ? (
                 <div className="p-8 text-center text-slate-500">
                   Loading...
