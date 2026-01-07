@@ -470,7 +470,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                     )}
                   </div>
 
-                  <form onSubmit={submitComment} className="sticky bottom-0 bg-white pt-2">
+                  <form onSubmit={submitComment} className="bg-white pt-2 pb-2">
                     <div className="relative">
                       {showMentions && mentionSuggestions.length > 0 && (
                         <div className="absolute bottom-full mb-1 w-full bg-white border border-slate-300 rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
@@ -504,7 +504,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                         <button
                           type="submit"
                           disabled={!newComment.trim() || submittingComment}
-                          className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                          className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 touch-manipulation"
                         >
                           <Send className="w-4 h-4" />
                         </button>

@@ -12,7 +12,7 @@ interface Notification {
   created_at: string;
   actor: {
     username: string;
-    full_name: string;
+    display_name: string;
   };
   log: {
     location: string;
@@ -49,28 +49,37 @@ export default function Notifications() {
   }, []);
 
   const loadNotifications = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-    const { data, error } = await supabase
-      .from('notifications')
-      .select(`
-        *,
-        actor:actor_id (username, full_name),
-        log:log_id (location)
-      `)
-      .eq('recipient_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(20);
+      const { data, error } = await supabase
+        .from('notifications')
+        .select(`
+          *,
+          actor:profiles!actor_id (username, display_name),
+          log:logs!log_id (location)
+        `)
+        .eq('recipient_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
 
-    if (error) {
-      console.error('Error loading notifications:', error);
-      return;
+      if (error) {
+        console.error('Error loading notifications:', error);
+        setLoading(false);
+        return;
+      }
+
+      setNotifications(data || []);
+      setUnreadCount(data?.filter(n => !n.is_read).length || 0);
+    } catch (err) {
+      console.error('Error loading notifications:', err);
+    } finally {
+      setLoading(false);
     }
-
-    setNotifications(data || []);
-    setUnreadCount(data?.filter(n => !n.is_read).length || 0);
-    setLoading(false);
   };
 
   const markAsRead = async (notificationId: string) => {
@@ -100,12 +109,13 @@ export default function Notifications() {
   };
 
   const getNotificationText = (notification: Notification) => {
-    const name = notification.actor.full_name || notification.actor.username;
+    const name = notification.actor?.display_name || notification.actor?.username || 'Someone';
+    const location = notification.log?.location || 'your post';
     switch (notification.type) {
       case 'like':
-        return `${name} liked your post from ${notification.log.location}`;
+        return `${name} liked your post from ${location}`;
       case 'comment':
-        return `${name} commented on your post from ${notification.log.location}`;
+        return `${name} commented on your post from ${location}`;
       case 'reply':
         return `${name} replied to your comment`;
       default:
