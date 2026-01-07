@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase, Profile } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
+import { Analytics } from '@vercel/analytics/react';
 import Auth from './components/Auth';
 import ProfileSetup from './components/ProfileSetup';
 import QuickLogForm from './components/QuickLogForm';
@@ -93,6 +94,7 @@ function App() {
 
   return (
     <>
+      <Analytics />
       <header className="bg-white shadow-sm sticky top-0 z-50 w-full">
         <div className="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
