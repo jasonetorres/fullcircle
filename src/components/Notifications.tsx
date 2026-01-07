@@ -204,7 +204,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-40 bg-black/30 sm:bg-transparent"
             onClick={() => setIsOpen(false)}
           />
           <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-96 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[calc(100vh-5rem)] sm:max-h-[500px] flex flex-col overflow-hidden">
