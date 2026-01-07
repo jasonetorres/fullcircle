@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { supabase, Profile } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
 import Auth from './components/Auth';
@@ -10,10 +11,11 @@ import Search from './components/Search';
 import ProfileComponent from './components/Profile';
 import AccountSettings from './components/AccountSettings';
 import Notifications from './components/Notifications';
+import { PublicRecap } from './components/PublicRecap';
 import { LogOut, Home, Compass, Search as SearchIcon, User as UserIcon } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 
-function App() {
+function MainApp() {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -207,6 +209,17 @@ function App() {
       )}
       <Analytics />
     </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/recap/:userId/:year" element={<PublicRecap />} />
+        <Route path="*" element={<MainApp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
