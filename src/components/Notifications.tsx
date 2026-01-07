@@ -134,7 +134,7 @@ export default function Notifications() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 hover:bg-white/10 rounded-lg transition-colors"
+        className="relative p-2 hover:bg-slate-100 rounded-lg transition-colors"
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
@@ -150,13 +150,13 @@ export default function Notifications() {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-96 bg-gray-900 rounded-lg shadow-xl border border-gray-700 z-50 max-h-[500px] flex flex-col">
-            <div className="p-4 border-b border-gray-700 flex items-center justify-between">
-              <h3 className="font-semibold">Notifications</h3>
+          <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[500px] flex flex-col">
+            <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+              <h3 className="font-semibold text-slate-800">Notifications</h3>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="text-sm text-blue-400 hover:text-blue-300"
+                  className="text-sm text-blue-600 hover:text-blue-700"
                 >
                   Mark all as read
                 </button>
@@ -165,11 +165,11 @@ export default function Notifications() {
 
             <div className="overflow-y-auto flex-1">
               {loading ? (
-                <div className="p-8 text-center text-gray-400">
+                <div className="p-8 text-center text-slate-500">
                   Loading...
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="p-8 text-center text-gray-400">
+                <div className="p-8 text-center text-slate-500">
                   No notifications yet
                 </div>
               ) : (
@@ -177,16 +177,16 @@ export default function Notifications() {
                   <button
                     key={notification.id}
                     onClick={() => handleNotificationClick(notification)}
-                    className={`w-full p-4 text-left hover:bg-gray-800 transition-colors border-b border-gray-800 ${
-                      !notification.is_read ? 'bg-blue-500/10' : ''
+                    className={`w-full p-4 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 ${
+                      !notification.is_read ? 'bg-blue-50' : ''
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm leading-relaxed">
+                        <p className="text-sm leading-relaxed text-slate-800">
                           {getNotificationText(notification)}
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-slate-500 mt-1">
                           {getTimeAgo(notification.created_at)}
                         </p>
                       </div>
