@@ -60,8 +60,8 @@ export default function Notifications() {
         .from('notifications')
         .select(`
           *,
-          actor:profiles!actor_id (username, display_name),
-          log:logs!log_id (location)
+          actor:profiles!notifications_actor_id_fkey (username, display_name),
+          log:logs!notifications_log_id_fkey (location)
         `)
         .eq('recipient_id', user.id)
         .order('created_at', { ascending: false })
