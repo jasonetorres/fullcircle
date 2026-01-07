@@ -29,11 +29,15 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   const [mentionSuggestions, setMentionSuggestions] = useState<Profile[]>([]);
   const [showMentions, setShowMentions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'unset';
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -56,20 +60,30 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
 
       const commentsData = (data || []) as CommentWithProfile[];
 
-      const commentsWithLikes = await Promise.all(
-        commentsData.map(async (comment) => {
-          const [{ data: likes }, { data: userLike }] = await Promise.all([
-            supabase.from('comment_likes').select('id').eq('comment_id', comment.id),
-            supabase.from('comment_likes').select('id').eq('comment_id', comment.id).eq('user_id', currentUserId).maybeSingle(),
-          ]);
+      if (commentsData.length === 0) {
+        setComments([]);
+        return;
+      }
 
-          return {
-            ...comment,
-            likes_count: likes?.length || 0,
-            user_liked: !!userLike,
-          };
-        })
-      );
+      const commentIds = commentsData.map(c => c.id);
+
+      const [{ data: allLikes }, { data: userLikes }] = await Promise.all([
+        supabase.from('comment_likes').select('comment_id').in('comment_id', commentIds),
+        supabase.from('comment_likes').select('comment_id').eq('user_id', currentUserId).in('comment_id', commentIds),
+      ]);
+
+      const likesCountMap = new Map<string, number>();
+      allLikes?.forEach(like => {
+        likesCountMap.set(like.comment_id, (likesCountMap.get(like.comment_id) || 0) + 1);
+      });
+
+      const userLikedSet = new Set(userLikes?.map(l => l.comment_id));
+
+      const commentsWithLikes = commentsData.map(comment => ({
+        ...comment,
+        likes_count: likesCountMap.get(comment.id) || 0,
+        user_liked: userLikedSet.has(comment.id),
+      }));
 
       const topLevelComments = commentsWithLikes.filter(c => !c.parent_comment_id);
       const commentMap = new Map(commentsWithLikes.map(c => [c.id, { ...c, replies: [] as CommentWithProfile[] }]));
@@ -162,9 +176,13 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
     return mentions;
   };
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNewComment(value);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
 
     const cursorPos = e.target.selectionStart || 0;
     const textBeforeCursor = value.slice(0, cursorPos);
@@ -173,13 +191,17 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
     if (lastAtSymbol !== -1 && lastAtSymbol === cursorPos - 1) {
       setShowMentions(true);
       setMentionSearch('');
-      await searchUsers('');
+      searchTimeoutRef.current = setTimeout(() => {
+        searchUsers('');
+      }, 300);
     } else if (lastAtSymbol !== -1) {
       const searchTerm = textBeforeCursor.slice(lastAtSymbol + 1);
-      if (!searchTerm.includes(' ')) {
+      if (!searchTerm.includes(' ') && searchTerm.length >= 2) {
         setMentionSearch(searchTerm);
         setShowMentions(true);
-        await searchUsers(searchTerm);
+        searchTimeoutRef.current = setTimeout(() => {
+          searchUsers(searchTerm);
+        }, 300);
       } else {
         setShowMentions(false);
       }

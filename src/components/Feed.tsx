@@ -19,10 +19,14 @@ interface FeedLog extends Log {
 export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
   const [logs, setLogs] = useState<FeedLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [selectedLog, setSelectedLog] = useState<FeedLog | null>(null);
+  const [offset, setOffset] = useState(0);
+  const LIMIT = 20;
 
   useEffect(() => {
-    fetchFeed();
+    fetchFeed(true);
   }, [userId]);
 
   useEffect(() => {
@@ -35,74 +39,75 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
     }
   }, [initialLogId, logs, onLogOpened]);
 
-  const fetchFeed = async () => {
-    setLoading(true);
-    try {
-      const { data: logsData, error: logsError } = await supabase
-        .from('logs')
-        .select('*')
-        .eq('is_public', true)
-        .order('event_date', { ascending: false })
-        .limit(50);
+  const fetchFeed = async (reset = false) => {
+    if (reset) {
+      setLoading(true);
+      setOffset(0);
+    } else {
+      setLoadingMore(true);
+    }
 
-      if (logsError) {
-        console.error('Error fetching logs:', logsError);
-        throw logsError;
+    try {
+      const currentOffset = reset ? 0 : offset;
+      const { data, error } = await supabase.rpc('get_feed_with_stats', {
+        p_user_id: userId,
+        p_limit: LIMIT,
+        p_offset: currentOffset,
+      });
+
+      if (error) {
+        console.error('Error fetching feed:', error);
+        throw error;
       }
 
-      if (!logsData || logsData.length === 0) {
-        setLogs([]);
+      if (!data || data.length === 0) {
+        if (reset) {
+          setLogs([]);
+        }
+        setHasMore(false);
         setLoading(false);
+        setLoadingMore(false);
         return;
       }
 
-      const userIds = [...new Set(logsData.map((log) => log.user_id))];
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('*')
-        .in('id', userIds);
+      const feedLogs: FeedLog[] = data.map((row: any) => ({
+        id: row.id,
+        user_id: row.user_id,
+        title: row.title,
+        description: row.description,
+        location: row.location,
+        event_date: row.event_date,
+        is_public: row.is_public,
+        trip_name: row.trip_name,
+        image_url: row.image_url,
+        created_at: row.created_at,
+        profile: {
+          id: row.profile_id,
+          username: row.profile_username,
+          display_name: row.profile_display_name,
+          bio: row.profile_bio,
+          avatar_url: row.profile_avatar_url,
+          created_at: '',
+        },
+        likes_count: Number(row.likes_count),
+        comments_count: Number(row.comments_count),
+        user_liked: row.user_liked,
+      }));
 
-      if (profilesError) {
-        console.error('Error fetching profiles:', profilesError);
-        throw profilesError;
+      if (reset) {
+        setLogs(feedLogs);
+        setOffset(LIMIT);
+      } else {
+        setLogs(prev => [...prev, ...feedLogs]);
+        setOffset(prev => prev + LIMIT);
       }
 
-      const logIds = logsData.map((log) => log.id);
-      const [{ data: likesData }, { data: commentsData }, { data: userLikesData }] =
-        await Promise.all([
-          supabase.from('likes').select('log_id').in('log_id', logIds),
-          supabase.from('comments').select('log_id').in('log_id', logIds),
-          supabase.from('likes').select('log_id').eq('user_id', userId).in('log_id', logIds),
-        ]);
-
-      const profilesMap = new Map(profilesData?.map((p) => [p.id, p]));
-      const likesCount = new Map<string, number>();
-      const commentsCount = new Map<string, number>();
-      const userLikedSet = new Set(userLikesData?.map((l) => l.log_id));
-
-      likesData?.forEach((like) => {
-        likesCount.set(like.log_id, (likesCount.get(like.log_id) || 0) + 1);
-      });
-
-      commentsData?.forEach((comment) => {
-        commentsCount.set(comment.log_id, (commentsCount.get(comment.log_id) || 0) + 1);
-      });
-
-      const feedLogs: FeedLog[] = logsData
-        .filter((log) => profilesMap.has(log.user_id))
-        .map((log) => ({
-          ...log,
-          profile: profilesMap.get(log.user_id)!,
-          likes_count: likesCount.get(log.id) || 0,
-          comments_count: commentsCount.get(log.id) || 0,
-          user_liked: userLikedSet.has(log.id),
-        }));
-
-      setLogs(feedLogs);
+      setHasMore(data.length === LIMIT);
     } catch (err: any) {
       console.error('Error fetching feed:', err);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
@@ -134,7 +139,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
   };
 
   const handleLogRefresh = () => {
-    fetchFeed();
+    fetchFeed(true);
   };
 
   const formatDate = (dateString: string) => {
@@ -242,6 +247,25 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
             </div>
           </div>
         ))}
+
+        {hasMore && !loading && (
+          <div className="flex justify-center py-4">
+            <button
+              onClick={() => fetchFeed(false)}
+              disabled={loadingMore}
+              className="px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loadingMore ? (
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  <span>Loading...</span>
+                </div>
+              ) : (
+                'Load More'
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       {selectedLog && (
