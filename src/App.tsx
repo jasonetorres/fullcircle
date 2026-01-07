@@ -9,6 +9,7 @@ import Feed from './components/Feed';
 import Search from './components/Search';
 import ProfileComponent from './components/Profile';
 import AccountSettings from './components/AccountSettings';
+import Notifications from './components/Notifications';
 import { LogOut, Home, Compass, Search as SearchIcon, User as UserIcon } from 'lucide-react';
 
 function App() {
@@ -96,13 +97,16 @@ function App() {
             />
             <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition p-2"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="hidden sm:inline text-sm">Sign Out</span>
-          </button>
+          <div className="flex items-center gap-2 text-slate-600">
+            <Notifications />
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 hover:text-slate-800 transition p-2"
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm">Sign Out</span>
+            </button>
+          </div>
         </div>
 
         <div className="border-t border-slate-200">
