@@ -15,11 +15,15 @@ interface Notification {
     display_name: string;
   };
   log: {
-    location: string;
+    title: string;
   };
 }
 
-export default function Notifications() {
+interface NotificationsProps {
+  onNotificationClick?: (logId: string) => void;
+}
+
+export default function Notifications({ onNotificationClick }: NotificationsProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +65,7 @@ export default function Notifications() {
         .select(`
           *,
           actor:profiles!notifications_actor_id_fkey (username, display_name),
-          log:logs!notifications_log_id_fkey (location)
+          log:logs!notifications_log_id_fkey (title)
         `)
         .eq('recipient_id', user.id)
         .order('created_at', { ascending: false })
@@ -110,12 +114,12 @@ export default function Notifications() {
 
   const getNotificationText = (notification: Notification) => {
     const name = notification.actor?.display_name || notification.actor?.username || 'Someone';
-    const location = notification.log?.location || 'your post';
+    const title = notification.log?.title || 'your post';
     switch (notification.type) {
       case 'like':
-        return `${name} liked your post from ${location}`;
+        return `${name} liked "${title}"`;
       case 'comment':
-        return `${name} commented on your post from ${location}`;
+        return `${name} commented on "${title}"`;
       case 'reply':
         return `${name} replied to your comment`;
       default:
@@ -138,6 +142,9 @@ export default function Notifications() {
       markAsRead(notification.id);
     }
     setIsOpen(false);
+    if (onNotificationClick) {
+      onNotificationClick(notification.log_id);
+    }
   };
 
   return (

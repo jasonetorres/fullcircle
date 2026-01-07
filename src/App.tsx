@@ -19,6 +19,7 @@ function App() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [activeTab, setActiveTab] = useState<'myLogs' | 'feed' | 'search' | 'profile'>('myLogs');
   const [showSettings, setShowSettings] = useState(false);
+  const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -69,6 +70,11 @@ function App() {
     setRefreshTrigger((prev) => prev + 1);
   };
 
+  const handleNotificationClick = (logId: string) => {
+    setSelectedLogId(logId);
+    setActiveTab('feed');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -98,7 +104,7 @@ function App() {
             <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
-            <Notifications />
+            <Notifications onNotificationClick={handleNotificationClick} />
             <button
               onClick={handleSignOut}
               className="flex items-center gap-2 hover:text-slate-800 transition p-2"
@@ -169,7 +175,12 @@ function App() {
                 <Timeline userId={user.id} refreshTrigger={refreshTrigger} />
               </>
             ) : activeTab === 'feed' ? (
-              <Feed key={user.id} userId={user.id} />
+              <Feed
+                key={user.id}
+                userId={user.id}
+                initialLogId={selectedLogId}
+                onLogOpened={() => setSelectedLogId(null)}
+              />
             ) : activeTab === 'search' ? (
               <Search userId={user.id} />
             ) : (

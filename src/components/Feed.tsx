@@ -5,6 +5,8 @@ import LogDetailModal from './LogDetailModal';
 
 interface FeedProps {
   userId: string;
+  initialLogId?: string | null;
+  onLogOpened?: () => void;
 }
 
 interface FeedLog extends Log {
@@ -14,7 +16,7 @@ interface FeedLog extends Log {
   user_liked: boolean;
 }
 
-export default function Feed({ userId }: FeedProps) {
+export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
   const [logs, setLogs] = useState<FeedLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLog, setSelectedLog] = useState<FeedLog | null>(null);
@@ -22,6 +24,16 @@ export default function Feed({ userId }: FeedProps) {
   useEffect(() => {
     fetchFeed();
   }, [userId]);
+
+  useEffect(() => {
+    if (initialLogId && logs.length > 0) {
+      const logToOpen = logs.find(log => log.id === initialLogId);
+      if (logToOpen) {
+        setSelectedLog(logToOpen);
+        onLogOpened?.();
+      }
+    }
+  }, [initialLogId, logs, onLogOpened]);
 
   const fetchFeed = async () => {
     setLoading(true);
