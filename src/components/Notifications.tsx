@@ -247,7 +247,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
                     </div>
                   );
 
-                  const className = `w-full p-4 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 ${
+                  const baseClassName = `block w-full p-4 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 ${
                     !notification.is_read ? 'bg-blue-50' : ''
                   }`;
 
@@ -262,7 +262,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
                           }
                           setIsOpen(false);
                         }}
-                        className={className}
+                        className={baseClassName}
                       >
                         {content}
                       </Link>
@@ -273,7 +273,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
                     <button
                       key={notification.id}
                       onClick={() => handleNotificationClick(notification)}
-                      className={className}
+                      className={baseClassName}
                     >
                       {content}
                     </button>
