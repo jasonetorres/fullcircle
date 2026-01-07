@@ -220,7 +220,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
               )}
             </div>
 
-            <div className="overflow-y-auto flex-1 overscroll-contain" style={{ scrollbarWidth: 'thin' }}>
+            <div className="overflow-y-auto flex-1 overscroll-contain scrollbar-hide">
               {loading ? (
                 <div className="p-8 text-center text-slate-500">
                   Loading...
@@ -232,9 +232,9 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
               ) : (
                 notifications.map(notification => {
                   const content = (
-                    <div className="flex items-start gap-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm leading-relaxed text-slate-800">
+                    <div className="flex items-start gap-3 w-full">
+                      <div className="flex-1 min-w-0 py-0.5">
+                        <p className="text-sm text-slate-800 break-words">
                           {getNotificationText(notification)}
                         </p>
                         <p className="text-xs text-slate-500 mt-1">
@@ -242,7 +242,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
                         </p>
                       </div>
                       {!notification.is_read && (
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0" />
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0" />
                       )}
                     </div>
                   );
