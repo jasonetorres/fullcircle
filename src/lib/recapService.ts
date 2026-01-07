@@ -24,7 +24,15 @@ export type YearRecapData = {
 };
 
 export async function getYearRecapStats(userId: string, year: number): Promise<YearRecapStats | null> {
-  const { data, error } = await supabase.rpc('get_year_recap_stats', {
+  const { data: { session } } = await supabase.auth.getSession();
+  const isAuthenticated = !!session?.user;
+  const isOwnRecap = session?.user?.id === userId;
+
+  const functionName = isAuthenticated && isOwnRecap
+    ? 'get_year_recap_stats'
+    : 'get_public_year_recap_stats';
+
+  const { data, error } = await supabase.rpc(functionName, {
     target_user_id: userId,
     target_year: year
   });
@@ -41,7 +49,10 @@ export async function getTopPosts(userId: string, year: number, limit: number = 
   const startDate = `${year}-01-01`;
   const endDate = `${year}-12-31`;
 
-  const { data, error } = await supabase
+  const { data: { session } } = await supabase.auth.getSession();
+  const isOwnRecap = session?.user?.id === userId;
+
+  let query = supabase
     .from('logs')
     .select(`
       *,
@@ -49,7 +60,13 @@ export async function getTopPosts(userId: string, year: number, limit: number = 
     `)
     .eq('user_id', userId)
     .gte('event_date', startDate)
-    .lte('event_date', endDate)
+    .lte('event_date', endDate);
+
+  if (!isOwnRecap) {
+    query = query.eq('is_public', true);
+  }
+
+  const { data, error } = await query
     .order('likes(count)', { ascending: false })
     .limit(limit);
 
@@ -65,13 +82,22 @@ export async function getAllLocations(userId: string, year: number): Promise<str
   const startDate = `${year}-01-01`;
   const endDate = `${year}-12-31`;
 
-  const { data, error } = await supabase
+  const { data: { session } } = await supabase.auth.getSession();
+  const isOwnRecap = session?.user?.id === userId;
+
+  let query = supabase
     .from('logs')
     .select('location')
     .eq('user_id', userId)
     .gte('event_date', startDate)
     .lte('event_date', endDate)
     .not('location', 'is', null);
+
+  if (!isOwnRecap) {
+    query = query.eq('is_public', true);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching locations:', error);
@@ -86,13 +112,22 @@ export async function getAllTrips(userId: string, year: number): Promise<string[
   const startDate = `${year}-01-01`;
   const endDate = `${year}-12-31`;
 
-  const { data, error } = await supabase
+  const { data: { session } } = await supabase.auth.getSession();
+  const isOwnRecap = session?.user?.id === userId;
+
+  let query = supabase
     .from('logs')
     .select('trip_name')
     .eq('user_id', userId)
     .gte('event_date', startDate)
     .lte('event_date', endDate)
     .not('trip_name', 'is', null);
+
+  if (!isOwnRecap) {
+    query = query.eq('is_public', true);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching trips:', error);
@@ -107,13 +142,22 @@ export async function getPhotoHighlights(userId: string, year: number, limit: nu
   const startDate = `${year}-01-01`;
   const endDate = `${year}-12-31`;
 
-  const { data, error } = await supabase
+  const { data: { session } } = await supabase.auth.getSession();
+  const isOwnRecap = session?.user?.id === userId;
+
+  let query = supabase
     .from('logs')
     .select('*')
     .eq('user_id', userId)
     .gte('event_date', startDate)
     .lte('event_date', endDate)
-    .not('image_url', 'is', null)
+    .not('image_url', 'is', null);
+
+  if (!isOwnRecap) {
+    query = query.eq('is_public', true);
+  }
+
+  const { data, error } = await query
     .order('created_at', { ascending: false })
     .limit(limit);
 

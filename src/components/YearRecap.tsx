@@ -20,6 +20,7 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [recapData, setRecapData] = useState<YearRecapData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadRecapData();
@@ -41,10 +42,22 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
   }, [currentSlide]);
 
   const loadRecapData = async () => {
-    setLoading(true);
-    const data = await getFullYearRecap(userId, year);
-    setRecapData(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getFullYearRecap(userId, year);
+
+      if (!data || data.stats.total_logs === 0) {
+        setError('no_data');
+      } else {
+        setRecapData(data);
+      }
+    } catch (err) {
+      console.error('Error loading recap:', err);
+      setError('failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const nextSlide = () => {
@@ -75,21 +88,41 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900 flex items-center justify-center z-50">
-        <div className="text-white text-2xl animate-pulse">Loading your {year} recap...</div>
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-900 via-slate-900 to-slate-800 flex items-center justify-center z-50">
+        <div className="text-white text-2xl animate-pulse">Loading {year} recap...</div>
       </div>
     );
   }
 
-  if (!recapData) {
+  if (error || !recapData) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900 flex items-center justify-center z-50">
-        <div className="text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">No data found</h2>
-          <p className="text-lg mb-6">You don't have any logs for {year} yet.</p>
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-900 via-slate-900 to-slate-800 flex items-center justify-center z-50">
+        <div className="text-white text-center max-w-md px-6">
+          {error === 'no_data' ? (
+            <>
+              <h2 className="text-3xl font-bold mb-4">No Recap Available</h2>
+              <p className="text-lg mb-6">
+                There are no public logs for {year} yet.
+              </p>
+            </>
+          ) : error === 'failed' ? (
+            <>
+              <h2 className="text-3xl font-bold mb-4">Unable to Load Recap</h2>
+              <p className="text-lg mb-6">
+                Something went wrong while loading the recap. Please try again later.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl font-bold mb-4">No Data Found</h2>
+              <p className="text-lg mb-6">
+                This recap is not available.
+              </p>
+            </>
+          )}
           <button
             onClick={onClose}
-            className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition"
+            className="px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition"
           >
             Close
           </button>
