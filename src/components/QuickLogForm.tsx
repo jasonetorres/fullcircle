@@ -113,14 +113,16 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
               className="w-full px-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
             />
           </div>
-          <button
-            type="submit"
-            disabled={loading || !formData.title}
-            className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-2 rounded-lg transition flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-          >
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline text-sm font-medium">Log</span>
-          </button>
+          {!isExpanded && (
+            <button
+              type="submit"
+              disabled={loading || !formData.title}
+              className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-2 rounded-lg transition flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm font-medium">Log</span>
+            </button>
+          )}
         </div>
 
         {isExpanded && (
@@ -218,7 +220,7 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
               )}
             </div>
 
-            <div className="flex items-center justify-between pt-1 gap-2">
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() =>
@@ -242,13 +244,33 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
                   </>
                 )}
               </button>
+            </div>
 
+            <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="text-slate-600 hover:text-slate-800 text-xs transition py-1.5 px-2"
+                className="text-slate-600 hover:text-slate-800 text-sm transition py-2 px-3 font-medium"
               >
-                Collapse
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                disabled={loading || !formData.title}
+                className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Posting...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    Post Log
+                  </>
+                )}
               </button>
             </div>
           </div>
