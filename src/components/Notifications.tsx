@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Bell } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Notification {
   id: string;
   actor_id: string;
-  type: 'like' | 'comment' | 'reply';
-  log_id: string;
+  type: 'like' | 'comment' | 'reply' | 'follow';
+  log_id: string | null;
   comment_id: string | null;
   is_read: boolean;
   created_at: string;
   actor: {
     username: string;
     display_name: string;
-  };
+  } | null;
   log: {
     title: string;
-  };
+  } | null;
 }
 
 interface NotificationsProps {
@@ -72,13 +73,9 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
         return;
       }
 
-      const { data, error } = await supabase
+      const { data: notificationsData, error } = await supabase
         .from('notifications')
-        .select(`
-          *,
-          actor:profiles!notifications_actor_id_fkey (username, display_name),
-          log:logs!notifications_log_id_fkey (title)
-        `)
+        .select('*')
         .eq('recipient_id', user.id)
         .order('created_at', { ascending: false })
         .limit(20);
@@ -89,8 +86,34 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
         return;
       }
 
-      setNotifications(data || []);
-      setUnreadCount(data?.filter(n => !n.is_read).length || 0);
+      if (!notificationsData || notificationsData.length === 0) {
+        setNotifications([]);
+        setUnreadCount(0);
+        setLoading(false);
+        return;
+      }
+
+      const actorIds = [...new Set(notificationsData.map(n => n.actor_id))];
+      const logIds = [...new Set(notificationsData.map(n => n.log_id).filter(Boolean))];
+
+      const [{ data: actors }, { data: logs }] = await Promise.all([
+        supabase.from('profiles').select('id, username, display_name').in('id', actorIds),
+        logIds.length > 0
+          ? supabase.from('logs').select('id, title').in('id', logIds)
+          : Promise.resolve({ data: [] })
+      ]);
+
+      const actorMap = new Map(actors?.map(a => [a.id, a]) || []);
+      const logMap = new Map(logs?.map(l => [l.id, l]) || []);
+
+      const enrichedNotifications = notificationsData.map(n => ({
+        ...n,
+        actor: actorMap.get(n.actor_id) || null,
+        log: n.log_id ? logMap.get(n.log_id) || null : null,
+      }));
+
+      setNotifications(enrichedNotifications);
+      setUnreadCount(enrichedNotifications.filter(n => !n.is_read).length);
     } catch (err) {
       console.error('Error loading notifications:', err);
     } finally {
@@ -134,6 +157,8 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
         return `${name} commented on "${title}"`;
       case 'reply':
         return `${name} replied to your comment`;
+      case 'follow':
+        return `${name} started following you`;
       default:
         return '';
     }
@@ -154,7 +179,10 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       markAsRead(notification.id);
     }
     setIsOpen(false);
-    if (onNotificationClick) {
+    if (notification.type === 'follow') {
+      return;
+    }
+    if (onNotificationClick && notification.log_id) {
       onNotificationClick(notification.log_id);
     }
   };
@@ -202,14 +230,8 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
                   No notifications yet
                 </div>
               ) : (
-                notifications.map(notification => (
-                  <button
-                    key={notification.id}
-                    onClick={() => handleNotificationClick(notification)}
-                    className={`w-full p-4 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 ${
-                      !notification.is_read ? 'bg-blue-50' : ''
-                    }`}
-                  >
+                notifications.map(notification => {
+                  const content = (
                     <div className="flex items-start gap-3">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm leading-relaxed text-slate-800">
@@ -223,8 +245,40 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
                         <div className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0" />
                       )}
                     </div>
-                  </button>
-                ))
+                  );
+
+                  const className = `w-full p-4 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 ${
+                    !notification.is_read ? 'bg-blue-50' : ''
+                  }`;
+
+                  if (notification.type === 'follow') {
+                    return (
+                      <Link
+                        key={notification.id}
+                        to={`/profile/${notification.actor_id}`}
+                        onClick={() => {
+                          if (!notification.is_read) {
+                            markAsRead(notification.id);
+                          }
+                          setIsOpen(false);
+                        }}
+                        className={className}
+                      >
+                        {content}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={notification.id}
+                      onClick={() => handleNotificationClick(notification)}
+                      className={className}
+                    >
+                      {content}
+                    </button>
+                  );
+                })
               )}
             </div>
           </div>
