@@ -15,6 +15,7 @@ const FROM_EMAIL =
   Deno.env.get("NOTIFICATION_FROM_EMAIL") ||
   "FullCircle <onboarding@resend.dev>";
 const APP_URL = Deno.env.get("APP_URL") || "https://fullcircle.app";
+const TEST_EMAIL = Deno.env.get("TEST_EMAIL");
 
 interface NotificationRecord {
   id: string;
@@ -240,8 +241,8 @@ Deno.serve(async (req: Request) => {
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
-        to: [recipientUser.email],
-        subject,
+        to: [TEST_EMAIL || recipientUser.email],
+        subject: TEST_EMAIL ? `[TEST] ${subject}` : subject,
         html,
         headers: {
           "X-Entity-Ref-ID": record.id,

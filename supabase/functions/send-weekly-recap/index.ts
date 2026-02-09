@@ -14,6 +14,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const FROM_EMAIL =
   Deno.env.get("NOTIFICATION_FROM_EMAIL") ||
   "FullCircle <onboarding@resend.dev>";
+const TEST_EMAIL = Deno.env.get("TEST_EMAIL");
 
 function buildRecapHtml(
   stats: { logs_count: number; photos_count: number; likes_count: number; top_location: string | null },
@@ -215,8 +216,8 @@ Deno.serve(async (req: Request) => {
           },
           body: JSON.stringify({
             from: FROM_EMAIL,
-            to: [user.email],
-            subject: "Your FullCircle Week in Review",
+            to: [TEST_EMAIL || user.email],
+            subject: TEST_EMAIL ? "[TEST] Your FullCircle Week in Review" : "Your FullCircle Week in Review",
             html,
           }),
         });
