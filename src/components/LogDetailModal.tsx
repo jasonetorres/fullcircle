@@ -1,4 +1,4 @@
-import { X, Calendar, MapPin, Plane, Lock, Globe, Heart, MessageCircle, Send, User, CornerDownRight } from 'lucide-react';
+import { X, Calendar, MapPin, Plane, Lock, Globe, Heart, MessageCircle, Send, User } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, Log, Profile, Comment } from '../lib/supabase';
@@ -26,7 +26,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   const [userLiked, setUserLiked] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
-  const [mentionSearch, setMentionSearch] = useState('');
+  const [, setMentionSearch] = useState('');
   const [mentionSuggestions, setMentionSuggestions] = useState<Profile[]>([]);
   const [showMentions, setShowMentions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -246,7 +246,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
     try {
       const mentions = extractMentions(newComment);
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('comments')
         .insert({
           log_id: log.id,

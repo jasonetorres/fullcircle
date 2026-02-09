@@ -58,4 +58,6 @@ export type Comment = {
   content: string;
   created_at: string;
   updated_at: string;
+  parent_comment_id: string | null;
+  mentions: any;
 };

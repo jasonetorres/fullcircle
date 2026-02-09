@@ -90,7 +90,7 @@ export default function Search({ userId }: SearchProps) {
             >
               <option value="">All Locations</option>
               {uniqueLocations.map((location) => (
-                <option key={location} value={location}>
+                <option key={location} value={location || ''}>
                   {location}
                 </option>
               ))}

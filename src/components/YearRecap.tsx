@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, X, Share2, Download } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Share2 } from 'lucide-react';
 import { getFullYearRecap, YearRecapData } from '../lib/recapService';
 import { RecapIntro } from './recap/RecapIntro';
 import { RecapStats } from './recap/RecapStats';
