@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { supabase, Profile } from '../lib/supabase';
-import { X, Upload, User, Loader, Mail } from 'lucide-react';
+import { X, Upload, User, Loader, Mail, CalendarDays } from 'lucide-react';
 
 interface AccountSettingsProps {
   userId: string;
@@ -17,6 +17,7 @@ export default function AccountSettings({
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
   const [emailNotifications, setEmailNotifications] = useState(true);
+  const [weeklyRecap, setWeeklyRecap] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
@@ -42,6 +43,7 @@ export default function AccountSettings({
         setDisplayName(data.display_name || '');
         setBio(data.bio || '');
         setEmailNotifications(data.email_notifications ?? true);
+        setWeeklyRecap(data.weekly_recap_enabled ?? true);
       }
     } catch (err: any) {
       console.error('Error fetching profile:', err);
@@ -105,6 +107,7 @@ export default function AccountSettings({
           display_name: displayName.trim() || null,
           bio: bio.trim() || null,
           email_notifications: emailNotifications,
+          weekly_recap_enabled: weeklyRecap,
           updated_at: new Date().toISOString(),
         })
         .eq('id', userId);
@@ -256,6 +259,32 @@ export default function AccountSettings({
                 <span
                   className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                     emailNotifications ? 'translate-x-5' : 'translate-x-0.5'
+                  } mt-0.5`}
+                />
+              </button>
+            </div>
+            <div className="flex items-center justify-between mt-3 p-3 bg-slate-50 rounded-lg">
+              <div className="flex-1 mr-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <CalendarDays className="w-3.5 h-3.5 text-slate-500" />
+                  <p className="text-sm font-medium text-slate-700">Weekly Recap</p>
+                </div>
+                <p className="text-xs text-slate-500">
+                  Receive a weekly summary of your logs, photos, and engagement
+                </p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={weeklyRecap}
+                onClick={() => setWeeklyRecap(!weeklyRecap)}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 ${
+                  weeklyRecap ? 'bg-slate-800' : 'bg-slate-300'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    weeklyRecap ? 'translate-x-5' : 'translate-x-0.5'
                   } mt-0.5`}
                 />
               </button>

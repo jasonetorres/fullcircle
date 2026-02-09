@@ -33,6 +33,8 @@ export type Profile = {
   created_at: string;
   updated_at: string;
   email_notifications: boolean;
+  weekly_recap_enabled: boolean;
+  unsubscribe_token: string;
 };
 
 export type Follow = {
