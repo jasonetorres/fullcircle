@@ -42,8 +42,8 @@ function buildRecapHtml(
     .header { padding: 40px 32px; text-align: center; background: #ffffff; }
     .logo { width: 80px; height: auto; margin-bottom: 12px; }
     .logo-text { display: block; font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: -0.025em; }
-    .stats-grid { padding: 0 32px; display: table; width: 100%; border-spacing: 10px; margin-bottom: 20px; }
-    .stat-card { display: table-cell; background: #f1f5f9; padding: 20px; border-radius: 16px; text-align: center; width: 33%; }
+    .stats-grid { padding: 0 32px; display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+    .stat-card { flex: 1; background: #f1f5f9; padding: 20px; border-radius: 16px; text-align: center; min-width: 0; }
     .stat-value { display: block; font-size: 24px; font-weight: 800; color: #1e293b; }
     .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; }
     .highlight-section { padding: 32px; background: #1e293b; color: #ffffff; text-align: center; margin: 0 32px 32px 32px; border-radius: 16px; }
