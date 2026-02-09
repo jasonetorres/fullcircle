@@ -34,6 +34,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   const [selectedLog, setSelectedLog] = useState<Log | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   const isOwnProfile = userId === currentUserId;
 
@@ -237,11 +238,37 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           onClose={() => setShowRecap(false)}
         />
       )}
+
+      {showAvatarModal && profile.avatar_url && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowAvatarModal(false)}
+        >
+          <div className="relative max-w-2xl max-h-[90vh]">
+            <img
+              src={profile.avatar_url}
+              alt={profile.username}
+              className="w-full h-full object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setShowAvatarModal(false)}
+              className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
         <div className="p-4">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+            <div
+              className={`w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0 ${profile.avatar_url ? 'cursor-pointer hover:opacity-90 transition' : ''}`}
+              onClick={() => profile.avatar_url && setShowAvatarModal(true)}
+            >
               {profile.avatar_url ? (
                 <img
                   src={profile.avatar_url}
