@@ -14,7 +14,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const FROM_EMAIL =
   Deno.env.get("NOTIFICATION_FROM_EMAIL") ||
   "FullCircle <onboarding@resend.dev>";
-const APP_URL = Deno.env.get("APP_URL") || "https://fullcircle.app";
+const APP_URL = Deno.env.get("APP_URL") || "https://fullcircle.bolt.host";
 const TEST_EMAIL = Deno.env.get("TEST_EMAIL");
 
 interface NotificationRecord {
@@ -92,54 +92,43 @@ function buildEmailHtml(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FullCircle Notification</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
+    .wrapper { padding: 40px 20px; }
+    .container { max-width: 550px; margin: 0 auto; background: #ffffff; border-radius: 20px; border: 1px solid #e2e8f0; overflow: hidden; }
+    .header { padding: 40px 32px; text-align: center; background: #ffffff; }
+    .logo { width: 80px; height: auto; margin-bottom: 12px; }
+    .logo-text { display: block; font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: -0.025em; }
+    .content { padding: 32px; text-align: center; }
+    .icon-circle { display: inline-block; width: 56px; height: 56px; line-height: 56px; border-radius: 50%; background-color: ${config.bgColor}; font-size: 24px; margin-bottom: 24px; }
+    .icon { color: ${config.color}; }
+    .greeting { margin: 0 0 8px; font-size: 15px; color: #64748b; }
+    .message { margin: 0 0 24px; font-size: 17px; color: #1e293b; line-height: 1.5; }
+    .button { background-color: #1e293b; color: #ffffff !important; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block; }
+    .footer { padding: 32px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+  </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;padding:40px 20px;">
-    <tr>
-      <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-          <tr>
-            <td style="padding:32px 32px 24px;text-align:center;border-bottom:1px solid #f1f5f9;">
-              <div style="font-size:20px;font-weight:700;color:#1e293b;letter-spacing:-0.3px;">FullCircle</div>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:32px;">
-              <div style="text-align:center;margin-bottom:24px;">
-                <div style="display:inline-block;width:56px;height:56px;line-height:56px;border-radius:50%;background-color:${config.bgColor};font-size:24px;text-align:center;">
-                  <span style="color:${config.color};">${config.icon}</span>
-                </div>
-              </div>
-              <p style="margin:0 0 8px;font-size:15px;color:#64748b;text-align:center;">
-                Hey ${recipientName},
-              </p>
-              <p style="margin:0 0 24px;font-size:17px;color:#1e293b;text-align:center;line-height:1.5;">
-                <strong>${actorName}</strong> ${config.message}
-              </p>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td align="center">
-                    <a href="${APP_URL}" style="display:inline-block;padding:12px 32px;background-color:#1e293b;color:#ffffff;text-decoration:none;border-radius:10px;font-size:14px;font-weight:600;letter-spacing:0.2px;">
-                      Open FullCircle
-                    </a>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:20px 32px;background-color:#f8fafc;border-top:1px solid #f1f5f9;">
-              <p style="margin:0;font-size:12px;color:#94a3b8;text-align:center;line-height:1.6;">
-                You received this because you have email notifications enabled.
-                <br>
-                You can turn them off in your account settings.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="header">
+        <img src="https://ujpjuqeybegruuayzzeb.supabase.co/storage/v1/object/public/avatars/Screenshot%202026-02-09%20at%209.52.01%20AM.png" alt="FullCircle" class="logo">
+        <span class="logo-text">FullCircle</span>
+      </div>
+      <div class="content">
+        <div class="icon-circle">
+          <span class="icon">${config.icon}</span>
+        </div>
+        <p class="greeting">Hey ${recipientName},</p>
+        <p class="message"><strong>${actorName}</strong> ${config.message}</p>
+        <a href="${APP_URL}" class="button">Open FullCircle</a>
+      </div>
+      <div class="footer">
+        You received this because you have email notifications enabled.<br>
+        You can turn them off in your account settings.
+      </div>
+    </div>
+  </div>
 </body>
 </html>`;
 }
