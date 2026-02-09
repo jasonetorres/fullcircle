@@ -120,7 +120,7 @@ function MainApp() {
         </div>
       </header>
 
-      <div className="min-h-screen bg-slate-50 pb-20">
+      <div className="min-h-screen bg-slate-50 pb-24">
         <main className="flex-1">
           <div className="max-w-4xl mx-auto px-4 py-4">
             {activeTab === 'myLogs' ? (
@@ -148,7 +148,7 @@ function MainApp() {
         </main>
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 safe-area-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 pb-6 safe-area-bottom">
         <div className="max-w-4xl mx-auto flex items-center justify-around px-2">
           <button
             onClick={() => setActiveTab('myLogs')}
