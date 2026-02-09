@@ -3,6 +3,7 @@ import { supabase, Profile as ProfileType, Log } from '../lib/supabase';
 import { MapPin, Calendar, Settings, User, Sparkles, Download, UserPlus, UserMinus } from 'lucide-react';
 import { YearRecap } from './YearRecap';
 import LogDetailModal from './LogDetailModal';
+import { linkifyText } from '../lib/linkify';
 
 interface ProfileProps {
   userId: string;
@@ -293,7 +294,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           </div>
 
           {profile.bio && (
-            <p className="text-sm text-slate-700 mb-3">{profile.bio}</p>
+            <p className="text-sm text-slate-700 mb-3">{linkifyText(profile.bio)}</p>
           )}
 
           <div className="grid grid-cols-4 gap-3 mb-3">
