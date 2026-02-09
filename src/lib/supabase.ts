@@ -32,6 +32,7 @@ export type Profile = {
   avatar_url: string | null;
   created_at: string;
   updated_at: string;
+  email_notifications: boolean;
 };
 
 export type Follow = {

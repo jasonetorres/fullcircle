@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { supabase, Profile } from '../lib/supabase';
-import { X, Upload, User, Loader } from 'lucide-react';
+import { X, Upload, User, Loader, Mail } from 'lucide-react';
 
 interface AccountSettingsProps {
   userId: string;
@@ -16,6 +16,7 @@ export default function AccountSettings({
   const [profile, setProfile] = useState<Profile | null>(null);
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
+  const [emailNotifications, setEmailNotifications] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
@@ -40,6 +41,7 @@ export default function AccountSettings({
         setProfile(data);
         setDisplayName(data.display_name || '');
         setBio(data.bio || '');
+        setEmailNotifications(data.email_notifications ?? true);
       }
     } catch (err: any) {
       console.error('Error fetching profile:', err);
@@ -102,6 +104,7 @@ export default function AccountSettings({
         .update({
           display_name: displayName.trim() || null,
           bio: bio.trim() || null,
+          email_notifications: emailNotifications,
           updated_at: new Date().toISOString(),
         })
         .eq('id', userId);
@@ -227,6 +230,35 @@ export default function AccountSettings({
             <div className="flex justify-between text-xs text-slate-500 mt-1">
               <span>Your bio (optional)</span>
               <span>{bio.length}/200</span>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-200 pt-6">
+            <div className="flex items-center gap-3 mb-1">
+              <Mail className="w-4 h-4 text-slate-500" />
+              <span className="text-sm font-medium text-slate-700">Email Notifications</span>
+            </div>
+            <div className="flex items-center justify-between mt-3 p-3 bg-slate-50 rounded-lg">
+              <div className="flex-1 mr-3">
+                <p className="text-sm text-slate-600">
+                  Receive email alerts for likes, comments, replies, and new followers
+                </p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={emailNotifications}
+                onClick={() => setEmailNotifications(!emailNotifications)}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 ${
+                  emailNotifications ? 'bg-slate-800' : 'bg-slate-300'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    emailNotifications ? 'translate-x-5' : 'translate-x-0.5'
+                  } mt-0.5`}
+                />
+              </button>
             </div>
           </div>
 
