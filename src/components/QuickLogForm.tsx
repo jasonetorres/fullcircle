@@ -1,18 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Plus, Calendar, MapPin, Plane, Lock, Globe, Image, X } from 'lucide-react';
+import { Plus, Calendar, MapPin, Plane, Lock, Globe, Image, X, Camera } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
+import { compressImage } from '../lib/imageUtils';
 
 interface QuickLogFormProps {
   onLogAdded: () => void;
   userId: string;
+  onClose?: () => void;
 }
 
-export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFormProps) {
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(false);
+
   const getLocalDate = () => {
     const now = new Date();
     const year = now.getFullYear();
@@ -30,15 +33,23 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
     is_public: true,
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
+      const compressed = await compressImage(file);
+      setImageFile(compressed);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressed);
     }
   };
 
@@ -55,10 +66,11 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
       let imageUrl = null;
 
       if (imageFile) {
+        setUploadProgress(true);
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${userId}/${Date.now()}.${fileExt}`;
 
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('log-images')
           .upload(fileName, imageFile);
 
@@ -69,6 +81,7 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
           .getPublicUrl(fileName);
 
         imageUrl = publicUrl;
+        setUploadProgress(false);
       }
 
       const { error } = await supabase.from('logs').insert({
@@ -79,203 +92,200 @@ export default function QuickLogForm({ onLogAdded, userId }: QuickLogFormProps) 
 
       if (error) throw error;
 
-      setFormData({
-        title: '',
-        event_date: getLocalDate(),
-        description: '',
-        location: '',
-        trip_name: '',
-        is_public: true,
-      });
-      setImageFile(null);
-      setImagePreview(null);
-      setIsExpanded(false);
       onLogAdded();
     } catch (err: any) {
       alert(err.message || 'Failed to add log');
     } finally {
       setLoading(false);
+      setUploadProgress(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-3 mb-4">
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="flex items-start gap-2">
-          <div className="flex-1">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center animate-fade-in">
+      <div
+        className="bg-white w-full sm:max-w-lg sm:rounded-xl rounded-t-2xl max-h-[90vh] overflow-y-auto animate-slide-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="sticky top-0 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between z-10 rounded-t-2xl sm:rounded-t-xl">
+          <h2 className="text-lg font-bold text-slate-800">New Log</h2>
+          <button
+            onClick={onClose}
+            className="p-1 text-slate-400 hover:text-slate-600 transition"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-4 space-y-3">
+          <div>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              onFocus={() => setIsExpanded(true)}
               placeholder="What happened today?"
               required
-              className="w-full px-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              autoFocus
+              className="w-full px-3 py-2.5 text-base border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
             />
           </div>
-          {!isExpanded && (
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 mb-1">
+                <Calendar className="w-3 h-3" />
+                Date
+              </label>
+              <input
+                type="date"
+                value={formData.event_date}
+                onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
+                required
+                className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              />
+            </div>
+            <div>
+              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 mb-1">
+                <MapPin className="w-3 h-3" />
+                Location
+              </label>
+              <LocationAutocomplete
+                value={formData.location}
+                onChange={(value) => setFormData({ ...formData, location: value })}
+                placeholder="Where?"
+                className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="flex items-center gap-1 text-xs font-medium text-slate-600 mb-1">
+              <Plane className="w-3 h-3" />
+              Trip Name
+            </label>
+            <input
+              type="text"
+              value={formData.trip_name}
+              onChange={(e) => setFormData({ ...formData, trip_name: e.target.value })}
+              placeholder="Part of a trip? Name it"
+              className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">
+              Description
+            </label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Tell the story..."
+              rows={3}
+              className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
+            />
+          </div>
+
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+              id="modal-image-upload"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleImageChange}
+              className="hidden"
+              id="modal-camera-capture"
+            />
+            {imagePreview ? (
+              <div className="relative">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-40 object-cover rounded-xl"
+                />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1 hover:bg-black/70 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                {uploadProgress && (
+                  <div className="absolute inset-0 bg-black/30 rounded-xl flex items-center justify-center">
+                    <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <label
+                  htmlFor="modal-image-upload"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
+                >
+                  <Image className="w-4 h-4" />
+                  Gallery
+                </label>
+                <label
+                  htmlFor="modal-camera-capture"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
+                >
+                  <Camera className="w-4 h-4" />
+                  Camera
+                </label>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() =>
+                setFormData({ ...formData, is_public: !formData.is_public })
+              }
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition text-sm font-medium ${
+                formData.is_public
+                  ? 'bg-emerald-50 text-emerald-700'
+                  : 'bg-slate-100 text-slate-600'
+              }`}
+            >
+              {formData.is_public ? (
+                <>
+                  <Globe className="w-4 h-4" />
+                  Public
+                </>
+              ) : (
+                <>
+                  <Lock className="w-4 h-4" />
+                  Private
+                </>
+              )}
+            </button>
+
             <button
               type="submit"
               disabled={loading || !formData.title}
-              className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-2 rounded-lg transition flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+              className="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold active:scale-95"
             >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm font-medium">Log</span>
-            </button>
-          )}
-        </div>
-
-        {isExpanded && (
-          <div className="space-y-2 pt-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <div>
-                <label className="flex items-center gap-1 text-xs font-medium text-slate-700 mb-1">
-                  <Calendar className="w-3 h-3" />
-                  Event Date
-                </label>
-                <input
-                  type="date"
-                  value={formData.event_date}
-                  onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
-                  required
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-1 text-xs font-medium text-slate-700 mb-1">
-                  <MapPin className="w-3 h-3" />
-                  Location
-                </label>
-                <LocationAutocomplete
-                  value={formData.location}
-                  onChange={(value) => setFormData({ ...formData, location: value })}
-                  placeholder="Where were you?"
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="flex items-center gap-1 text-xs font-medium text-slate-700 mb-1">
-                <Plane className="w-3 h-3" />
-                Trip Name
-              </label>
-              <input
-                type="text"
-                value={formData.trip_name}
-                onChange={(e) => setFormData({ ...formData, trip_name: e.target.value })}
-                placeholder="Part of a trip? Name it"
-                className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Description
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Tell the story..."
-                rows={2}
-                className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
-              />
-            </div>
-
-            <div>
-              <label className="flex items-center gap-1 text-xs font-medium text-slate-700 mb-1">
-                <Image className="w-3 h-3" />
-                Image
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-                id="image-upload"
-              />
-              <label
-                htmlFor="image-upload"
-                className="flex items-center justify-center gap-1 px-2 py-1.5 border border-slate-300 rounded-lg text-xs text-slate-600 hover:bg-slate-50 transition cursor-pointer"
-              >
-                <Image className="w-3 h-3" />
-                Choose Image
-              </label>
-              {imagePreview && (
-                <div className="mt-2 relative inline-block">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-20 h-20 object-cover rounded-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Posting...
+                </>
+              ) : (
+                <>
+                  <Plus className="w-4 h-4" />
+                  Post Log
+                </>
               )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, is_public: !formData.is_public })
-                }
-                className={`flex items-center gap-1 px-2 py-1.5 rounded-lg transition text-xs font-medium ${
-                  formData.is_public
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-slate-100 text-slate-700'
-                }`}
-              >
-                {formData.is_public ? (
-                  <>
-                    <Globe className="w-3 h-3" />
-                    Public
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-3 h-3" />
-                    Private
-                  </>
-                )}
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200">
-              <button
-                type="button"
-                onClick={() => setIsExpanded(false)}
-                className="text-slate-600 hover:text-slate-800 text-sm transition py-2 px-3 font-medium"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                disabled={loading || !formData.title}
-                className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Posting...
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-4 h-4" />
-                    Post Log
-                  </>
-                )}
-              </button>
-            </div>
+            </button>
           </div>
-        )}
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

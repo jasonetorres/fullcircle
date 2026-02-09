@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell } from 'lucide-react';
+import { Bell, Heart, MessageCircle, UserPlus, Reply, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { badgeManager } from '../lib/badgeManager';
 
@@ -15,6 +15,7 @@ interface Notification {
   actor: {
     username: string;
     display_name: string;
+    avatar_url: string | null;
   } | null;
   log: {
     title: string;
@@ -23,9 +24,10 @@ interface Notification {
 
 interface NotificationsProps {
   onNotificationClick?: (logId: string) => void;
+  userId: string;
 }
 
-export default function Notifications({ onNotificationClick }: NotificationsProps) {
+export default function Notifications({ onNotificationClick, userId }: NotificationsProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -34,64 +36,52 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
   useEffect(() => {
     loadNotifications();
 
-    let channel: ReturnType<typeof supabase.channel> | null = null;
-
-    const setupSubscription = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      channel = supabase
-        .channel(`notifications:${user.id}`)
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'notifications',
-            filter: `recipient_id=eq.${user.id}`,
-          },
-          () => {
-            loadNotifications();
-          }
-        )
-        .subscribe();
-    };
-
-    setupSubscription();
+    const channel = supabase
+      .channel(`notifications:${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `recipient_id=eq.${userId}`,
+        },
+        () => {
+          loadNotifications();
+        }
+      )
+      .subscribe();
 
     return () => {
-      if (channel) {
-        supabase.removeChannel(channel);
-      }
+      supabase.removeChannel(channel);
     };
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     badgeManager.setBadge(unreadCount);
   }, [unreadCount]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   const loadNotifications = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
       const { data: notificationsData, error } = await supabase
         .from('notifications')
         .select('*')
-        .eq('recipient_id', user.id)
+        .eq('recipient_id', userId)
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(30);
 
-      if (error) {
-        console.error('Error loading notifications:', error);
-        setLoading(false);
-        return;
-      }
-
-      if (!notificationsData || notificationsData.length === 0) {
+      if (error || !notificationsData || notificationsData.length === 0) {
         setNotifications([]);
         setUnreadCount(0);
         setLoading(false);
@@ -102,7 +92,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       const logIds = [...new Set(notificationsData.map(n => n.log_id).filter(Boolean))];
 
       const [{ data: actors }, { data: logs }] = await Promise.all([
-        supabase.from('profiles').select('id, username, display_name').in('id', actorIds),
+        supabase.from('profiles').select('id, username, display_name, avatar_url').in('id', actorIds),
         logIds.length > 0
           ? supabase.from('logs').select('id, title').in('id', logIds)
           : Promise.resolve({ data: [] })
@@ -111,14 +101,14 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       const actorMap = new Map(actors?.map(a => [a.id, a]) || []);
       const logMap = new Map(logs?.map(l => [l.id, l]) || []);
 
-      const enrichedNotifications = notificationsData.map(n => ({
+      const enriched = notificationsData.map(n => ({
         ...n,
         actor: actorMap.get(n.actor_id) || null,
         log: n.log_id ? logMap.get(n.log_id) || null : null,
       }));
 
-      setNotifications(enrichedNotifications);
-      setUnreadCount(enrichedNotifications.filter(n => !n.is_read).length);
+      setNotifications(enriched);
+      setUnreadCount(enriched.filter(n => !n.is_read).length);
     } catch (err) {
       console.error('Error loading notifications:', err);
     } finally {
@@ -139,44 +129,45 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
   };
 
   const markAllAsRead = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
     await supabase
       .from('notifications')
       .update({ is_read: true })
-      .eq('recipient_id', user.id)
+      .eq('recipient_id', userId)
       .eq('is_read', false);
 
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
     setUnreadCount(0);
   };
 
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'like': return <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />;
+      case 'comment': return <MessageCircle className="w-3.5 h-3.5 text-blue-500" />;
+      case 'reply': return <Reply className="w-3.5 h-3.5 text-teal-500" />;
+      case 'follow': return <UserPlus className="w-3.5 h-3.5 text-emerald-500" />;
+      default: return <Bell className="w-3.5 h-3.5 text-slate-400" />;
+    }
+  };
+
   const getNotificationText = (notification: Notification) => {
     const name = notification.actor?.display_name || notification.actor?.username || 'Someone';
     const title = notification.log?.title || 'your post';
     switch (notification.type) {
-      case 'like':
-        return `${name} liked "${title}"`;
-      case 'comment':
-        return `${name} commented on "${title}"`;
-      case 'reply':
-        return `${name} replied to your comment`;
-      case 'follow':
-        return `${name} started following you`;
-      default:
-        return '';
+      case 'like': return <><strong>{name}</strong> liked <strong>"{title}"</strong></>;
+      case 'comment': return <><strong>{name}</strong> commented on <strong>"{title}"</strong></>;
+      case 'reply': return <><strong>{name}</strong> replied to your comment</>;
+      case 'follow': return <><strong>{name}</strong> started following you</>;
+      default: return '';
     }
   };
 
   const getTimeAgo = (date: string) => {
     const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
-
-    if (seconds < 60) return 'just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-    return new Date(date).toLocaleDateString();
+    if (seconds < 60) return 'now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d`;
+    return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
   const handleNotificationClick = (notification: Notification) => {
@@ -184,12 +175,27 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       markAsRead(notification.id);
     }
     setIsOpen(false);
-    if (notification.type === 'follow') {
-      return;
-    }
-    if (onNotificationClick && notification.log_id) {
+    if (notification.type !== 'follow' && onNotificationClick && notification.log_id) {
       onNotificationClick(notification.log_id);
     }
+  };
+
+  const renderAvatar = (notification: Notification) => {
+    const actor = notification.actor;
+    if (actor?.avatar_url) {
+      return (
+        <img
+          src={actor.avatar_url}
+          alt={actor.username}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      );
+    }
+    return (
+      <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white text-sm font-bold">
+        {actor?.username?.[0]?.toUpperCase() || '?'}
+      </div>
+    );
   };
 
   return (
@@ -200,7 +206,7 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+          <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] rounded-full min-w-[18px] min-h-[18px] flex items-center justify-center font-bold leading-none px-1">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -209,82 +215,99 @@ export default function Notifications({ onNotificationClick }: NotificationsProp
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/30 sm:bg-transparent"
+            className="fixed inset-0 z-40 bg-black/40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-96 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[calc(100vh-5rem)] sm:max-h-[500px] flex flex-col overflow-hidden">
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
-              <h3 className="font-semibold text-slate-800">Notifications</h3>
-              {unreadCount > 0 && (
-                <button
-                  onClick={markAllAsRead}
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                >
-                  Mark all as read
-                </button>
-              )}
-            </div>
+          <div className="fixed inset-x-0 bottom-0 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-auto sm:mt-2 z-50 sm:w-96 animate-slide-up sm:animate-fade-in">
+            <div className="bg-white sm:rounded-xl rounded-t-2xl shadow-2xl border-t sm:border border-slate-200 max-h-[75vh] sm:max-h-[500px] flex flex-col overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                <h3 className="font-bold text-slate-800">Notifications</h3>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={markAllAsRead}
+                    className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 font-medium transition"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    Mark all read
+                  </button>
+                )}
+              </div>
 
-            <div className="overflow-y-auto flex-1 overscroll-contain scrollbar-hide">
-              {loading ? (
-                <div className="p-8 text-center text-slate-500">
-                  Loading...
-                </div>
-              ) : notifications.length === 0 ? (
-                <div className="p-8 text-center text-slate-500">
-                  No notifications yet
-                </div>
-              ) : (
-                notifications.map(notification => {
-                  const content = (
-                    <div className="flex items-start gap-3 w-full">
-                      <div className="flex-1 min-w-0 py-0.5">
-                        <p className="text-sm text-slate-800 break-words">
-                          {getNotificationText(notification)}
-                        </p>
-                        <p className="text-xs text-slate-500 mt-1">
-                          {getTimeAgo(notification.created_at)}
-                        </p>
+              <div className="overflow-y-auto flex-1 overscroll-contain">
+                {loading ? (
+                  <div className="p-8 text-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-slate-300 border-t-slate-800 mx-auto" />
+                  </div>
+                ) : notifications.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <Bell className="w-8 h-8 text-slate-200 mx-auto mb-2" />
+                    <p className="text-sm text-slate-400">No notifications yet</p>
+                  </div>
+                ) : (
+                  notifications.map(notification => {
+                    const content = (
+                      <div className="flex items-start gap-3 w-full">
+                        <div className="relative flex-shrink-0">
+                          {renderAvatar(notification)}
+                          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm">
+                            {getTypeIcon(notification.type)}
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0 py-0.5">
+                          <p className="text-sm text-slate-700 leading-snug line-clamp-2">
+                            {getNotificationText(notification)}
+                          </p>
+                          <p className="text-xs text-slate-400 mt-0.5">
+                            {getTimeAgo(notification.created_at)}
+                          </p>
+                        </div>
+                        {!notification.is_read && (
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                        )}
                       </div>
-                      {!notification.is_read && (
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0" />
-                      )}
-                    </div>
-                  );
+                    );
 
-                  const baseClassName = `block w-full p-4 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 ${
-                    !notification.is_read ? 'bg-blue-50' : ''
-                  }`;
+                    const baseClassName = `block w-full p-3 text-left transition-colors ${
+                      !notification.is_read ? 'bg-blue-50/50' : 'hover:bg-slate-50'
+                    }`;
 
-                  if (notification.type === 'follow') {
+                    if (notification.type === 'follow') {
+                      return (
+                        <Link
+                          key={notification.id}
+                          to={`/profile/${notification.actor_id}`}
+                          onClick={() => {
+                            if (!notification.is_read) markAsRead(notification.id);
+                            setIsOpen(false);
+                          }}
+                          className={baseClassName}
+                        >
+                          {content}
+                        </Link>
+                      );
+                    }
+
                     return (
-                      <Link
+                      <button
                         key={notification.id}
-                        to={`/profile/${notification.actor_id}`}
-                        onClick={() => {
-                          if (!notification.is_read) {
-                            markAsRead(notification.id);
-                          }
-                          setIsOpen(false);
-                        }}
+                        onClick={() => handleNotificationClick(notification)}
                         className={baseClassName}
                       >
                         {content}
-                      </Link>
+                      </button>
                     );
-                  }
+                  })
+                )}
+              </div>
 
-                  return (
-                    <button
-                      key={notification.id}
-                      onClick={() => handleNotificationClick(notification)}
-                      className={baseClassName}
-                    >
-                      {content}
-                    </button>
-                  );
-                })
-              )}
+              <div className="sm:hidden px-4 py-3 border-t border-slate-100 flex-shrink-0">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-full py-2.5 text-sm font-medium text-slate-600 bg-slate-100 rounded-xl transition hover:bg-slate-200 active:scale-[0.98]"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </>

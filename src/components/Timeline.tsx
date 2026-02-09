@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { supabase, Log } from '../lib/supabase';
-import { Calendar, MapPin, Plane, Globe, Lock, Trash2, ChevronDown, ChevronUp, X, Image } from 'lucide-react';
+import { Calendar, MapPin, Plane, Globe, Lock, Trash2, ChevronDown, ChevronUp, X, Image, Camera } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
+import { compressImage } from '../lib/imageUtils';
 
 interface TimelineProps {
   userId: string;
@@ -140,15 +141,16 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
     setImagePreview(null);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
+      const compressed = await compressImage(file);
+      setImageFile(compressed);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressed);
     }
   };
 
@@ -367,10 +369,6 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
               </div>
 
               <div>
-                <label className="flex items-center gap-1 text-xs font-medium text-slate-700 mb-1">
-                  <Image className="w-3 h-3" />
-                  Image
-                </label>
                 <input
                   type="file"
                   accept="image/*"
@@ -378,27 +376,45 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
                   className="hidden"
                   id="edit-image-upload"
                 />
-                <label
-                  htmlFor="edit-image-upload"
-                  className="flex items-center justify-center gap-1 px-2 py-1.5 border border-slate-300 rounded-lg text-xs text-slate-600 hover:bg-slate-50 transition cursor-pointer"
-                >
-                  <Image className="w-3 h-3" />
-                  {imagePreview ? 'Change Image' : 'Choose Image'}
-                </label>
-                {imagePreview && (
-                  <div className="mt-2 relative inline-block">
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="edit-camera-capture"
+                />
+                {imagePreview ? (
+                  <div className="relative">
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="w-20 h-20 object-cover rounded-lg"
+                      className="w-full h-32 object-cover rounded-lg"
                     />
                     <button
                       type="button"
                       onClick={removeImage}
-                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600"
+                      className="absolute top-1.5 right-1.5 bg-black/50 text-white rounded-full p-1 hover:bg-black/70"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <label
+                      htmlFor="edit-image-upload"
+                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 border border-dashed border-slate-300 rounded-lg text-xs text-slate-500 hover:bg-slate-50 transition cursor-pointer"
+                    >
+                      <Image className="w-3.5 h-3.5" />
+                      Gallery
+                    </label>
+                    <label
+                      htmlFor="edit-camera-capture"
+                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 border border-dashed border-slate-300 rounded-lg text-xs text-slate-500 hover:bg-slate-50 transition cursor-pointer"
+                    >
+                      <Camera className="w-3.5 h-3.5" />
+                      Camera
+                    </label>
                   </div>
                 )}
               </div>
