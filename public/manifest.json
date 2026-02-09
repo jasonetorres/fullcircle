@@ -9,20 +9,20 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/lgofc copy.png",
-      "sizes": "512x512",
+      "src": "/lgofc.png",
+      "sizes": "488x488",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/lgofc copy.png",
-      "sizes": "512x512",
+      "src": "/lgofc.png",
+      "sizes": "488x488",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/lgofc copy.png",
-      "sizes": "192x192",
+      "src": "/fullcircle.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     }
