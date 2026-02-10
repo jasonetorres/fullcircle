@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { supabase, Profile as ProfileType, Log } from '../lib/supabase';
-import { MapPin, Calendar, Settings, User, Sparkles, Download, UserPlus, UserMinus } from 'lucide-react';
+import { MapPin, Calendar, Settings, User, Sparkles, Download, UserPlus, UserMinus, Award } from 'lucide-react';
 import { YearRecap } from './YearRecap';
 import LogDetailModal from './LogDetailModal';
+import StatsModal from './StatsModal';
 import { linkifyText } from '../lib/linkify';
+import { getUserBadges, checkAndAwardBadges } from '../lib/achievementManager';
 
 interface ProfileProps {
   userId: string;
@@ -35,6 +37,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState<'followers' | 'following' | 'posts' | 'places' | null>(null);
+  const [badges, setBadges] = useState<any[]>([]);
 
   const isOwnProfile = userId === currentUserId;
 
@@ -47,8 +51,12 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
     fetchProfile();
     fetchLogs();
     fetchStats();
+    fetchBadges();
     if (!isOwnProfile && currentUserId) {
       checkFollowStatus();
+    }
+    if (isOwnProfile) {
+      checkAndAwardBadges(userId);
     }
   }, [userId, activeFilter]);
 
@@ -129,6 +137,15 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
     }
   };
 
+  const fetchBadges = async () => {
+    try {
+      const userBadges = await getUserBadges(userId);
+      setBadges(userBadges);
+    } catch (err: any) {
+      console.error('Error fetching badges:', err);
+    }
+  };
+
   const checkFollowStatus = async () => {
     if (!currentUserId) return;
 
@@ -173,6 +190,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
         if (error) throw error;
         setIsFollowing(true);
         setStats(prev => ({ ...prev, followers: prev.followers + 1 }));
+        checkAndAwardBadges(userId);
       }
     } catch (err: any) {
       console.error('Error toggling follow:', err);
@@ -324,23 +342,64 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             <p className="text-sm text-slate-700 mb-3">{linkifyText(profile.bio)}</p>
           )}
 
+          {badges.length > 0 && (
+            <div className="mb-3 pb-3 border-b border-slate-200">
+              <div className="flex items-center gap-2 mb-2">
+                <Award className="w-4 h-4 text-slate-600" />
+                <span className="text-xs font-semibold text-slate-600">ACHIEVEMENTS</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {badges.slice(0, 8).map((userBadge: any) => (
+                  <div
+                    key={userBadge.id}
+                    className="group relative flex items-center gap-1.5 px-2 py-1 bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200 rounded-full text-xs hover:shadow-md transition cursor-pointer"
+                    title={userBadge.badges?.description}
+                  >
+                    <span className="text-base">{userBadge.badges?.icon}</span>
+                    <span className="font-medium text-slate-700">{userBadge.badges?.name}</span>
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-800 text-white text-xs rounded hidden group-hover:block whitespace-nowrap z-10">
+                      {userBadge.badges?.description}
+                    </div>
+                  </div>
+                ))}
+                {badges.length > 8 && (
+                  <div className="px-2 py-1 bg-slate-100 border border-slate-200 rounded-full text-xs font-medium text-slate-600">
+                    +{badges.length - 8} more
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-4 gap-3 mb-3">
-            <div className="text-center">
+            <button
+              onClick={() => setShowStatsModal('posts')}
+              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+            >
               <div className="text-lg font-bold text-slate-800">{stats.totalPosts}</div>
               <div className="text-xs text-slate-500">Posts</div>
-            </div>
-            <div className="text-center">
+            </button>
+            <button
+              onClick={() => setShowStatsModal('places')}
+              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+            >
               <div className="text-lg font-bold text-slate-800">{stats.uniqueLocations}</div>
               <div className="text-xs text-slate-500">Places</div>
-            </div>
-            <div className="text-center">
+            </button>
+            <button
+              onClick={() => setShowStatsModal('followers')}
+              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+            >
               <div className="text-lg font-bold text-slate-800">{stats.followers}</div>
               <div className="text-xs text-slate-500">Followers</div>
-            </div>
-            <div className="text-center">
+            </button>
+            <button
+              onClick={() => setShowStatsModal('following')}
+              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+            >
               <div className="text-lg font-bold text-slate-800">{stats.following}</div>
               <div className="text-xs text-slate-500">Following</div>
-            </div>
+            </button>
           </div>
 
           {isOwnProfile && (
@@ -478,6 +537,14 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           currentUserId={currentUserId}
           onClose={() => setSelectedLog(null)}
           showSocialFeatures={!isOwnProfile && selectedLog.is_public}
+        />
+      )}
+
+      {showStatsModal && (
+        <StatsModal
+          userId={userId}
+          type={showStatsModal}
+          onClose={() => setShowStatsModal(null)}
         />
       )}
     </>

@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Plus, Calendar, MapPin, Plane, Lock, Globe, Image, X, Camera } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
 import { compressImage } from '../lib/imageUtils';
+import { checkAndAwardBadges } from '../lib/achievementManager';
 
 interface QuickLogFormProps {
   onLogAdded: () => void;
@@ -91,6 +92,8 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
       });
 
       if (error) throw error;
+
+      checkAndAwardBadges(userId);
 
       onLogAdded();
     } catch (err: any) {

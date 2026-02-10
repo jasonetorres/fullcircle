@@ -2,6 +2,7 @@ import { X, Calendar, MapPin, Plane, Lock, Globe, Heart, MessageCircle, Send, Us
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, Log, Profile, Comment } from '../lib/supabase';
+import { checkAndAwardBadges } from '../lib/achievementManager';
 
 interface LogDetailModalProps {
   log: Log;
@@ -128,6 +129,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
         await supabase.from('likes').insert({ log_id: log.id, user_id: currentUserId });
         setUserLiked(true);
         setLikesCount(prev => prev + 1);
+        checkAndAwardBadges(log.user_id);
       }
     } catch (err: any) {
       console.error('Error toggling like:', err);

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase, Log, Profile } from '../lib/supabase';
 import { Calendar, MapPin, Plane, Heart, MessageCircle, User } from 'lucide-react';
 import LogDetailModal from './LogDetailModal';
+import { checkAndAwardBadges } from '../lib/achievementManager';
 
 interface FeedProps {
   userId: string;
@@ -133,6 +134,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
               : l
           )
         );
+        checkAndAwardBadges(log.user_id);
       }
     } catch (err: any) {
       console.error('Error toggling like:', err);
@@ -188,9 +190,17 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
                 <Link
                   to={`/profile/${log.user_id}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition"
+                  className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition overflow-hidden"
                 >
-                  {log.profile?.username?.[0]?.toUpperCase() || <User className="w-4 h-4" />}
+                  {log.profile?.avatar_url ? (
+                    <img
+                      src={log.profile.avatar_url}
+                      alt={log.profile.username}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    log.profile?.username?.[0]?.toUpperCase() || <User className="w-4 h-4" />
+                  )}
                 </Link>
                 <Link
                   to={`/profile/${log.user_id}`}
