@@ -42,20 +42,52 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).then((fetchResponse) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          if (event.request.url.startsWith('http')) {
-            cache.put(event.request, fetchResponse.clone());
-          }
-          return fetchResponse;
+  const isAppFile = event.request.destination === 'document' ||
+                    event.request.destination === 'script' ||
+                    event.request.destination === 'style' ||
+                    url.pathname.endsWith('.html') ||
+                    url.pathname.endsWith('.js') ||
+                    url.pathname.endsWith('.css');
+
+  if (isAppFile) {
+    event.respondWith(
+      fetch(event.request)
+        .then((fetchResponse) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            if (event.request.url.startsWith('http')) {
+              cache.put(event.request, fetchResponse.clone());
+            }
+            return fetchResponse;
+          });
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            if (event.request.destination === 'document') {
+              return caches.match('/index.html');
+            }
+            throw new Error('No cached response available');
+          });
+        })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request).then((fetchResponse) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            if (event.request.url.startsWith('http')) {
+              cache.put(event.request, fetchResponse.clone());
+            }
+            return fetchResponse;
+          });
         });
-      });
-    }).catch(() => {
-      if (event.request.destination === 'document') {
-        return caches.match('/index.html');
-      }
-    })
-  );
+      }).catch(() => {
+        if (event.request.destination === 'document') {
+          return caches.match('/index.html');
+        }
+      })
+    );
+  }
 });
