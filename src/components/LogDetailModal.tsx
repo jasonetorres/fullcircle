@@ -411,7 +411,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   );
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-end sm:items-center justify-center z-50 sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[60] p-4" onClick={onClose}>
       <div className="bg-white sm:rounded-xl shadow-2xl max-w-4xl w-full h-full sm:h-auto sm:max-h-[85vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="flex-shrink-0 bg-white border-b border-slate-200 p-3 flex items-center justify-between">
           <Link to={`/profile/${profile.id}`} className="flex items-center gap-2 min-w-0 hover:opacity-80 transition">

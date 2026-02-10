@@ -125,8 +125,8 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="bg-white w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl max-h-[85vh] sm:max-h-[80vh] flex flex-col shadow-2xl animate-slide-up">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+      <div className="bg-white w-full max-w-lg rounded-2xl max-h-[80vh] flex flex-col shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-800">{getTitle()}</h2>
           <button

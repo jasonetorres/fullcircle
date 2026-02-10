@@ -105,7 +105,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 animate-fade-in">
       <div
         className="bg-white w-full max-w-lg rounded-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
