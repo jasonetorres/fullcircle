@@ -13,10 +13,15 @@ interface Badge {
 interface UserStats {
   totalPosts: number;
   uniqueLocations: number;
-  followers: number;
-  totalLikes: number;
   currentStreak: number;
   longestStreak: number;
+}
+
+export interface StreakData {
+  currentStreak: number;
+  longestStreak: number;
+  lastPostDate: string | null;
+  isActiveToday: boolean;
 }
 
 export async function checkAndAwardBadges(userId: string): Promise<void> {
@@ -41,12 +46,6 @@ export async function checkAndAwardBadges(userId: string): Promise<void> {
         case 'locations':
           shouldAward = stats.uniqueLocations >= badge.requirement_value;
           break;
-        case 'followers':
-          shouldAward = stats.followers >= badge.requirement_value;
-          break;
-        case 'total_likes':
-          shouldAward = stats.totalLikes >= badge.requirement_value;
-          break;
         case 'daily_streak':
           shouldAward = stats.currentStreak >= badge.requirement_value ||
                        stats.longestStreak >= badge.requirement_value;
@@ -67,7 +66,7 @@ export async function checkAndAwardBadges(userId: string): Promise<void> {
 }
 
 async function getUserStats(userId: string): Promise<UserStats> {
-  const [logsResult, locationsResult, followersResult, likesResult, streakData] =
+  const [logsResult, locationsResult, streakData] =
     await Promise.all([
       supabase.from('logs').select('id', { count: 'exact', head: true }).eq('user_id', userId),
       supabase
@@ -75,16 +74,6 @@ async function getUserStats(userId: string): Promise<UserStats> {
         .select('location')
         .eq('user_id', userId)
         .not('location', 'is', null),
-      supabase
-        .from('follows')
-        .select('id', { count: 'exact', head: true })
-        .eq('following_id', userId),
-      supabase
-        .from('likes')
-        .select('id', { count: 'exact', head: true })
-        .eq('log_id', 'in',
-          `(SELECT id FROM logs WHERE user_id = '${userId}')`
-        ),
       supabase
         .from('logs')
         .select('event_date')
@@ -101,8 +90,6 @@ async function getUserStats(userId: string): Promise<UserStats> {
   return {
     totalPosts: logsResult.count || 0,
     uniqueLocations,
-    followers: followersResult.count || 0,
-    totalLikes: likesResult.count || 0,
     currentStreak: streaks.current,
     longestStreak: streaks.longest,
   };
@@ -216,4 +203,39 @@ export async function getUserBadges(userId: string) {
   }
 
   return data || [];
+}
+
+export async function getUserStreak(userId: string): Promise<StreakData> {
+  const { data, error } = await supabase
+    .from('logs')
+    .select('event_date')
+    .eq('user_id', userId)
+    .order('event_date', { ascending: false });
+
+  if (error || !data || data.length === 0) {
+    return {
+      currentStreak: 0,
+      longestStreak: 0,
+      lastPostDate: null,
+      isActiveToday: false,
+    };
+  }
+
+  const dates = data.map(d => d.event_date);
+  const streaks = calculateStreaks(dates);
+  const mostRecentDate = dates[0];
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const lastPost = new Date(mostRecentDate);
+  lastPost.setHours(0, 0, 0, 0);
+
+  const isActiveToday = today.getTime() === lastPost.getTime();
+
+  return {
+    currentStreak: streaks.current,
+    longestStreak: streaks.longest,
+    lastPostDate: mostRecentDate,
+    isActiveToday,
+  };
 }

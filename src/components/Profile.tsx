@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { supabase, Profile as ProfileType, Log } from '../lib/supabase';
-import { MapPin, Calendar, Settings, User, Sparkles, Download, UserPlus, UserMinus, Award } from 'lucide-react';
+import { MapPin, Calendar, Settings, User, Sparkles, Download, UserPlus, UserMinus, Award, Flame } from 'lucide-react';
 import { YearRecap } from './YearRecap';
 import LogDetailModal from './LogDetailModal';
 import StatsModal from './StatsModal';
 import { linkifyText } from '../lib/linkify';
-import { getUserBadges, checkAndAwardBadges } from '../lib/achievementManager';
+import { getUserBadges, checkAndAwardBadges, getUserStreak, StreakData } from '../lib/achievementManager';
 
 interface ProfileProps {
   userId: string;
@@ -39,6 +39,12 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showStatsModal, setShowStatsModal] = useState<'followers' | 'following' | 'posts' | 'places' | null>(null);
   const [badges, setBadges] = useState<any[]>([]);
+  const [streakData, setStreakData] = useState<StreakData>({
+    currentStreak: 0,
+    longestStreak: 0,
+    lastPostDate: null,
+    isActiveToday: false,
+  });
 
   const isOwnProfile = userId === currentUserId;
 
@@ -52,6 +58,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
     fetchLogs();
     fetchStats();
     fetchBadges();
+    fetchStreak();
     if (!isOwnProfile && currentUserId) {
       checkFollowStatus();
     }
@@ -95,6 +102,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
 
       if (error) throw error;
       setLogs(data || []);
+
+      fetchStreak();
     } catch (err: any) {
       console.error('Error fetching logs:', err);
     } finally {
@@ -143,6 +152,15 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       setBadges(userBadges);
     } catch (err: any) {
       console.error('Error fetching badges:', err);
+    }
+  };
+
+  const fetchStreak = async () => {
+    try {
+      const streak = await getUserStreak(userId);
+      setStreakData(streak);
+    } catch (err: any) {
+      console.error('Error fetching streak:', err);
     }
   };
 
@@ -341,6 +359,49 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           {profile.bio && (
             <p className="text-sm text-slate-700 mb-3">{linkifyText(profile.bio)}</p>
           )}
+
+          <div className="mb-3 pb-3 border-b border-slate-200">
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 border-2 border-orange-200 rounded-xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    streakData.currentStreak > 0
+                      ? 'bg-gradient-to-br from-orange-500 to-red-500'
+                      : 'bg-slate-300'
+                  }`}>
+                    <Flame className={`w-6 h-6 ${streakData.currentStreak > 0 ? 'text-white' : 'text-slate-500'}`} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-slate-600 uppercase">Current Streak</div>
+                    <div className="text-2xl font-bold text-slate-800">
+                      {streakData.currentStreak} {streakData.currentStreak === 1 ? 'day' : 'days'}
+                    </div>
+                  </div>
+                </div>
+                {streakData.longestStreak > 0 && (
+                  <div className="text-right">
+                    <div className="text-xs text-slate-600">Best</div>
+                    <div className="text-lg font-bold text-slate-700">
+                      {streakData.longestStreak}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {streakData.currentStreak === 0 ? (
+                <p className="text-xs text-slate-600">
+                  Start your streak by posting today!
+                </p>
+              ) : streakData.isActiveToday ? (
+                <p className="text-xs text-green-700 font-medium">
+                  ✓ Posted today! Keep it going!
+                </p>
+              ) : (
+                <p className="text-xs text-amber-700 font-medium">
+                  Post today to continue your streak!
+                </p>
+              )}
+            </div>
+          </div>
 
           {badges.length > 0 && (
             <div className="mb-3 pb-3 border-b border-slate-200">
