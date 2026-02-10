@@ -72,6 +72,7 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
           .select('id, title, event_date, location, image_url')
           .eq('user_id', userId)
           .order('event_date', { ascending: false })
+          .order('created_at', { ascending: false })
           .limit(50);
 
         if (error) throw error;

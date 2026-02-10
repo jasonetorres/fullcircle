@@ -138,6 +138,7 @@ export default function Search({ userId }: SearchProps) {
         `)
         .eq('is_public', true)
         .order('event_date', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(50);
 
       if (publicQuery.trim()) {
@@ -216,7 +217,8 @@ export default function Search({ userId }: SearchProps) {
         .from('logs')
         .select('*')
         .eq('user_id', userId)
-        .order('event_date', { ascending: false });
+        .order('event_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setMyLogs(data || []);

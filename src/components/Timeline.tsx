@@ -37,7 +37,8 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
         .from('logs')
         .select('*')
         .eq('user_id', userId)
-        .order('event_date', { ascending: false });
+        .order('event_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setLogs(data || []);

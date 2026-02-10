@@ -89,7 +89,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
         .from('logs')
         .select('*')
         .eq('user_id', userId)
-        .order('event_date', { ascending: false });
+        .order('event_date', { ascending: false })
+        .order('created_at', { ascending: false });
 
       if (!isOwnProfile) {
         query = query.eq('is_public', true);

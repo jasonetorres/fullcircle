@@ -25,7 +25,8 @@ export default function Memories({ userId }: MemoriesProps) {
       .select('*')
       .eq('user_id', userId)
       .like('event_date', `%-${month}-${day}`)
-      .order('event_date', { ascending: false });
+      .order('event_date', { ascending: false })
+      .order('created_at', { ascending: false });
 
     if (error || !data) return;
 

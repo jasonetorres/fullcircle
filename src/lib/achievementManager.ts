@@ -78,7 +78,8 @@ async function getUserStats(userId: string): Promise<UserStats> {
         .from('logs')
         .select('event_date')
         .eq('user_id', userId)
-        .order('event_date', { ascending: false }),
+        .order('event_date', { ascending: false })
+        .order('created_at', { ascending: false }),
     ]);
 
   const uniqueLocations = new Set(
@@ -210,7 +211,8 @@ export async function getUserStreak(userId: string): Promise<StreakData> {
     .from('logs')
     .select('event_date')
     .eq('user_id', userId)
-    .order('event_date', { ascending: false });
+    .order('event_date', { ascending: false })
+    .order('created_at', { ascending: false });
 
   if (error || !data || data.length === 0) {
     return {
