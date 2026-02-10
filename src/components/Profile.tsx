@@ -45,6 +45,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
     lastPostDate: null,
     isActiveToday: false,
   });
+  const [showAchievements, setShowAchievements] = useState(false);
 
   const isOwnProfile = userId === currentUserId;
 
@@ -297,6 +298,92 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
         </div>
       )}
 
+      {showAchievements && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowAchievements(false)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-amber-600" />
+                <h2 className="text-lg font-bold text-slate-800">Achievements</h2>
+              </div>
+              <button
+                onClick={() => setShowAchievements(false)}
+                className="text-slate-400 hover:text-slate-600 transition"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6">
+              {streakData.currentStreak > 0 && (
+                <div className="mb-6 p-4 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-lg">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                      <Flame className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-slate-600 uppercase">Current Streak</div>
+                      <div className="text-2xl font-bold text-slate-800">
+                        {streakData.currentStreak} {streakData.currentStreak === 1 ? 'day' : 'days'}
+                      </div>
+                    </div>
+                  </div>
+                  {streakData.longestStreak > 0 && (
+                    <div className="text-sm text-slate-600">
+                      Best streak: <span className="font-bold">{streakData.longestStreak} days</span>
+                    </div>
+                  )}
+                  {streakData.isActiveToday ? (
+                    <p className="text-xs text-green-700 font-medium mt-2">
+                      ✓ Posted today! Keep it going!
+                    </p>
+                  ) : (
+                    <p className="text-xs text-amber-700 font-medium mt-2">
+                      Post today to continue your streak!
+                    </p>
+                  )}
+                </div>
+              )}
+              {badges.length > 0 ? (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold text-slate-600 uppercase">Badges Earned</h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    {badges.map((userBadge: any) => (
+                      <div
+                        key={userBadge.id}
+                        className="flex items-center gap-3 p-3 bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200 rounded-lg"
+                      >
+                        <div className="w-12 h-12 flex items-center justify-center text-3xl">
+                          {userBadge.badges?.icon}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-bold text-slate-800">{userBadge.badges?.name}</div>
+                          <div className="text-sm text-slate-600">{userBadge.badges?.description}</div>
+                          <div className="text-xs text-slate-500 mt-1">
+                            Earned {new Date(userBadge.earned_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Award className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500">No badges earned yet</p>
+                  <p className="text-sm text-slate-400 mt-1">Keep posting to unlock achievements!</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
         <div className="p-4">
@@ -352,7 +439,25 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                   </button>
                 ) : null}
               </div>
-              <p className="text-sm text-slate-500 truncate">@{profile.username}</p>
+              <div className="flex items-center gap-3">
+                <p className="text-sm text-slate-500 truncate">@{profile.username}</p>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200">
+                  <Flame className={`w-3.5 h-3.5 ${streakData.currentStreak > 0 ? 'text-orange-600' : 'text-slate-400'}`} />
+                  <span className="text-xs font-bold text-slate-800">{streakData.currentStreak}</span>
+                  {streakData.longestStreak > streakData.currentStreak && (
+                    <span className="text-xs text-slate-500">/ {streakData.longestStreak}</span>
+                  )}
+                </div>
+                {badges.length > 0 && (
+                  <button
+                    onClick={() => setShowAchievements(true)}
+                    className="flex items-center gap-1 px-2 py-0.5 bg-amber-100 rounded-full border border-amber-200 hover:bg-amber-200 transition"
+                  >
+                    <Award className="w-3.5 h-3.5 text-amber-700" />
+                    <span className="text-xs font-bold text-slate-800">{badges.length}</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -360,79 +465,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             <p className="text-sm text-slate-700 mb-3">{linkifyText(profile.bio)}</p>
           )}
 
-          <div className="mb-3 pb-3 border-b border-slate-200">
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 border-2 border-orange-200 rounded-xl p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    streakData.currentStreak > 0
-                      ? 'bg-gradient-to-br from-orange-500 to-red-500'
-                      : 'bg-slate-300'
-                  }`}>
-                    <Flame className={`w-6 h-6 ${streakData.currentStreak > 0 ? 'text-white' : 'text-slate-500'}`} />
-                  </div>
-                  <div>
-                    <div className="text-xs font-semibold text-slate-600 uppercase">Current Streak</div>
-                    <div className="text-2xl font-bold text-slate-800">
-                      {streakData.currentStreak} {streakData.currentStreak === 1 ? 'day' : 'days'}
-                    </div>
-                  </div>
-                </div>
-                {streakData.longestStreak > 0 && (
-                  <div className="text-right">
-                    <div className="text-xs text-slate-600">Best</div>
-                    <div className="text-lg font-bold text-slate-700">
-                      {streakData.longestStreak}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {streakData.currentStreak === 0 ? (
-                <p className="text-xs text-slate-600">
-                  Start your streak by posting today!
-                </p>
-              ) : streakData.isActiveToday ? (
-                <p className="text-xs text-green-700 font-medium">
-                  ✓ Posted today! Keep it going!
-                </p>
-              ) : (
-                <p className="text-xs text-amber-700 font-medium">
-                  Post today to continue your streak!
-                </p>
-              )}
-            </div>
-          </div>
-
-          {badges.length > 0 && (
-            <div className="mb-3 pb-3 border-b border-slate-200">
-              <div className="flex items-center gap-2 mb-2">
-                <Award className="w-4 h-4 text-slate-600" />
-                <span className="text-xs font-semibold text-slate-600">ACHIEVEMENTS</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {badges.slice(0, 8).map((userBadge: any) => (
-                  <div
-                    key={userBadge.id}
-                    className="group relative flex items-center gap-1.5 px-2 py-1 bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200 rounded-full text-xs hover:shadow-md transition cursor-pointer"
-                    title={userBadge.badges?.description}
-                  >
-                    <span className="text-base">{userBadge.badges?.icon}</span>
-                    <span className="font-medium text-slate-700">{userBadge.badges?.name}</span>
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-800 text-white text-xs rounded hidden group-hover:block whitespace-nowrap z-10">
-                      {userBadge.badges?.description}
-                    </div>
-                  </div>
-                ))}
-                {badges.length > 8 && (
-                  <div className="px-2 py-1 bg-slate-100 border border-slate-200 rounded-full text-xs font-medium text-slate-600">
-                    +{badges.length - 8} more
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-4 gap-3 mb-3">
+          <div className="grid grid-cols-4 gap-3 mb-3 pt-3 border-t border-slate-200">
             <button
               onClick={() => setShowStatsModal('posts')}
               className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
