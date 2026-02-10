@@ -101,27 +101,27 @@ function MainApp() {
 
   return (
     <>
-      <header className="bg-white shadow-sm sticky top-0 z-40 w-full">
-        <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src="/lgofc.png" alt="FullCircle" className="w-8 h-8" />
-            <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
+      <div className="h-screen flex flex-col overflow-hidden">
+        <header className="bg-white shadow-sm z-40 w-full flex-shrink-0">
+          <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <img src="/lgofc.png" alt="FullCircle" className="w-8 h-8" />
+              <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
+            </div>
+            <div className="flex items-center gap-1 text-slate-600">
+              <Notifications onNotificationClick={handleNotificationClick} userId={user.id} />
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-2 hover:text-slate-800 transition p-2 rounded-lg"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="hidden sm:inline text-sm">Sign Out</span>
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-1 text-slate-600">
-            <Notifications onNotificationClick={handleNotificationClick} userId={user.id} />
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2 hover:text-slate-800 transition p-2 rounded-lg"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="hidden sm:inline text-sm">Sign Out</span>
-            </button>
-          </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="min-h-screen bg-slate-50 pb-24">
-        <main className="flex-1">
+        <main className="flex-1 overflow-y-auto bg-slate-50">
           <div className="max-w-4xl mx-auto px-4 py-4">
             {activeTab === 'myLogs' ? (
               <>
@@ -146,54 +146,54 @@ function MainApp() {
             )}
           </div>
         </main>
-      </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 pb-6 safe-area-bottom">
-        <div className="max-w-4xl mx-auto flex items-center justify-around px-2">
-          <button
-            onClick={() => setActiveTab('myLogs')}
-            className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-              activeTab === 'myLogs' ? 'text-slate-900' : 'text-slate-400'
-            }`}
-          >
-            <Home className={`w-5 h-5 ${activeTab === 'myLogs' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px] font-medium">Home</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('feed')}
-            className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-              activeTab === 'feed' ? 'text-slate-900' : 'text-slate-400'
-            }`}
-          >
-            <Compass className={`w-5 h-5 ${activeTab === 'feed' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px] font-medium">Explore</span>
-          </button>
-          <button
-            onClick={() => setShowQuickLog(true)}
-            className="flex items-center justify-center w-12 h-12 -mt-4 bg-slate-800 rounded-full shadow-lg shadow-slate-800/30 text-white active:scale-95 transition-transform"
-          >
-            <Plus className="w-6 h-6" />
-          </button>
-          <button
-            onClick={() => setActiveTab('search')}
-            className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-              activeTab === 'search' ? 'text-slate-900' : 'text-slate-400'
-            }`}
-          >
-            <SearchIcon className={`w-5 h-5 ${activeTab === 'search' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px] font-medium">Search</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('profile')}
-            className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-              activeTab === 'profile' ? 'text-slate-900' : 'text-slate-400'
-            }`}
-          >
-            <UserIcon className={`w-5 h-5 ${activeTab === 'profile' ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-[10px] font-medium">Profile</span>
-          </button>
-        </div>
-      </nav>
+        <nav className="bg-white border-t border-slate-200 pb-6 safe-area-bottom z-50 flex-shrink-0">
+          <div className="max-w-4xl mx-auto flex items-center justify-around px-2">
+            <button
+              onClick={() => setActiveTab('myLogs')}
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
+                activeTab === 'myLogs' ? 'text-slate-900' : 'text-slate-400'
+              }`}
+            >
+              <Home className={`w-5 h-5 ${activeTab === 'myLogs' ? 'stroke-[2.5]' : ''}`} />
+              <span className="text-[10px] font-medium">Home</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('feed')}
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
+                activeTab === 'feed' ? 'text-slate-900' : 'text-slate-400'
+              }`}
+            >
+              <Compass className={`w-5 h-5 ${activeTab === 'feed' ? 'stroke-[2.5]' : ''}`} />
+              <span className="text-[10px] font-medium">Explore</span>
+            </button>
+            <button
+              onClick={() => setShowQuickLog(true)}
+              className="flex items-center justify-center w-12 h-12 -mt-4 bg-slate-800 rounded-full shadow-lg shadow-slate-800/30 text-white active:scale-95 transition-transform"
+            >
+              <Plus className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => setActiveTab('search')}
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
+                activeTab === 'search' ? 'text-slate-900' : 'text-slate-400'
+              }`}
+            >
+              <SearchIcon className={`w-5 h-5 ${activeTab === 'search' ? 'stroke-[2.5]' : ''}`} />
+              <span className="text-[10px] font-medium">Search</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('profile')}
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
+                activeTab === 'profile' ? 'text-slate-900' : 'text-slate-400'
+              }`}
+            >
+              <UserIcon className={`w-5 h-5 ${activeTab === 'profile' ? 'stroke-[2.5]' : ''}`} />
+              <span className="text-[10px] font-medium">Profile</span>
+            </button>
+          </div>
+        </nav>
+      </div>
 
       {showQuickLog && (
         <QuickLogForm
