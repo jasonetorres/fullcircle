@@ -404,7 +404,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-1">
                 <h1 className="text-lg font-bold text-slate-800 truncate">
                   {profile.display_name || profile.username}
                 </h1>
@@ -439,9 +439,9 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                   </button>
                 ) : null}
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 flex-wrap">
                 <p className="text-sm text-slate-500 truncate">@{profile.username}</p>
-                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200">
                   <Flame className={`w-3.5 h-3.5 ${streakData.currentStreak > 0 ? 'text-orange-600' : 'text-slate-400'}`} />
                   <span className="text-xs font-bold text-slate-800">{streakData.currentStreak}</span>
                   {streakData.longestStreak > streakData.currentStreak && (
@@ -451,7 +451,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 {badges.length > 0 && (
                   <button
                     onClick={() => setShowAchievements(true)}
-                    className="flex items-center gap-1 px-2 py-0.5 bg-amber-100 rounded-full border border-amber-200 hover:bg-amber-200 transition"
+                    className="flex items-center gap-1 px-2.5 py-1 bg-amber-100 rounded-full border border-amber-200 hover:bg-amber-200 transition"
                   >
                     <Award className="w-3.5 h-3.5 text-amber-700" />
                     <span className="text-xs font-bold text-slate-800">{badges.length}</span>
