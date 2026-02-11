@@ -9,6 +9,9 @@ export default function Auth() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -32,11 +35,42 @@ export default function Auth() {
         setSuccessMessage('Check your email for the password reset link');
         setEmail('');
       } else if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        if (password !== confirmPassword) {
+          setError('Passwords do not match');
+          setLoading(false);
+          return;
+        }
+
+        if (username.length < 3 || username.length > 20) {
+          setError('Username must be between 3 and 20 characters');
+          setLoading(false);
+          return;
+        }
+
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
         });
-        if (error) throw error;
+
+        if (signUpError) throw signUpError;
+
+        if (authData.user) {
+          const { error: profileError } = await supabase.from('profiles').insert({
+            id: authData.user.id,
+            username: username.toLowerCase().trim(),
+            display_name: displayName.trim() || null,
+          });
+
+          if (profileError) {
+            if (profileError.code === '23505') {
+              setError('Username already taken. Please choose another.');
+            } else {
+              throw profileError;
+            }
+            setLoading(false);
+            return;
+          }
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -52,26 +86,32 @@ export default function Auth() {
   };
 
   return (
-    <div className="h-screen bg-black flex items-center justify-center p-6 overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-6 overflow-y-auto py-12">
       <div className="w-full max-w-md">
-        <div className="border border-white/10 rounded-2xl p-8 lg:p-10">
-          <div className="text-center mb-8">
+        <div className="border border-white/10 rounded-2xl p-6 sm:p-8 lg:p-10">
+          <div className={`text-center ${isSignUp && !isForgotPassword ? 'mb-6' : 'mb-8'}`}>
             <img
               src="/lgofc.png"
               alt="theyear"
-              className="w-24 h-24 mx-auto mb-4"
+              className={`mx-auto ${isSignUp && !isForgotPassword ? 'w-16 h-16 mb-3' : 'w-24 h-24 mb-4'}`}
             />
             <h1 className="text-2xl font-semibold text-white mb-2 tracking-tight">
-              theyear
+              {isForgotPassword
+                ? 'Reset Password'
+                : isSignUp
+                ? 'Create Account'
+                : 'Welcome Back'}
             </h1>
             <p className="text-white/60 text-[15px]">
               {isForgotPassword
-                ? 'Reset your password'
-                : 'Capture and share your year, one moment at a time'}
+                ? 'Enter your email to reset your password'
+                : isSignUp
+                ? 'Start capturing and sharing your year'
+                : 'Sign in to continue your journey'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className={isSignUp && !isForgotPassword ? 'space-y-3' : 'space-y-4'}>
             <div>
               <label className="block text-sm font-medium text-white/80 mb-2">
                 Email
@@ -87,20 +127,75 @@ export default function Auth() {
             </div>
 
             {!isForgotPassword && (
-              <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
-                  placeholder="••••••••"
-                />
-              </div>
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
+                    placeholder="••••••••"
+                  />
+                </div>
+
+                {isSignUp && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">
+                        Confirm Password
+                      </label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        minLength={6}
+                        className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
+                        placeholder="••••••••"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">
+                        Display Name
+                      </label>
+                      <input
+                        type="text"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        required
+                        maxLength={50}
+                        className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
+                        placeholder="John Doe"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-white/80 mb-2">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
+                        required
+                        minLength={3}
+                        maxLength={20}
+                        className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
+                        placeholder="johndoe"
+                      />
+                      <p className="text-xs text-white/50 mt-1.5">
+                        3-20 characters, letters, numbers, and underscores only
+                      </p>
+                    </div>
+                  </>
+                )}
+              </>
             )}
 
             {error && (
@@ -173,6 +268,9 @@ export default function Auth() {
                   onClick={() => {
                     setIsSignUp(!isSignUp);
                     setError('');
+                    setConfirmPassword('');
+                    setDisplayName('');
+                    setUsername('');
                   }}
                   className="text-white/60 hover:text-white text-sm transition block w-full"
                 >
