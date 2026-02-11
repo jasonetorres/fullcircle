@@ -202,7 +202,7 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 hover:bg-slate-100 rounded-lg transition-colors"
+        className="relative p-2 hover:bg-slate-100 dark:hover:bg-dark-hover rounded-lg transition-colors"
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
