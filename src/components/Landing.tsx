@@ -34,7 +34,7 @@ export default function Landing() {
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black"></div>
 
           <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -51,7 +51,7 @@ export default function Landing() {
                   and memories with a platform built for those who value their story.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => navigate('/auth?signup=true')}
                     className="px-8 py-3.5 text-[15px] font-medium text-white border border-white/40 rounded-lg hover:bg-white/10 transition-all duration-200 inline-block"
@@ -59,41 +59,15 @@ export default function Landing() {
                     Get Started
                   </button>
                 </div>
-
-                <div className="flex gap-4">
-                  <a href="#" className="opacity-80 hover:opacity-100 transition-opacity">
-                    <img
-                      src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
-                      alt="Download on App Store"
-                      className="h-10"
-                    />
-                  </a>
-                  <a href="#" className="opacity-80 hover:opacity-100 transition-opacity">
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                      alt="Get it on Google Play"
-                      className="h-10"
-                    />
-                  </a>
-                </div>
               </div>
 
               <div className="relative hidden lg:block">
-                <div className="relative flex items-center justify-center gap-6">
-                  <div className="transform -rotate-6 hover:rotate-0 transition-transform duration-500">
-                    <img
-                      src="/YIR.png"
-                      alt="App Preview 1"
-                      className="w-72 rounded-3xl shadow-2xl"
-                    />
-                  </div>
-                  <div className="transform rotate-6 hover:rotate-0 transition-transform duration-500 -ml-12 mt-8">
-                    <img
-                      src="/YIR.png"
-                      alt="App Preview 2"
-                      className="w-72 rounded-3xl shadow-2xl"
-                    />
-                  </div>
+                <div className="relative flex items-center justify-center">
+                  <img
+                    src="/phone.png"
+                    alt="theyear App"
+                    className="w-[500px] h-auto"
+                  />
                 </div>
               </div>
             </div>
