@@ -1,5 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
@@ -11,9 +16,6 @@ export default defineConfig(({ command }) => ({
           {
             name: 'inject-sw-version',
             closeBundle() {
-              // Dynamic imports to avoid issues during dev
-              const { existsSync, readFileSync, writeFileSync } = require('fs');
-              const { resolve } = require('path');
               const swPath = resolve(__dirname, 'dist/service-worker.js');
               if (!existsSync(swPath)) {
                 console.warn(
