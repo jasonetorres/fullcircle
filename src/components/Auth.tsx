@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { LogIn, UserPlus, Loader2, ArrowLeft, AlertTriangle } from 'lucide-react';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(searchParams.get('signup') === 'true');
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -19,6 +20,14 @@ export default function Auth() {
   useEffect(() => {
     setIsSignUp(searchParams.get('signup') === 'true');
   }, [searchParams]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        navigate('/');
+      }
+    });
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +88,7 @@ export default function Auth() {
           password,
         });
         if (error) throw error;
+        navigate('/');
       }
     } catch (err: any) {
       setError(err.message || 'An error occurred');
