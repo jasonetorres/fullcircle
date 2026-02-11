@@ -439,7 +439,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 ) : null}
               </div>
               <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-dark-text-muted truncate">@{profile.username}</p>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-white/80 truncate">@{profile.username}</p>
                 <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-md sm:rounded-lg">
                   <Flame className={`w-3 h-3 sm:w-4 sm:h-4 ${streakData.currentStreak > 0 ? 'text-orange-500 dark:text-white' : 'text-slate-300 dark:text-white/30'}`} />
                   <span className="text-xs sm:text-sm font-medium text-slate-800 dark:text-white/90">{streakData.currentStreak}</span>
@@ -461,7 +461,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           </div>
 
           {profile.bio && (
-            <p className="text-xs sm:text-sm text-slate-700 dark:text-white/60 mb-3 sm:mb-4 md:mb-6 leading-relaxed">{linkifyText(profile.bio)}</p>
+            <p className="text-xs sm:text-sm text-slate-700 dark:text-white/80 mb-3 sm:mb-4 md:mb-6 leading-relaxed">{linkifyText(profile.bio)}</p>
           )}
 
           <div className="grid grid-cols-4 gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 mb-3 sm:mb-4 md:mb-6 pt-3 sm:pt-4 md:pt-6 border-t border-slate-200 dark:border-white/5">
