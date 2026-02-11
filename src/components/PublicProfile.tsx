@@ -135,12 +135,12 @@ export function PublicProfile() {
             <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
             <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">theyear</h1>
           </div>
-          <button
-            onClick={() => navigate('/')}
+          <Link
+            to="/"
             className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition text-sm"
           >
             Home
-          </button>
+          </Link>
         </div>
       </header>
 
