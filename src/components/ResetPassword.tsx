@@ -79,7 +79,7 @@ export default function ResetPassword() {
           <div className="text-center mb-6">
             <img
               src="/lgofc.png"
-              alt="thisyear"
+              alt="theyear"
               className="w-24 h-24 mx-auto mb-3"
             />
             <h1 className="text-2xl font-bold text-slate-800 mb-1">

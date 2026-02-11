@@ -58,11 +58,11 @@ export default function Auth() {
           <div className="text-center mb-4">
             <img
               src="/lgofc.png"
-              alt="thisyear"
+              alt="theyear"
               className="w-32 h-32 mx-auto mb-3"
             />
             <h1 className="text-2xl font-bold text-slate-800 mb-1">
-              thisyear
+              theyear
             </h1>
             <p className="text-slate-600 text-sm">
               {isForgotPassword

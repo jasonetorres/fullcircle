@@ -117,8 +117,8 @@ function MainApp() {
               onClick={() => window.location.reload()}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
             >
-              <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
-              <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
+              <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
+              <h1 className="text-lg font-bold text-slate-800">theyear</h1>
             </button>
 
             <nav className="hidden md:flex items-center gap-1">

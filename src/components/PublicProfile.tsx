@@ -87,8 +87,8 @@ export function PublicProfile() {
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
-              <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
+              <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
+              <h1 className="text-lg font-bold text-slate-800">theyear</h1>
             </div>
             <button
               onClick={() => navigate('/auth')}
@@ -132,8 +132,8 @@ export function PublicProfile() {
             <span className="text-sm font-medium">Back</span>
           </button>
           <div className="flex items-center gap-2">
-            <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
-            <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
+            <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
+            <h1 className="text-lg font-bold text-slate-800">theyear</h1>
           </div>
           <button
             onClick={() => navigate('/')}

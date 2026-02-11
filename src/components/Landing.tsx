@@ -9,8 +9,8 @@ export default function Landing() {
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
-            <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
+            <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
+            <h1 className="text-lg font-bold text-slate-800">theyear</h1>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -37,7 +37,7 @@ export default function Landing() {
             <span className="text-slate-600">one moment at a time</span>
           </h2>
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-            Capture, share, and relive your life's journey with thisyear. A beautiful space to log your experiences and create lasting memories.
+            Capture, share, and relive your life's journey with theyear. A beautiful space to log your experiences and create lasting memories.
           </p>
           <div className="flex items-center justify-center gap-4">
             <button
@@ -122,7 +122,7 @@ export default function Landing() {
             Ready to capture this year?
           </h3>
           <p className="text-lg text-slate-600 mb-8 max-w-xl mx-auto">
-            Join thisyear today and start building your personal timeline of memories. Free to use, easy to love.
+            Join theyear today and start building your personal timeline of memories. Free to use, easy to love.
           </p>
           <button
             onClick={() => navigate('/auth?signup=true')}
@@ -135,7 +135,7 @@ export default function Landing() {
 
       <footer className="bg-white border-t border-slate-200 mt-20">
         <div className="max-w-6xl mx-auto px-4 py-8 text-center text-sm text-slate-600">
-          <p>&copy; 2026 thisyear. Capture and share your year, one moment at a time.</p>
+          <p>&copy; 2026 theyear. Capture and share your year, one moment at a time.</p>
         </div>
       </footer>
     </div>

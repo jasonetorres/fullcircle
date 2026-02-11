@@ -1,6 +1,6 @@
 {
-  "name": "thisyear",
-  "short_name": "thisyear",
+  "name": "theyear",
+  "short_name": "theyear",
   "description": "Document your life's journey one moment at a time - log, share, and relive your experiences",
   "start_url": "/",
   "display": "standalone",
