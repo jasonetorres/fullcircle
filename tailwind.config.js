@@ -6,16 +6,19 @@ export default {
     extend: {
       colors: {
         dark: {
-          bg: '#15202b',
-          panel: '#1e2732',
-          border: '#38444d',
-          hover: '#253341',
+          bg: '#000000',
+          panel: '#0a0a0a',
+          border: '#1a1a1a',
+          hover: '#141414',
           text: {
             primary: '#e5e7eb',
-            secondary: '#8b98a5',
-            muted: '#6b7b8c',
+            secondary: '#a0a0a0',
+            muted: '#666666',
           },
         },
+      },
+      fontFamily: {
+        'display': ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
       },
       boxShadow: {
         'dark-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.26)',
