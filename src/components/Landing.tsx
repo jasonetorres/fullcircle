@@ -134,30 +134,7 @@ export default function Landing() {
 
                 <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Daily Logging</h3>
                 <p className="text-white/70 leading-relaxed text-[15px]">
-                  Capture each day's stories, thoughts, and highlight diary-style.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-b from-[#1a1a1a] to-black rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 group">
-                <div className="mb-6 bg-white/5 rounded-xl p-4 inline-block">
-                  <svg className="w-8 h-8 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" strokeWidth="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
-                    <polyline points="21 15 16 10 5 21" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-
-                <div className="mb-6 overflow-hidden rounded-xl">
-                  <img
-                    src="/YIR.png"
-                    alt="Photo Memories Interface"
-                    className="w-full h-auto"
-                  />
-                </div>
-
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Photo Memories</h3>
-                <p className="text-white/70 leading-relaxed text-[15px]">
-                  Save and organize your favorite travel photos in stunning albums.
+                  Capture each day's stories, thoughts, and highlights diary-style.
                 </p>
               </div>
 
@@ -171,15 +148,36 @@ export default function Landing() {
 
                 <div className="mb-6 overflow-hidden rounded-xl">
                   <img
-                    src="/YIR.png"
-                    alt="Interactive Map Interface"
+                    src="/traveltrack.png"
+                    alt="Travel Tracking Interface"
                     className="w-full h-auto"
                   />
                 </div>
 
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Interactive Map</h3>
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Travel Tracking</h3>
                 <p className="text-white/70 leading-relaxed text-[15px]">
-                  Pin and explore your visited locations on a global map of your adventures.
+                  Pin and explore your visited locations on an interactive global map.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-b from-[#1a1a1a] to-black rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                <div className="mb-6 bg-white/5 rounded-xl p-4 inline-block">
+                  <svg className="w-8 h-8 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+
+                <div className="mb-6 overflow-hidden rounded-xl">
+                  <img
+                    src="/YIR.png"
+                    alt="Year in Review Interface"
+                    className="w-full h-auto"
+                  />
+                </div>
+
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Year in Review</h3>
+                <p className="text-white/70 leading-relaxed text-[15px]">
+                  Beautiful yearly recaps that celebrate your journey with stats and highlights.
                 </p>
               </div>
             </div>
