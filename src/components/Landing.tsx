@@ -11,17 +11,26 @@ export default function Landing() {
             <img src="/lgofc.png" alt="theyear" className="w-7 h-7" />
             <h1 className="text-[17px] font-semibold text-white tracking-tight">theyear</h1>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-[15px] text-white/80">
-            <button className="hover:text-white transition-colors duration-200">Features</button>
-            <button className="hover:text-white transition-colors duration-200">About</button>
-            <button className="hover:text-white transition-colors duration-200">Blog</button>
-          </nav>
-          <button
-            onClick={() => navigate('/auth?signup=true')}
-            className="px-6 py-2.5 text-[15px] font-medium text-white border border-white/30 rounded-lg hover:bg-white/10 transition-all duration-200"
-          >
-            Get Started
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/auth')}
+              className="px-4 py-2 text-[15px] font-medium text-white/80 hover:text-white transition-colors duration-200"
+            >
+              Sign In
+            </button>
+            <a
+              href="#"
+              className="px-4 py-2 text-[15px] font-medium text-white/80 hover:text-white transition-colors duration-200"
+            >
+              Docs
+            </a>
+            <button
+              onClick={() => navigate('/auth?signup=true')}
+              className="px-6 py-2.5 text-[15px] font-medium text-white border border-white/30 rounded-lg hover:bg-white/10 transition-all duration-200"
+            >
+              Get Started
+            </button>
+          </div>
         </div>
       </header>
 
@@ -66,7 +75,7 @@ export default function Landing() {
                   <img
                     src="/phone.png"
                     alt="theyear App"
-                    className="w-[500px] h-auto"
+                    className="w-[400px] h-auto"
                   />
                 </div>
               </div>
