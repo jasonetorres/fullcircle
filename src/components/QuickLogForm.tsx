@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Plus, Calendar, MapPin, Plane, Lock, Globe, Image, X, Camera } from 'lucide-react';
+import { Plus, Calendar, MapPin, Plane, Lock, Globe, Image, X, Camera, Navigation } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
 import { compressImage } from '../lib/imageUtils';
 import { checkAndAwardBadges } from '../lib/achievementManager';
@@ -16,10 +16,23 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
 
   const getLocalDate = () => {
     const now = new Date();
     const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getMaxDate = () => {
+    return getLocalDate();
+  };
+
+  const getMinDate = () => {
+    const now = new Date();
+    const year = now.getFullYear() - 100;
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
@@ -57,6 +70,79 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
   const removeImage = () => {
     setImageFile(null);
     setImagePreview(null);
+  };
+
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setLocationLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`,
+            {
+              headers: {
+                'User-Agent': 'DailyLog/1.0',
+              },
+            }
+          );
+
+          if (!response.ok) throw new Error('Failed to fetch location');
+
+          const data = await response.json();
+
+          const address = data.address;
+          let locationString = '';
+
+          if (address.road && address.city) {
+            locationString = `${address.road}, ${address.city}`;
+          } else if (address.city && address.country) {
+            locationString = `${address.city}, ${address.country}`;
+          } else if (address.town && address.country) {
+            locationString = `${address.town}, ${address.country}`;
+          } else if (address.village && address.country) {
+            locationString = `${address.village}, ${address.country}`;
+          } else if (data.display_name) {
+            const parts = data.display_name.split(',').slice(0, 3);
+            locationString = parts.join(',');
+          } else {
+            locationString = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          }
+
+          setFormData({ ...formData, location: locationString });
+        } catch (error) {
+          console.error('Error fetching location:', error);
+          alert('Failed to get location name. Please enter manually.');
+        } finally {
+          setLocationLoading(false);
+        }
+      },
+      (error) => {
+        setLocationLoading(false);
+
+        if (error.code === error.PERMISSION_DENIED) {
+          alert('Location permission denied. Please enable location access in your browser settings.');
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          alert('Location information unavailable. Please enter location manually.');
+        } else if (error.code === error.TIMEOUT) {
+          alert('Location request timed out. Please try again.');
+        } else {
+          alert('Failed to get location. Please enter manually.');
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,7 +193,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
   return (
     <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 animate-fade-in">
       <div
-        className="bg-white dark:bg-dark-panel w-full max-w-md rounded-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+        className="bg-white dark:bg-dark-panel w-full max-w-md rounded-2xl max-h-[90dvh] overflow-y-auto shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border px-4 py-3 flex items-center justify-between z-10 rounded-t-2xl">
@@ -143,6 +229,8 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
                 type="date"
                 value={formData.event_date}
                 onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
+                max={getMaxDate()}
+                min={getMinDate()}
                 required
                 className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
               />
@@ -152,12 +240,27 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
                 <MapPin className="w-3 h-3" />
                 Location
               </label>
-              <LocationAutocomplete
-                value={formData.location}
-                onChange={(value) => setFormData({ ...formData, location: value })}
-                placeholder="Where?"
-                className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-              />
+              <div className="flex gap-1">
+                <LocationAutocomplete
+                  value={formData.location}
+                  onChange={(value) => setFormData({ ...formData, location: value })}
+                  placeholder="Where?"
+                  className="flex-1 px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                />
+                <button
+                  type="button"
+                  onClick={getCurrentLocation}
+                  disabled={locationLoading}
+                  className="px-2 py-2 border border-slate-200 dark:border-dark-border rounded-lg hover:bg-slate-50 dark:hover:bg-dark-hover transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  title="Use current location"
+                >
+                  {locationLoading ? (
+                    <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Navigation className="w-4 h-4 text-slate-600 dark:text-dark-text-secondary" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 

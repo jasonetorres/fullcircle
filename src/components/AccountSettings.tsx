@@ -232,7 +232,7 @@ export default function AccountSettings({
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-dark-panel rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white dark:bg-dark-panel rounded-xl shadow-2xl max-w-md w-full max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-4 flex items-center justify-between">

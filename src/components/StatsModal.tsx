@@ -131,7 +131,7 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-dark-panel w-full max-w-lg rounded-2xl max-h-[80vh] flex flex-col shadow-2xl"
+        className="bg-white dark:bg-dark-panel w-full max-w-lg rounded-2xl max-h-[80dvh] flex flex-col shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-dark-border">

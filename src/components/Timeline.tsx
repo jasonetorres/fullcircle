@@ -1,40 +1,50 @@
 import { useEffect, useState } from 'react';
-import { supabase, Log } from '../lib/supabase';
-import { Calendar, MapPin, Plane, Globe, Lock, Trash2, ChevronDown, ChevronUp, X, Image, Camera } from 'lucide-react';
-import LocationAutocomplete from './LocationAutocomplete';
-import { compressImage } from '../lib/imageUtils';
+import { supabase, Log, Profile } from '../lib/supabase';
+import { Calendar, MapPin, Plane, Globe, Lock, Trash2, ChevronDown, ChevronUp, Heart, MessageCircle } from 'lucide-react';
 import Tooltip from './Tooltip';
+import LogDetailModal from './LogDetailModal';
 
 interface TimelineProps {
   userId: string;
   refreshTrigger: number;
 }
 
+interface LogWithEngagement extends Log {
+  likes_count: number;
+  comments_count: number;
+}
+
 export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
-  const [logs, setLogs] = useState<Log[]>([]);
+  const [logs, setLogs] = useState<LogWithEngagement[]>([]);
   const [loading, setLoading] = useState(true);
   const [collapsedMonths, setCollapsedMonths] = useState<Set<string>>(new Set());
-  const [editingLog, setEditingLog] = useState<Log | null>(null);
-  const [editForm, setEditForm] = useState({
-    title: '',
-    event_date: '',
-    description: '',
-    location: '',
-    trip_name: '',
-    is_public: false,
-    image_url: '',
-  });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedLog, setSelectedLog] = useState<LogWithEngagement | null>(null);
+  const [userProfile, setUserProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     fetchLogs();
+    fetchUserProfile();
   }, [userId, refreshTrigger]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+      setUserProfile(data);
+    } catch (err: any) {
+      console.error('Error fetching user profile:', err);
+    }
+  };
 
   const fetchLogs = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data: logsData, error } = await supabase
         .from('logs')
         .select('*')
         .eq('user_id', userId)
@@ -42,7 +52,28 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setLogs(data || []);
+
+      if (!logsData || logsData.length === 0) {
+        setLogs([]);
+        return;
+      }
+
+      const logsWithEngagement = await Promise.all(
+        logsData.map(async (log) => {
+          const [{ count: likesCount }, { count: commentsCount }] = await Promise.all([
+            supabase.from('likes').select('*', { count: 'exact', head: true }).eq('log_id', log.id),
+            supabase.from('comments').select('*', { count: 'exact', head: true }).eq('log_id', log.id),
+          ]);
+
+          return {
+            ...log,
+            likes_count: likesCount || 0,
+            comments_count: commentsCount || 0,
+          };
+        })
+      );
+
+      setLogs(logsWithEngagement);
     } catch (err: any) {
       console.error('Error fetching logs:', err);
     } finally {
@@ -61,7 +92,6 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
       alert(err.message || 'Failed to delete log');
     }
   };
-
 
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split('-');
@@ -123,92 +153,6 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
     });
   };
 
-  const openEditModal = (log: Log) => {
-    setEditingLog(log);
-    setEditForm({
-      title: log.title,
-      event_date: log.event_date,
-      description: log.description || '',
-      location: log.location || '',
-      trip_name: log.trip_name || '',
-      is_public: log.is_public,
-      image_url: log.image_url || '',
-    });
-    setImagePreview(log.image_url);
-  };
-
-  const closeEditModal = () => {
-    setEditingLog(null);
-    setImageFile(null);
-    setImagePreview(null);
-  };
-
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const compressed = await compressImage(file);
-      setImageFile(compressed);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(compressed);
-    }
-  };
-
-  const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
-    setEditForm({ ...editForm, image_url: '' });
-  };
-
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingLog) return;
-
-    try {
-      let imageUrl = editForm.image_url;
-
-      if (imageFile) {
-        const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${userId}/${Date.now()}.${fileExt}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('log-images')
-          .upload(fileName, imageFile);
-
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('log-images')
-          .getPublicUrl(fileName);
-
-        imageUrl = publicUrl;
-      }
-
-      const { error } = await supabase
-        .from('logs')
-        .update({
-          title: editForm.title,
-          event_date: editForm.event_date,
-          description: editForm.description || null,
-          location: editForm.location || null,
-          trip_name: editForm.trip_name || null,
-          is_public: editForm.is_public,
-          image_url: imageUrl || null,
-        })
-        .eq('id', editingLog.id);
-
-      if (error) throw error;
-
-      closeEditModal();
-      fetchLogs();
-    } catch (err: any) {
-      alert(err.message || 'Failed to update log');
-    }
-  };
-
-
   return (
     <>
       <div className="space-y-4">
@@ -241,9 +185,9 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
                   </div>
 
                   <div
-                    onClick={() => openEditModal(log)}
-                    className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-card-hover dark:hover:shadow-card-hover-dark transition-all duration-200 p-3 group cursor-pointer"
-                  >
+                    onClick={() => setSelectedLog(log)}
+                    className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-card-hover dark:hover:shadow-card-hover-dark transition-all duration-200 p-3 group cursor-pointer">
+
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <div className="flex-1">
                         <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted mb-1">
@@ -288,7 +232,7 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
                       </p>
                     )}
 
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-1 mb-2">
                       {log.location && (
                         <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-secondary bg-slate-50 dark:bg-dark-hover px-2 py-1 rounded-full">
                           <MapPin className="w-3 h-3" />
@@ -302,6 +246,23 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
                         </div>
                       )}
                     </div>
+
+                    {(log.likes_count > 0 || log.comments_count > 0) && (
+                      <div className="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-dark-border">
+                        {log.likes_count > 0 && (
+                          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-secondary">
+                            <Heart className="w-3.5 h-3.5 fill-red-500 text-red-500" />
+                            <span>{log.likes_count}</span>
+                          </div>
+                        )}
+                        {log.comments_count > 0 && (
+                          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-secondary">
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            <span>{log.comments_count}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 ))}
@@ -312,151 +273,14 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
         ))}
       </div>
 
-      {editingLog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-[60] p-4">
-          <div className="bg-white dark:bg-dark-panel rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border dark:border-dark-border">
-            <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">Edit Log</h2>
-              <button onClick={closeEditModal} className="text-slate-400 dark:text-dark-text-muted hover:text-slate-600 dark:hover:text-dark-text-primary">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleEditSubmit} className="p-4 space-y-3">
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-dark-text-primary mb-1">Title *</label>
-                <input
-                  type="text"
-                  value={editForm.title}
-                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                  required
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-dark-text-primary mb-1">Date *</label>
-                <input
-                  type="date"
-                  value={editForm.event_date}
-                  onChange={(e) => setEditForm({ ...editForm, event_date: e.target.value })}
-                  required
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-dark-text-primary mb-1">Location</label>
-                <LocationAutocomplete
-                  value={editForm.location}
-                  onChange={(value) => setEditForm({ ...editForm, location: value })}
-                  placeholder="Where were you?"
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-dark-text-primary mb-1">Trip Name</label>
-                <input
-                  type="text"
-                  value={editForm.trip_name}
-                  onChange={(e) => setEditForm({ ...editForm, trip_name: e.target.value })}
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-dark-text-primary mb-1">Description</label>
-                <textarea
-                  value={editForm.description}
-                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
-                />
-              </div>
-
-              <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="edit-image-upload"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="edit-camera-capture"
-                />
-                {imagePreview ? (
-                  <div className="relative">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="w-full h-32 object-cover rounded-lg"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeImage}
-                      className="absolute top-1.5 right-1.5 bg-black/50 text-white rounded-full p-1 hover:bg-black/70"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    <label
-                      htmlFor="edit-image-upload"
-                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 border border-dashed border-slate-300 rounded-lg text-xs text-slate-500 hover:bg-slate-50 transition cursor-pointer"
-                    >
-                      <Image className="w-3.5 h-3.5" />
-                      Gallery
-                    </label>
-                    <label
-                      htmlFor="edit-camera-capture"
-                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 border border-dashed border-slate-300 rounded-lg text-xs text-slate-500 hover:bg-slate-50 transition cursor-pointer"
-                    >
-                      <Camera className="w-3.5 h-3.5" />
-                      Camera
-                    </label>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between pt-2">
-                <button
-                  type="button"
-                  onClick={() => setEditForm({ ...editForm, is_public: !editForm.is_public })}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium transition ${
-                    editForm.is_public
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  {editForm.is_public ? (
-                    <>
-                      <Globe className="w-3 h-3" />
-                      Public
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="w-3 h-3" />
-                      Private
-                    </>
-                  )}
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-semibold hover:bg-slate-700 transition"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {selectedLog && userProfile && (
+        <LogDetailModal
+          log={selectedLog}
+          profile={userProfile}
+          currentUserId={userId}
+          onClose={() => setSelectedLog(null)}
+          showSocialFeatures={false}
+        />
       )}
     </>
   );

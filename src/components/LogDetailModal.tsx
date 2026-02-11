@@ -412,7 +412,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[60] p-0 sm:p-4" onClick={onClose}>
-      <div className="bg-white dark:bg-dark-panel sm:rounded-xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col mt-[64px] mb-[64px] max-h-[calc(100vh-128px)] sm:mt-0 sm:mb-0 sm:h-auto sm:max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white dark:bg-dark-panel sm:rounded-xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col mt-[64px] mb-[64px] max-h-[calc(100dvh-128px)] sm:mt-0 sm:mb-0 sm:h-auto sm:max-h-[85dvh]" onClick={(e) => e.stopPropagation()}>
         <div className="flex-shrink-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-3 flex items-center justify-between">
           <Link to={`/profile/${profile.id}`} className="flex items-center gap-2 min-w-0 hover:opacity-80 transition">
             <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
@@ -435,7 +435,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
         <div className="flex-1 overflow-y-auto">
           {log.image_url && (
             <div className="bg-slate-100 flex items-center justify-center">
-              <img src={log.image_url} alt={log.title} className="w-full h-auto max-h-[40vh] object-contain" />
+              <img src={log.image_url} alt={log.title} className="w-full h-auto max-h-[40dvh] object-contain" />
             </div>
           )}
 

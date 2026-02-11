@@ -282,7 +282,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={() => setShowAvatarModal(false)}
         >
-          <div className="relative max-w-2xl max-h-[90vh]">
+          <div className="relative max-w-2xl max-h-[90dvh]">
             <img
               src={profile.avatar_url}
               alt={profile.username}
@@ -305,7 +305,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           onClick={() => setShowAchievements(false)}
         >
           <div
-            className="bg-black border border-white/10 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-auto"
+            className="bg-black border border-white/10 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85dvh] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/5 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 flex items-center justify-between">
