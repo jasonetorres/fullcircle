@@ -107,14 +107,14 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
   return (
     <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 animate-fade-in">
       <div
-        className="bg-white w-full max-w-md rounded-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+        className="bg-white dark:bg-dark-panel w-full max-w-md rounded-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between z-10 rounded-t-2xl">
-          <h2 className="text-xl font-bold text-slate-800">New Log</h2>
+        <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border px-4 py-3 flex items-center justify-between z-10 rounded-t-2xl">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-dark-text-primary">New Log</h2>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 transition touch-target-sm"
+            className="p-2 text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary transition touch-target-sm"
           >
             <X className="w-6 h-6" />
           </button>
@@ -129,13 +129,13 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
               placeholder="What happened today?"
               required
               autoFocus
-              className="w-full px-4 py-3 text-base border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 text-base border-2 border-slate-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 mb-1">
+              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1">
                 <Calendar className="w-3 h-3" />
                 Date
               </label>
@@ -144,11 +144,11 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
                 value={formData.event_date}
                 onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
                 required
-                className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
               />
             </div>
             <div>
-              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 mb-1">
+              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1">
                 <MapPin className="w-3 h-3" />
                 Location
               </label>
@@ -156,13 +156,13 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
                 value={formData.location}
                 onChange={(value) => setFormData({ ...formData, location: value })}
                 placeholder="Where?"
-                className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="flex items-center gap-1 text-xs font-medium text-slate-600 mb-1">
+            <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1">
               <Plane className="w-3 h-3" />
               Trip Name
             </label>
@@ -171,7 +171,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
               value={formData.trip_name}
               onChange={(e) => setFormData({ ...formData, trip_name: e.target.value })}
               placeholder="Part of a trip? Name it"
-              className="w-full px-2.5 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
             />
           </div>
 
@@ -184,7 +184,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Tell the story..."
               rows={3}
-              className="w-full px-3 py-2.5 text-base border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full px-3 py-2.5 text-base border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
             />
           </div>
 
@@ -228,14 +228,14 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
               <div className="flex gap-2">
                 <label
                   htmlFor="modal-image-upload"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
                 >
                   <Image className="w-4 h-4" />
                   Gallery
                 </label>
                 <label
                   htmlFor="modal-camera-capture"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
                 >
                   <Camera className="w-4 h-4" />
                   Camera
@@ -253,8 +253,8 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
                   onClick={() => setFormData({ ...formData, is_public: true })}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition text-sm font-medium ${
                     formData.is_public
-                      ? 'bg-white text-emerald-700 shadow-sm'
-                      : 'text-slate-600 hover:text-slate-800'
+                      ? 'bg-white dark:bg-dark-panel text-emerald-700 shadow-sm'
+                      : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:text-dark-text-primary'
                   }`}
                 >
                   <Globe className="w-4 h-4" />
@@ -265,8 +265,8 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
                   onClick={() => setFormData({ ...formData, is_public: false })}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition text-sm font-medium ${
                     !formData.is_public
-                      ? 'bg-white text-slate-800 shadow-sm'
-                      : 'text-slate-600 hover:text-slate-800'
+                      ? 'bg-white dark:bg-dark-panel text-slate-800 dark:text-dark-text-primary shadow-sm'
+                      : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:text-dark-text-primary'
                   }`}
                 >
                   <Lock className="w-4 h-4" />
@@ -278,7 +278,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
             <button
               type="submit"
               disabled={loading || !formData.title}
-              className="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold active:scale-95"
+              className="bg-slate-800 dark:bg-orange-500 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold active:scale-95"
             >
               {loading ? (
                 <>

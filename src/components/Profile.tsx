@@ -262,7 +262,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
   if (!profile) {
     return (
       <div className="text-center py-12">
-        <p className="text-slate-600">Profile not found</p>
+        <p className="text-slate-600 dark:text-dark-text-secondary">Profile not found</p>
       </div>
     );
   }
@@ -308,14 +308,14 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-white border-b border-slate-200 dark:border-dark-border px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Award className="w-5 h-5 text-amber-600" />
-                <h2 className="text-lg font-bold text-slate-800">Achievements</h2>
+                <h2 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">Achievements</h2>
               </div>
               <button
                 onClick={() => setShowAchievements(false)}
-                className="text-slate-400 hover:text-slate-600 transition"
+                className="text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary transition"
               >
                 ✕
               </button>
@@ -328,14 +328,14 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                       <Flame className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-slate-600 uppercase">Current Streak</div>
-                      <div className="text-2xl font-bold text-slate-800">
+                      <div className="text-xs font-semibold text-slate-600 dark:text-dark-text-secondary uppercase">Current Streak</div>
+                      <div className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary">
                         {streakData.currentStreak} {streakData.currentStreak === 1 ? 'day' : 'days'}
                       </div>
                     </div>
                   </div>
                   {streakData.longestStreak > 0 && (
-                    <div className="text-sm text-slate-600">
+                    <div className="text-sm text-slate-600 dark:text-dark-text-secondary">
                       Best streak: <span className="font-bold">{streakData.longestStreak} days</span>
                     </div>
                   )}
@@ -352,7 +352,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               )}
               {badges.length > 0 ? (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-slate-600 uppercase">Badges Earned</h3>
+                  <h3 className="text-sm font-semibold text-slate-600 dark:text-dark-text-secondary uppercase">Badges Earned</h3>
                   <div className="grid grid-cols-1 gap-3">
                     {badges.map((userBadge: any) => (
                       <div
@@ -363,9 +363,9 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                           {userBadge.badges?.icon}
                         </div>
                         <div className="flex-1">
-                          <div className="font-bold text-slate-800">{userBadge.badges?.name}</div>
-                          <div className="text-sm text-slate-600">{userBadge.badges?.description}</div>
-                          <div className="text-xs text-slate-500 mt-1">
+                          <div className="font-bold text-slate-800 dark:text-dark-text-primary">{userBadge.badges?.name}</div>
+                          <div className="text-sm text-slate-600 dark:text-dark-text-secondary">{userBadge.badges?.description}</div>
+                          <div className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">
                             Earned {new Date(userBadge.earned_at).toLocaleDateString()}
                           </div>
                         </div>
@@ -376,7 +376,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               ) : (
                 <div className="text-center py-8">
                   <Award className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                  <p className="text-slate-500">No badges earned yet</p>
+                  <p className="text-slate-500 dark:text-dark-text-muted">No badges earned yet</p>
                   <p className="text-sm text-slate-400 mt-1">Keep posting to unlock achievements!</p>
                 </div>
               )}
@@ -386,11 +386,11 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       )}
 
       <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+      <div className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden mb-4">
         <div className="p-4">
           <div className="flex items-start gap-3 mb-4">
             <div
-              className={`w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0 ${profile.avatar_url ? 'cursor-pointer hover:opacity-90 transition' : ''}`}
+              className={`w-16 h-16 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0 ${profile.avatar_url ? 'cursor-pointer hover:opacity-90 transition' : ''}`}
               onClick={() => profile.avatar_url && setShowAvatarModal(true)}
             >
               {profile.avatar_url ? (
@@ -406,13 +406,13 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-lg font-bold text-slate-800 truncate">
+                <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary truncate">
                   {profile.display_name || profile.username}
                 </h1>
                 {isOwnProfile ? (
                   <button
                     onClick={onOpenSettings}
-                    className="flex-shrink-0 text-slate-600 hover:text-slate-800 transition"
+                    className="flex-shrink-0 text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:text-dark-text-primary transition"
                   >
                     <Settings className="w-5 h-5" />
                   </button>
@@ -423,7 +423,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                       isFollowing
                         ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                        : 'bg-slate-800 text-white hover:bg-slate-700'
+                        : 'bg-slate-800 dark:bg-orange-500 text-white hover:bg-slate-700'
                     } ${followLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {isFollowing ? (
@@ -441,18 +441,18 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 ) : null}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-sm text-slate-500 truncate">@{profile.username}</p>
+                <p className="text-sm text-slate-500 dark:text-dark-text-muted truncate">@{profile.username}</p>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200">
                   <Flame className={`w-3.5 h-3.5 ${streakData.currentStreak > 0 ? 'text-orange-600' : 'text-slate-400'}`} />
-                  <span className="text-xs font-bold text-slate-800">{streakData.currentStreak}</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-dark-text-primary">{streakData.currentStreak}</span>
                   {streakData.longestStreak > streakData.currentStreak && (
-                    <span className="text-xs text-slate-500">/ {streakData.longestStreak}</span>
+                    <span className="text-xs text-slate-500 dark:text-dark-text-muted">/ {streakData.longestStreak}</span>
                   )}
                 </div>
                 {badges.length > 0 && (
                   <button
                     onClick={() => setShowAchievements(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition shadow-sm active:scale-95"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 transition shadow-sm active:scale-95"
                   >
                     <Award className="w-4 h-4" />
                     <span className="text-xs font-semibold">{badges.length} Badge{badges.length !== 1 ? 's' : ''}</span>
@@ -466,39 +466,39 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             <p className="text-sm text-slate-700 mb-3">{linkifyText(profile.bio)}</p>
           )}
 
-          <div className="grid grid-cols-4 gap-3 mb-3 pt-3 border-t border-slate-200">
+          <div className="grid grid-cols-4 gap-3 mb-3 pt-3 border-t border-slate-200 dark:border-dark-border">
             <button
               onClick={() => setShowStatsModal('posts')}
-              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+              className="text-center hover:bg-slate-50 dark:bg-dark-hover rounded-lg py-2 transition"
             >
-              <div className="text-lg font-bold text-slate-800">{stats.totalPosts}</div>
-              <div className="text-xs text-slate-500">Posts</div>
+              <div className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">{stats.totalPosts}</div>
+              <div className="text-xs text-slate-500 dark:text-dark-text-muted">Posts</div>
             </button>
             <button
               onClick={() => setShowStatsModal('places')}
-              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+              className="text-center hover:bg-slate-50 dark:bg-dark-hover rounded-lg py-2 transition"
             >
-              <div className="text-lg font-bold text-slate-800">{stats.uniqueLocations}</div>
-              <div className="text-xs text-slate-500">Places</div>
+              <div className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">{stats.uniqueLocations}</div>
+              <div className="text-xs text-slate-500 dark:text-dark-text-muted">Places</div>
             </button>
             <button
               onClick={() => setShowStatsModal('followers')}
-              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+              className="text-center hover:bg-slate-50 dark:bg-dark-hover rounded-lg py-2 transition"
             >
-              <div className="text-lg font-bold text-slate-800">{stats.followers}</div>
-              <div className="text-xs text-slate-500">Followers</div>
+              <div className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">{stats.followers}</div>
+              <div className="text-xs text-slate-500 dark:text-dark-text-muted">Followers</div>
             </button>
             <button
               onClick={() => setShowStatsModal('following')}
-              className="text-center hover:bg-slate-50 rounded-lg py-2 transition"
+              className="text-center hover:bg-slate-50 dark:bg-dark-hover rounded-lg py-2 transition"
             >
-              <div className="text-lg font-bold text-slate-800">{stats.following}</div>
-              <div className="text-xs text-slate-500">Following</div>
+              <div className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">{stats.following}</div>
+              <div className="text-xs text-slate-500 dark:text-dark-text-muted">Following</div>
             </button>
           </div>
 
           {isOwnProfile && (
-            <div className="flex gap-2 pt-3 border-t border-slate-200">
+            <div className="flex gap-2 pt-3 border-t border-slate-200 dark:border-dark-border">
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -527,8 +527,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             onClick={() => setActiveFilter('all')}
             className={`px-3 py-1.5 text-sm rounded-full transition ${
               activeFilter === 'all'
-                ? 'bg-slate-800 text-white'
-                : 'bg-white text-slate-600 hover:bg-slate-100 shadow-md'
+                ? 'bg-slate-800 dark:bg-orange-500 text-white'
+                : 'bg-white text-slate-600 dark:text-dark-text-secondary hover:bg-slate-100 shadow-md'
             }`}
           >
             All
@@ -537,8 +537,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             onClick={() => setActiveFilter('public')}
             className={`px-3 py-1.5 text-sm rounded-full transition ${
               activeFilter === 'public'
-                ? 'bg-slate-800 text-white'
-                : 'bg-white text-slate-600 hover:bg-slate-100 shadow-md'
+                ? 'bg-slate-800 dark:bg-orange-500 text-white'
+                : 'bg-white text-slate-600 dark:text-dark-text-secondary hover:bg-slate-100 shadow-md'
             }`}
           >
             Public
@@ -547,8 +547,8 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
             onClick={() => setActiveFilter('private')}
             className={`px-3 py-1.5 text-sm rounded-full transition ${
               activeFilter === 'private'
-                ? 'bg-slate-800 text-white'
-                : 'bg-white text-slate-600 hover:bg-slate-100 shadow-md'
+                ? 'bg-slate-800 dark:bg-orange-500 text-white'
+                : 'bg-white text-slate-600 dark:text-dark-text-secondary hover:bg-slate-100 shadow-md'
             }`}
           >
             Private
@@ -556,7 +556,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           {logs.length > 0 && (
             <button
               onClick={exportLogs}
-              className="ml-auto flex items-center gap-2 px-3 py-1.5 bg-white text-slate-600 hover:bg-slate-100 shadow-md rounded-full transition text-sm"
+              className="ml-auto flex items-center gap-2 px-3 py-1.5 bg-white text-slate-600 dark:text-dark-text-secondary hover:bg-slate-100 shadow-md rounded-full transition text-sm"
             >
               <Download className="w-4 h-4" />
               Export
@@ -566,16 +566,16 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       )}
 
       {logs.length === 0 ? (
-        <div className="text-center py-8 bg-white rounded-lg shadow-md">
+        <div className="text-center py-8 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
           <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-          <p className="text-slate-600 text-sm">No posts yet</p>
+          <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No posts yet</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {logs.map((log) => (
             <div
               key={log.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group cursor-pointer"
+              className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden hover:shadow-lg transition group cursor-pointer"
               onClick={() => setSelectedLog(log)}
             >
               {log.image_url ? (
@@ -600,19 +600,19 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               ) : (
                 <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 p-3 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-bold text-slate-800 text-xs mb-1 line-clamp-2">{log.title}</h3>
+                    <h3 className="font-bold text-slate-800 dark:text-dark-text-primary text-xs mb-1 line-clamp-2">{log.title}</h3>
                     {log.description && (
-                      <p className="text-xs text-slate-600 line-clamp-3">{log.description}</p>
+                      <p className="text-xs text-slate-600 dark:text-dark-text-secondary line-clamp-3">{log.description}</p>
                     )}
                   </div>
                   <div className="space-y-0.5">
                     {log.location && (
-                      <div className="flex items-center gap-1 text-xs text-slate-500 truncate">
+                      <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted truncate">
                         <MapPin className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">{log.location}</span>
                       </div>
                     )}
-                    <div className="flex items-center gap-1 text-xs text-slate-500">
+                    <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted">
                       <Calendar className="w-3 h-3" />
                       <span>{formatDate(log.event_date)}</span>
                     </div>

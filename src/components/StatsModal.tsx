@@ -131,11 +131,11 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-full max-w-lg rounded-2xl max-h-[80vh] flex flex-col shadow-2xl"
+        className="bg-white dark:bg-dark-panel w-full max-w-lg rounded-2xl max-h-[80vh] flex flex-col shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <h2 className="text-lg font-bold text-slate-800">{getTitle()}</h2>
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-dark-border">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">{getTitle()}</h2>
           <button
             onClick={onClose}
             className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 rounded-full transition touch-target-sm"
@@ -180,7 +180,7 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-800 truncate">
+                          <p className="text-sm font-semibold text-slate-800 dark:text-dark-text-primary truncate">
                             {user.display_name || user.username}
                           </p>
                           <p className="text-xs text-slate-500 truncate">@{user.username}</p>
@@ -210,7 +210,7 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
                             />
                           )}
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-slate-800 mb-1 truncate">
+                            <p className="text-sm font-semibold text-slate-800 dark:text-dark-text-primary mb-1 truncate">
                               {post.title}
                             </p>
                             <div className="flex flex-wrap gap-2 text-xs text-slate-500">
@@ -250,7 +250,7 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
                           <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                             <MapPin className="w-5 h-5" />
                           </div>
-                          <p className="text-sm font-medium text-slate-800 truncate">
+                          <p className="text-sm font-medium text-slate-800 dark:text-dark-text-primary truncate">
                             {place.location}
                           </p>
                         </div>

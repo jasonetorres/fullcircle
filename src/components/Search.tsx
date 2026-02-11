@@ -320,45 +320,45 @@ export default function Search({ userId }: SearchProps) {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="flex border-b border-slate-200">
+      <div className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden">
+        <div className="flex border-b border-slate-200 dark:border-dark-border">
           <button
             onClick={() => setActiveTab('users')}
             className={`flex-1 px-4 py-3 text-sm font-medium transition relative ${
               activeTab === 'users'
-                ? 'text-slate-800'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'text-slate-800 dark:text-dark-text-primary'
+                : 'text-slate-500 dark:text-dark-text-muted hover:text-slate-700'
             }`}
           >
             Users
             {activeTab === 'users' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-orange-500"></div>
             )}
           </button>
           <button
             onClick={() => setActiveTab('public')}
             className={`flex-1 px-4 py-3 text-sm font-medium transition relative ${
               activeTab === 'public'
-                ? 'text-slate-800'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'text-slate-800 dark:text-dark-text-primary'
+                : 'text-slate-500 dark:text-dark-text-muted hover:text-slate-700'
             }`}
           >
             Public Logs
             {activeTab === 'public' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-orange-500"></div>
             )}
           </button>
           <button
             onClick={() => setActiveTab('mine')}
             className={`flex-1 px-4 py-3 text-sm font-medium transition relative ${
               activeTab === 'mine'
-                ? 'text-slate-800'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'text-slate-800 dark:text-dark-text-primary'
+                : 'text-slate-500 dark:text-dark-text-muted hover:text-slate-700'
             }`}
           >
             My Logs
             {activeTab === 'mine' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-orange-500"></div>
             )}
           </button>
         </div>
@@ -373,19 +373,19 @@ export default function Search({ userId }: SearchProps) {
                   value={usersQuery}
                   onChange={(e) => setUsersQuery(e.target.value)}
                   placeholder="Search users by name or username..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
                 />
                 {usersQuery && (
                   <button
                     onClick={() => setUsersQuery('')}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 )}
               </div>
               {usersQuery && (
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-slate-600 dark:text-dark-text-secondary">
                   {users.length} {users.length === 1 ? 'user' : 'users'} found
                 </div>
               )}
@@ -401,12 +401,12 @@ export default function Search({ userId }: SearchProps) {
                   value={publicQuery}
                   onChange={(e) => setPublicQuery(e.target.value)}
                   placeholder="Search public logs..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
                 />
                 {publicQuery && (
                   <button
                     onClick={() => setPublicQuery('')}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -418,7 +418,7 @@ export default function Search({ userId }: SearchProps) {
                   <select
                     value={publicLocationFilter}
                     onChange={(e) => setPublicLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition bg-white"
+                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition bg-white"
                   >
                     <option value="">All Locations</option>
                     {publicLocations.map((location) => (
@@ -430,7 +430,7 @@ export default function Search({ userId }: SearchProps) {
                 </div>
               )}
               {(publicQuery || publicLocationFilter) && (
-                <div className="flex items-center justify-between text-sm text-slate-600 pt-2 border-t border-slate-200">
+                <div className="flex items-center justify-between text-sm text-slate-600 dark:text-dark-text-secondary pt-2 border-t border-slate-200 dark:border-dark-border">
                   <span>
                     {publicLogs.length} {publicLogs.length === 1 ? 'result' : 'results'}
                   </span>
@@ -439,7 +439,7 @@ export default function Search({ userId }: SearchProps) {
                       onClick={() => {
                         setPublicLocationFilter('');
                       }}
-                      className="text-slate-500 hover:text-slate-700 underline text-xs"
+                      className="text-slate-500 dark:text-dark-text-muted hover:text-slate-700 underline text-xs"
                     >
                       Clear location
                     </button>
@@ -458,12 +458,12 @@ export default function Search({ userId }: SearchProps) {
                   value={myQuery}
                   onChange={(e) => setMyQuery(e.target.value)}
                   placeholder="Search your logs..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
                 />
                 {myQuery && (
                   <button
                     onClick={() => setMyQuery('')}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -475,7 +475,7 @@ export default function Search({ userId }: SearchProps) {
                   <select
                     value={myLocationFilter}
                     onChange={(e) => setMyLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition bg-white"
+                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition bg-white"
                   >
                     <option value="">All Locations</option>
                     {myLocations.map((location) => (
@@ -486,7 +486,7 @@ export default function Search({ userId }: SearchProps) {
                   </select>
                 </div>
               )}
-              <div className="flex items-center justify-between text-sm text-slate-600 pt-2 border-t border-slate-200">
+              <div className="flex items-center justify-between text-sm text-slate-600 dark:text-dark-text-secondary pt-2 border-t border-slate-200 dark:border-dark-border">
                 <span>
                   {filteredMyLogs.length} {filteredMyLogs.length === 1 ? 'result' : 'results'}
                 </span>
@@ -495,7 +495,7 @@ export default function Search({ userId }: SearchProps) {
                     onClick={() => {
                       setMyLocationFilter('');
                     }}
-                    className="text-slate-500 hover:text-slate-700 underline text-xs"
+                    className="text-slate-500 dark:text-dark-text-muted hover:text-slate-700 underline text-xs"
                   >
                     Clear location
                   </button>
@@ -510,21 +510,21 @@ export default function Search({ userId }: SearchProps) {
         <div>
           {usersLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-slate-800"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800"></div>
             </div>
           ) : users.length === 0 && usersQuery ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
               <User className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-              <p className="text-slate-600 text-sm">No users found</p>
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No users found</p>
+              <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
                 Try a different search term
               </p>
             </div>
           ) : users.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
               <SearchIcon className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-              <p className="text-slate-600 text-sm">Search for users to discover</p>
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-slate-600 dark:text-dark-text-secondary text-sm">Search for users to discover</p>
+              <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
                 Find and follow people on Full Circle
               </p>
             </div>
@@ -533,10 +533,10 @@ export default function Search({ userId }: SearchProps) {
               {users.map((user) => (
                 <div
                   key={user.id}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4"
+                  className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition p-4"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    <div className="w-12 h-12 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                       {user.avatar_url ? (
                         <img
                           src={user.avatar_url}
@@ -548,16 +548,16 @@ export default function Search({ userId }: SearchProps) {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-bold text-slate-800 truncate">
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-dark-text-primary truncate">
                         {user.display_name || user.username}
                       </h3>
-                      <p className="text-xs text-slate-500 truncate mb-1">@{user.username}</p>
+                      <p className="text-xs text-slate-500 dark:text-dark-text-muted truncate mb-1">@{user.username}</p>
                       {user.bio && (
-                        <p className="text-xs text-slate-600 line-clamp-2 mb-2">
+                        <p className="text-xs text-slate-600 dark:text-dark-text-secondary line-clamp-2 mb-2">
                           {linkifyText(user.bio)}
                         </p>
                       )}
-                      <div className="flex items-center gap-3 text-xs text-slate-500">
+                      <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-dark-text-muted">
                         <span>{user.followers_count} followers</span>
                       </div>
                     </div>
@@ -566,7 +566,7 @@ export default function Search({ userId }: SearchProps) {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition flex-shrink-0 ${
                         user.is_following
                           ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                          : 'bg-slate-800 text-white hover:bg-slate-700'
+                          : 'bg-slate-800 dark:bg-orange-500 text-white hover:bg-slate-700'
                       }`}
                     >
                       {user.is_following ? (
@@ -593,21 +593,21 @@ export default function Search({ userId }: SearchProps) {
         <div>
           {publicLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-slate-800"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800"></div>
             </div>
           ) : publicLogs.length === 0 && (publicQuery || publicLocationFilter) ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
               <SearchIcon className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-              <p className="text-slate-600 text-sm">No matching logs found</p>
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No matching logs found</p>
+              <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
                 Try adjusting your search filters
               </p>
             </div>
           ) : publicLogs.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
               <Globe className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-              <p className="text-slate-600 text-sm">Search to discover public logs</p>
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-slate-600 dark:text-dark-text-secondary text-sm">Search to discover public logs</p>
+              <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
                 Explore memories shared by the community
               </p>
             </div>
@@ -616,12 +616,12 @@ export default function Search({ userId }: SearchProps) {
               {publicLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden cursor-pointer"
+                  className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition overflow-hidden cursor-pointer"
                   onClick={() => openLogDetail(log)}
                 >
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      <div className="w-8 h-8 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                         {log.author.avatar_url ? (
                           <img
                             src={log.author.avatar_url}
@@ -633,12 +633,12 @@ export default function Search({ userId }: SearchProps) {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-800 truncate">
+                        <p className="text-sm font-semibold text-slate-800 dark:text-dark-text-primary truncate">
                           {log.author.display_name || log.author.username}
                         </p>
-                        <p className="text-xs text-slate-500 truncate">@{log.author.username}</p>
+                        <p className="text-xs text-slate-500 dark:text-dark-text-muted truncate">@{log.author.username}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-slate-500">
+                      <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted">
                         <Calendar className="w-3 h-3" />
                         <span>{formatDate(log.event_date)}</span>
                       </div>
@@ -652,9 +652,9 @@ export default function Search({ userId }: SearchProps) {
                       />
                     )}
 
-                    <h3 className="text-sm font-bold text-slate-800 mb-1">{log.title}</h3>
+                    <h3 className="text-sm font-bold text-slate-800 dark:text-dark-text-primary mb-1">{log.title}</h3>
                     {log.description && (
-                      <p className="text-xs text-slate-600 mb-2 line-clamp-2">
+                      <p className="text-xs text-slate-600 dark:text-dark-text-secondary mb-2 line-clamp-2">
                         {linkifyText(log.description)}
                       </p>
                     )}
@@ -662,19 +662,19 @@ export default function Search({ userId }: SearchProps) {
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1">
                         {log.location && (
-                          <div className="flex items-center gap-1 text-xs text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full">
+                          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted bg-slate-50 dark:bg-dark-hover px-2 py-0.5 rounded-full">
                             <MapPin className="w-3 h-3" />
                             <span className="truncate max-w-[120px]">{log.location}</span>
                           </div>
                         )}
                         {log.trip_name && (
-                          <div className="flex items-center gap-1 text-xs text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full">
+                          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted bg-slate-50 dark:bg-dark-hover px-2 py-0.5 rounded-full">
                             <Plane className="w-3 h-3" />
                             <span className="truncate max-w-[120px]">{log.trip_name}</span>
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-slate-500">
+                      <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-dark-text-muted">
                         <div className="flex items-center gap-1">
                           <Heart className={`w-4 h-4 ${log.is_liked ? 'fill-red-500 text-red-500' : ''}`} />
                           <span>{log.likes_count}</span>
@@ -697,13 +697,13 @@ export default function Search({ userId }: SearchProps) {
         <div>
           {myLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-slate-800"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800"></div>
             </div>
           ) : filteredMyLogs.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
               <SearchIcon className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-              <p className="text-slate-600 text-sm">No matching logs found</p>
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No matching logs found</p>
+              <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
                 Try adjusting your search filters
               </p>
             </div>
@@ -712,7 +712,7 @@ export default function Search({ userId }: SearchProps) {
               {filteredMyLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-4"
+                  className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition p-4"
                 >
                   <div className="flex items-start gap-3">
                     {log.image_url && (
@@ -724,7 +724,7 @@ export default function Search({ userId }: SearchProps) {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="flex items-center gap-1 text-xs text-slate-500">
+                        <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted">
                           <Calendar className="w-3 h-3" />
                           <span>{formatDate(log.event_date)}</span>
                         </div>
@@ -738,19 +738,19 @@ export default function Search({ userId }: SearchProps) {
                           </Tooltip>
                         )}
                       </div>
-                      <h3 className="text-sm font-bold text-slate-800 mb-1 line-clamp-1">{log.title}</h3>
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-dark-text-primary mb-1 line-clamp-1">{log.title}</h3>
                       {log.description && (
-                        <p className="text-xs text-slate-600 mb-2 line-clamp-2">{log.description}</p>
+                        <p className="text-xs text-slate-600 dark:text-dark-text-secondary mb-2 line-clamp-2">{log.description}</p>
                       )}
                       <div className="flex flex-wrap gap-1">
                         {log.location && (
-                          <div className="flex items-center gap-1 text-xs text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full">
+                          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted bg-slate-50 dark:bg-dark-hover px-2 py-0.5 rounded-full">
                             <MapPin className="w-3 h-3" />
                             <span className="truncate max-w-[120px]">{log.location}</span>
                           </div>
                         )}
                         {log.trip_name && (
-                          <div className="flex items-center gap-1 text-xs text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full">
+                          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-muted bg-slate-50 dark:bg-dark-hover px-2 py-0.5 rounded-full">
                             <Plane className="w-3 h-3" />
                             <span className="truncate max-w-[120px]">{log.trip_name}</span>
                           </div>

@@ -334,7 +334,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
             <div className="flex items-center gap-2 mb-0.5">
               <Link
                 to={`/profile/${comment.user_id}`}
-                className="text-xs font-semibold text-slate-800 truncate hover:opacity-80 transition"
+                className="text-xs font-semibold text-slate-800 dark:text-dark-text-primary truncate hover:opacity-80 transition"
               >
                 {comment.profile?.display_name || comment.profile?.username}
               </Link>
@@ -392,7 +392,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                     setReplyingTo(null);
                     setReplyContent('');
                   }}
-                  className="px-2 py-1.5 text-slate-600 hover:text-slate-800 transition text-xs"
+                  className="px-2 py-1.5 text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:text-dark-text-primary transition text-xs"
                 >
                   Cancel
                 </button>
@@ -412,8 +412,8 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[60] p-0 sm:p-4" onClick={onClose}>
-      <div className="bg-white sm:rounded-xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col mt-[64px] mb-[64px] max-h-[calc(100vh-128px)] sm:mt-0 sm:mb-0 sm:h-auto sm:max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
-        <div className="flex-shrink-0 bg-white border-b border-slate-200 p-3 flex items-center justify-between">
+      <div className="bg-white dark:bg-dark-panel sm:rounded-xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col mt-[64px] mb-[64px] max-h-[calc(100vh-128px)] sm:mt-0 sm:mb-0 sm:h-auto sm:max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+        <div className="flex-shrink-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-3 flex items-center justify-between">
           <Link to={`/profile/${profile.id}`} className="flex items-center gap-2 min-w-0 hover:opacity-80 transition">
             <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {profile.avatar_url ? (
@@ -423,11 +423,11 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
               )}
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-800 truncate">{profile.display_name || profile.username}</p>
+              <p className="text-sm font-semibold text-slate-800 dark:text-dark-text-primary truncate">{profile.display_name || profile.username}</p>
               <p className="text-xs text-slate-500 truncate">@{profile.username}</p>
             </div>
           </Link>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition flex-shrink-0">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary transition flex-shrink-0">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -440,7 +440,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
           )}
 
           <div className="p-4">
-            <div className="flex items-center gap-2 text-xs text-slate-600 mb-2">
+            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-dark-text-secondary mb-2">
               <Calendar className="w-3.5 h-3.5" />
               <span className="truncate">{formatDate(log.event_date)}</span>
               {log.is_public ? (
@@ -450,7 +450,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
               )}
             </div>
 
-            <h2 className="text-xl font-bold text-slate-800 mb-2">{log.title}</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-dark-text-primary mb-2">{log.title}</h2>
 
             {log.description && (
               <p className="text-sm text-slate-700 mb-3 leading-relaxed whitespace-pre-wrap">{log.description}</p>
@@ -458,13 +458,13 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
 
             <div className="flex flex-wrap gap-2 mb-3">
               {log.location && (
-                <div className="flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full">
+                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-dark-text-secondary bg-slate-100 px-2.5 py-1 rounded-full">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                   <span className="truncate">{log.location}</span>
                 </div>
               )}
               {log.trip_name && (
-                <div className="flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full">
+                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-dark-text-secondary bg-slate-100 px-2.5 py-1 rounded-full">
                   <Plane className="w-3.5 h-3.5 flex-shrink-0" />
                   <span className="truncate">{log.trip_name}</span>
                 </div>
@@ -473,7 +473,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
 
             {showSocialFeatures && log.is_public && (
               <>
-                <div className="flex items-center gap-4 py-3 border-t border-slate-200 mb-3">
+                <div className="flex items-center gap-4 py-3 border-t border-slate-200 dark:border-dark-border mb-3">
                   <button
                     onClick={toggleLike}
                     className={`flex items-center gap-1.5 transition ${
@@ -491,8 +491,8 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                   </div>
                 </div>
 
-                <div className="border-t border-slate-200 pt-3">
-                  <h3 className="font-semibold text-slate-800 mb-2 text-sm">Comments</h3>
+                <div className="border-t border-slate-200 dark:border-dark-border pt-3">
+                  <h3 className="font-semibold text-slate-800 dark:text-dark-text-primary mb-2 text-sm">Comments</h3>
                   <div className="space-y-3 mb-3">
                     {comments.length === 0 ? (
                       <p className="text-center text-slate-500 text-xs py-3">No comments yet</p>
@@ -501,10 +501,10 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                     )}
                   </div>
 
-                  <form onSubmit={submitComment} className="bg-white pt-2 pb-2">
+                  <form onSubmit={submitComment} className="bg-white dark:bg-dark-panel pt-2 pb-2">
                     <div className="relative">
                       {showMentions && mentionSuggestions.length > 0 && (
-                        <div className="absolute bottom-full mb-1 w-full bg-white border border-slate-300 rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
+                        <div className="absolute bottom-full mb-1 w-full bg-white dark:bg-dark-panel border border-slate-300 rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
                           {mentionSuggestions.map((user) => (
                             <button
                               key={user.id}

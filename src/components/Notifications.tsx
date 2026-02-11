@@ -219,9 +219,9 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
             onClick={() => setIsOpen(false)}
           />
           <div className="fixed inset-x-0 bottom-0 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-auto sm:mt-2 z-50 sm:w-96 animate-slide-up sm:animate-fade-in">
-            <div className="bg-white sm:rounded-xl rounded-t-2xl shadow-2xl border-t sm:border border-slate-200 max-h-[75vh] sm:max-h-[500px] flex flex-col overflow-hidden">
+            <div className="bg-white dark:bg-dark-panel sm:rounded-xl rounded-t-2xl shadow-2xl border-t sm:border border-slate-200 dark:border-dark-border max-h-[75vh] sm:max-h-[500px] flex flex-col overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
-                <h3 className="font-bold text-slate-800">Notifications</h3>
+                <h3 className="font-bold text-slate-800 dark:text-dark-text-primary">Notifications</h3>
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
@@ -249,7 +249,7 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
                       <div className="flex items-start gap-3 w-full">
                         <div className="relative flex-shrink-0">
                           {renderAvatar(notification)}
-                          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm">
+                          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-white dark:bg-dark-panel flex items-center justify-center shadow-sm">
                             {getTypeIcon(notification.type)}
                           </div>
                         </div>

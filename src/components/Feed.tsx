@@ -159,7 +159,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-slate-800"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500"></div>
       </div>
     );
   }
@@ -167,9 +167,9 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
   if (logs.length === 0) {
     return (
       <div className="text-center py-12">
-        <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-        <p className="text-slate-600 text-sm">No public logs yet</p>
-        <p className="text-slate-500 text-xs mt-1">
+        <Calendar className="w-12 h-12 text-slate-300 dark:text-dark-border mx-auto mb-2" />
+        <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No public logs yet</p>
+        <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
           Be the first to share your experiences!
         </p>
       </div>
@@ -182,7 +182,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
         {logs.map((log) => (
           <div
             key={log.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition"
+            className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden cursor-pointer hover:shadow-lg transition"
             onClick={() => setSelectedLog(log)}
           >
             <div className="p-3">
@@ -191,7 +191,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
                   to={`/profile/${log.user_id}`}
                   state={{ from: 'feed' }}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition overflow-hidden"
+                  className="w-8 h-8 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition overflow-hidden"
                 >
                   {log.profile?.avatar_url ? (
                     <img
@@ -209,58 +209,58 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
                   onClick={(e) => e.stopPropagation()}
                   className="flex-1 min-w-0 hover:opacity-80 transition"
                 >
-                  <p className="text-sm font-semibold text-slate-800 truncate">
+                  <p className="text-sm font-semibold text-slate-800 dark:text-dark-text-primary truncate">
                     {log.profile?.display_name || log.profile?.username || 'Unknown'}
                   </p>
-                  <p className="text-xs text-slate-500 truncate">
+                  <p className="text-xs text-slate-500 dark:text-dark-text-muted truncate">
                     @{log.profile?.username || 'unknown'}
                   </p>
                 </Link>
-                <div className="text-xs text-slate-500 flex-shrink-0">{formatDate(log.event_date)}</div>
+                <div className="text-xs text-slate-500 dark:text-dark-text-muted flex-shrink-0">{formatDate(log.event_date)}</div>
               </div>
 
-              <h3 className="text-base font-bold text-slate-800 mb-1">{log.title}</h3>
+              <h3 className="text-base font-bold text-slate-800 dark:text-dark-text-primary mb-1">{log.title}</h3>
 
               {log.description && (
-                <p className="text-sm text-slate-600 mb-2 line-clamp-3">{log.description}</p>
+                <p className="text-sm text-slate-600 dark:text-dark-text-secondary mb-2 line-clamp-3">{log.description}</p>
               )}
 
               {log.image_url && (
                 <img
                   src={log.image_url}
                   alt={log.title}
-                  className="w-full h-64 object-cover rounded-lg mb-2"
+                  className="w-full h-64 object-cover rounded-lg mb-2 border dark:border-dark-border"
                 />
               )}
 
               <div className="flex flex-wrap gap-2 mb-2">
                 {log.location && (
-                  <div className="flex items-center gap-1 text-xs text-slate-500 bg-slate-50 px-2 py-1 rounded-full">
+                  <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-secondary bg-slate-50 dark:bg-dark-hover px-2 py-1 rounded-full">
                     <MapPin className="w-3 h-3" />
                     <span>{log.location}</span>
                   </div>
                 )}
                 {log.trip_name && (
-                  <div className="flex items-center gap-1 text-xs text-slate-500 bg-slate-50 px-2 py-1 rounded-full">
+                  <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-dark-text-secondary bg-slate-50 dark:bg-dark-hover px-2 py-1 rounded-full">
                     <Plane className="w-3 h-3" />
                     <span>{log.trip_name}</span>
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center gap-4 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-4 pt-2 border-t border-slate-100 dark:border-dark-border">
                 <button
                   onClick={(e) => toggleLike(log, e)}
                   className={`flex items-center gap-1 text-sm transition ${
                     log.user_liked
-                      ? 'text-red-600 font-semibold'
-                      : 'text-slate-500 hover:text-red-600'
+                      ? 'text-red-600 dark:text-red-400 font-semibold'
+                      : 'text-slate-500 dark:text-dark-text-secondary hover:text-red-600 dark:hover:text-red-400'
                   }`}
                 >
-                  <Heart className={`w-4 h-4 ${log.user_liked ? 'fill-red-600' : ''}`} />
+                  <Heart className={`w-4 h-4 ${log.user_liked ? 'fill-red-600 dark:fill-red-400' : ''}`} />
                   <span>{log.likes_count}</span>
                 </button>
-                <div className="flex items-center gap-1 text-sm text-slate-500">
+                <div className="flex items-center gap-1 text-sm text-slate-500 dark:text-dark-text-secondary">
                   <MessageCircle className="w-4 h-4" />
                   <span>{log.comments_count}</span>
                 </div>
@@ -274,7 +274,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
             <button
               onClick={() => fetchFeed(false)}
               disabled={loadingMore}
-              className="px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingMore ? (
                 <div className="flex items-center gap-2">
