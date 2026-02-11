@@ -268,7 +268,9 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
                     );
 
                     const baseClassName = `block w-full p-3 text-left transition-colors ${
-                      !notification.is_read ? 'bg-blue-50/50 dark:bg-dark-hover' : 'hover:bg-slate-50 dark:hover:bg-dark-hover'
+                      !notification.is_read
+                        ? 'bg-blue-50/50 dark:bg-dark-hover hover:bg-blue-50 dark:hover:bg-dark-border'
+                        : 'hover:bg-slate-50 dark:hover:bg-dark-hover'
                     }`;
 
                     if (notification.type === 'follow') {

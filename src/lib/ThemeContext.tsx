@@ -61,8 +61,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
       if (newEffectiveTheme === 'dark') {
         document.documentElement.classList.add('dark');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#000000');
       } else {
         document.documentElement.classList.remove('dark');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#ffffff');
       }
     };
 

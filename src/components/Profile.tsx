@@ -301,18 +301,18 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
 
       {showAchievements && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 bg-black/40 dark:bg-black/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 sm:p-6"
           onClick={() => setShowAchievements(false)}
         >
           <div
-            className="bg-black border border-white/10 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85dvh] overflow-auto"
+            className="bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85dvh] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/5 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-light text-white tracking-wide">Achievements</h2>
+            <div className="sticky top-0 bg-white/95 dark:bg-black/95 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 flex items-center justify-between">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-light text-slate-800 dark:text-white tracking-wide">Achievements</h2>
               <button
                 onClick={() => setShowAchievements(false)}
-                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/5 rounded-full transition-all duration-200"
+                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-slate-400 dark:text-white/40 hover:text-slate-800 dark:hover:text-white/80 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-all duration-200"
               >
                 ✕
               </button>
@@ -321,27 +321,27 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               {streakData.currentStreak > 0 && (
                 <div className="space-y-4 sm:space-y-6">
                   <div className="flex items-center gap-4 sm:gap-6">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center shadow-lg flex-shrink-0">
-                      <Flame className="w-7 h-7 sm:w-9 sm:h-9 text-white" style={{ filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.5))' }} />
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 dark:from-white/10 dark:to-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <Flame className="w-7 h-7 sm:w-9 sm:h-9 text-orange-500 dark:text-white" style={{ filter: 'drop-shadow(0 0 12px rgba(251, 146, 60, 0.5))' }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mb-1 sm:mb-2">Current Streak</div>
-                      <div className="text-3xl sm:text-4xl md:text-5xl font-display font-light text-white mb-2 sm:mb-3">
-                        {streakData.currentStreak}<span className="text-lg sm:text-xl md:text-2xl text-white/60 ml-1 sm:ml-2">{streakData.currentStreak === 1 ? 'day' : 'days'}</span>
+                      <div className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-white/40 uppercase tracking-wider mb-1 sm:mb-2">Current Streak</div>
+                      <div className="text-3xl sm:text-4xl md:text-5xl font-display font-light text-slate-800 dark:text-white mb-2 sm:mb-3">
+                        {streakData.currentStreak}<span className="text-lg sm:text-xl md:text-2xl text-slate-500 dark:text-white/60 ml-1 sm:ml-2">{streakData.currentStreak === 1 ? 'day' : 'days'}</span>
                       </div>
                       {streakData.longestStreak > 0 && (
-                        <div className="text-xs sm:text-sm text-white/50">
-                          Best: <span className="font-medium text-white/70">{streakData.longestStreak} days</span>
+                        <div className="text-xs sm:text-sm text-slate-600 dark:text-white/50">
+                          Best: <span className="font-medium text-slate-700 dark:text-white/70">{streakData.longestStreak} days</span>
                         </div>
                       )}
                     </div>
                   </div>
                   {streakData.isActiveToday ? (
-                    <p className="text-xs sm:text-sm text-white/60">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-white/60">
                       Posted today. Keep the momentum going.
                     </p>
                   ) : (
-                    <p className="text-xs sm:text-sm text-white/60">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-white/60">
                       Post today to continue your streak.
                     </p>
                   )}
@@ -349,20 +349,20 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               )}
               {badges.length > 0 ? (
                 <div className="space-y-4 sm:space-y-6">
-                  <h3 className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider">Badges Earned</h3>
+                  <h3 className="text-[10px] sm:text-xs font-medium text-slate-500 dark:text-white/40 uppercase tracking-wider">Badges Earned</h3>
                   <div className="space-y-3 sm:space-y-4">
                     {badges.map((userBadge: any) => (
                       <div
                         key={userBadge.id}
-                        className="flex items-start gap-3 sm:gap-4 md:gap-6 p-4 sm:p-5 md:p-6 bg-white/[0.02] hover:bg-white/[0.04] border border-white/5 rounded-lg sm:rounded-xl transition-all duration-300"
+                        className="flex items-start gap-3 sm:gap-4 md:gap-6 p-4 sm:p-5 md:p-6 bg-slate-50 dark:bg-white/[0.02] hover:bg-slate-100 dark:hover:bg-white/[0.04] border border-slate-200 dark:border-white/5 rounded-lg sm:rounded-xl transition-all duration-300"
                       >
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center text-2xl sm:text-3xl md:text-4xl flex-shrink-0 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center text-2xl sm:text-3xl md:text-4xl flex-shrink-0 bg-slate-100 dark:bg-white/5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-white/10">
                           {userBadge.badges?.icon}
                         </div>
                         <div className="flex-1 min-w-0 pt-0.5 sm:pt-1">
-                          <div className="text-base sm:text-lg font-display font-light text-white mb-1 sm:mb-2">{userBadge.badges?.name}</div>
-                          <div className="text-xs sm:text-sm text-white/60 leading-relaxed mb-2 sm:mb-3">{userBadge.badges?.description}</div>
-                          <div className="text-[10px] sm:text-xs text-white/30">
+                          <div className="text-base sm:text-lg font-display font-light text-slate-800 dark:text-white mb-1 sm:mb-2">{userBadge.badges?.name}</div>
+                          <div className="text-xs sm:text-sm text-slate-600 dark:text-white/60 leading-relaxed mb-2 sm:mb-3">{userBadge.badges?.description}</div>
+                          <div className="text-[10px] sm:text-xs text-slate-500 dark:text-white/30">
                             {new Date(userBadge.earned_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                           </div>
                         </div>
@@ -372,9 +372,9 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 </div>
               ) : (
                 <div className="text-center py-12 sm:py-16">
-                  <Award className="w-12 h-12 sm:w-16 sm:h-16 text-white/10 mx-auto mb-4 sm:mb-6" />
-                  <p className="text-white/40 mb-2">No badges earned yet</p>
-                  <p className="text-xs sm:text-sm text-white/30">Keep posting to unlock achievements</p>
+                  <Award className="w-12 h-12 sm:w-16 sm:h-16 text-slate-200 dark:text-white/10 mx-auto mb-4 sm:mb-6" />
+                  <p className="text-slate-600 dark:text-white/40 mb-2">No badges earned yet</p>
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-white/30">Keep posting to unlock achievements</p>
                 </div>
               )}
             </div>
@@ -577,7 +577,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               onClick={() => setSelectedLog(log)}
             >
               {log.image_url ? (
-                <div className="aspect-square relative overflow-hidden bg-slate-100">
+                <div className="aspect-square relative overflow-hidden bg-slate-100 dark:bg-dark-hover">
                   <img
                     src={log.image_url}
                     alt={log.title}
@@ -596,7 +596,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                   </div>
                 </div>
               ) : (
-                <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 p-3 flex flex-col justify-between">
+                <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 dark:from-dark-hover dark:to-dark-panel p-3 flex flex-col justify-between">
                   <div>
                     <h3 className="font-bold text-slate-800 dark:text-dark-text-primary text-xs mb-1 line-clamp-2">{log.title}</h3>
                     {log.description && (

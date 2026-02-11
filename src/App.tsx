@@ -272,7 +272,7 @@ function MainApp() {
           </div>
         </main>
 
-        <nav className="md:hidden bg-white dark:bg-dark-panel border-t border-slate-200 dark:border-dark-border pb-6 safe-area-bottom z-50 flex-shrink-0">
+        <nav className="md:hidden bg-white dark:bg-dark-panel border-t border-slate-200 dark:border-dark-border pb-8 safe-area-bottom z-50 flex-shrink-0">
           <div className="max-w-4xl mx-auto flex items-center justify-around px-2">
             <button
               onClick={() => setActiveTab('myLogs')}
