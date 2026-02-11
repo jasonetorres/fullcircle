@@ -7,10 +7,10 @@ export function PublicRecap() {
 
   if (!userId || !year) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">Invalid Recap URL</h2>
-          <p className="text-slate-600">The recap URL is invalid or incomplete.</p>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-4">Invalid Recap URL</h2>
+          <p className="text-slate-600 dark:text-dark-text-secondary">The recap URL is invalid or incomplete.</p>
         </div>
       </div>
     );

@@ -45,10 +45,10 @@ export function PublicProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 border-t-slate-800 mx-auto mb-4"></div>
-          <p className="text-slate-600 text-sm">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500 mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-dark-text-secondary text-sm">Loading profile...</p>
         </div>
       </div>
     );
@@ -56,22 +56,22 @@ export function PublicProfile() {
 
   if (!loading && !profile) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
         <div className="text-center">
-          <User className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Profile Not Found</h2>
-          <p className="text-slate-600 mb-6">This user does not exist.</p>
+          <User className="w-16 h-16 text-slate-300 dark:text-dark-text-muted mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-2">Profile Not Found</h2>
+          <p className="text-slate-600 dark:text-dark-text-secondary mb-6">This user does not exist.</p>
           {currentUser ? (
             <button
               onClick={() => navigate('/')}
-              className="px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition"
+              className="px-6 py-3 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition"
             >
               Go Home
             </button>
           ) : (
             <button
               onClick={() => navigate('/auth')}
-              className="px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition"
+              className="px-6 py-3 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition"
             >
               Sign In
             </button>
@@ -83,16 +83,16 @@ export function PublicProfile() {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-slate-50">
-        <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="min-h-screen bg-slate-50 dark:bg-dark-bg">
+        <header className="bg-white dark:bg-dark-panel shadow-sm dark:shadow-dark-border/50 border-b dark:border-dark-border sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
-              <h1 className="text-lg font-bold text-slate-800">theyear</h1>
+              <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">theyear</h1>
             </div>
             <button
               onClick={() => navigate('/auth')}
-              className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition text-sm"
+              className="px-4 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition text-sm"
             >
               Sign In
             </button>
@@ -121,23 +121,23 @@ export function PublicProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-dark-bg">
+      <header className="bg-white dark:bg-dark-panel shadow-sm dark:shadow-dark-border/50 border-b dark:border-dark-border sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition touch-target-sm p-2"
+            className="flex items-center gap-2 text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary transition touch-target-sm p-2"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-medium">Back</span>
           </button>
           <div className="flex items-center gap-2">
             <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
-            <h1 className="text-lg font-bold text-slate-800">theyear</h1>
+            <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">theyear</h1>
           </div>
           <button
             onClick={() => navigate('/')}
-            className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition text-sm"
+            className="px-4 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition text-sm"
           >
             Home
           </button>
