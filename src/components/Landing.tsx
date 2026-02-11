@@ -27,7 +27,7 @@ export default function Landing() {
 
       <main>
         <section
-          className="relative min-h-[90vh] flex items-center overflow-hidden"
+          className="relative min-h-[75vh] flex items-center overflow-hidden"
           style={{
             backgroundImage: 'url(https://images.pexels.com/photos/2398220/pexels-photo-2398220.jpeg?auto=compress&cs=tinysrgb&w=1920)',
             backgroundSize: 'cover',
@@ -36,7 +36,7 @@ export default function Landing() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black"></div>
 
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
+          <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="text-left">
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-normal mb-6 leading-[1.1] text-white">
@@ -74,7 +74,7 @@ export default function Landing() {
           </div>
         </section>
 
-        <section className="py-24 bg-black">
+        <section className="py-16 bg-black">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-20">
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-normal mb-6 text-white tracking-tight leading-[1.1]">
