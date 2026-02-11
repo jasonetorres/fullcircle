@@ -242,7 +242,7 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
 
                   <div
                     onClick={() => openEditModal(log)}
-                    className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition p-3 group cursor-pointer"
+                    className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-card-hover dark:hover:shadow-card-hover-dark transition-all duration-200 p-3 group cursor-pointer"
                   >
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <div className="flex-1">

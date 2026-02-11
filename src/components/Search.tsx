@@ -320,7 +320,7 @@ export default function Search({ userId }: SearchProps) {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden">
+      <div className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden">
         <div className="flex border-b border-slate-200 dark:border-dark-border">
           <button
             onClick={() => setActiveTab('users')}
@@ -513,7 +513,7 @@ export default function Search({ userId }: SearchProps) {
               <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800"></div>
             </div>
           ) : users.length === 0 && usersQuery ? (
-            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border">
               <User className="w-12 h-12 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No users found</p>
               <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
@@ -521,7 +521,7 @@ export default function Search({ userId }: SearchProps) {
               </p>
             </div>
           ) : users.length === 0 ? (
-            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border">
               <SearchIcon className="w-12 h-12 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-600 dark:text-dark-text-secondary text-sm">Search for users to discover</p>
               <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
@@ -533,7 +533,7 @@ export default function Search({ userId }: SearchProps) {
               {users.map((user) => (
                 <div
                   key={user.id}
-                  className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition p-4"
+                  className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-lg transition p-4"
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-12 h-12 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
@@ -596,7 +596,7 @@ export default function Search({ userId }: SearchProps) {
               <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800"></div>
             </div>
           ) : publicLogs.length === 0 && (publicQuery || publicLocationFilter) ? (
-            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border">
               <SearchIcon className="w-12 h-12 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No matching logs found</p>
               <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
@@ -604,7 +604,7 @@ export default function Search({ userId }: SearchProps) {
               </p>
             </div>
           ) : publicLogs.length === 0 ? (
-            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border">
               <Globe className="w-12 h-12 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-600 dark:text-dark-text-secondary text-sm">Search to discover public logs</p>
               <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
@@ -616,7 +616,7 @@ export default function Search({ userId }: SearchProps) {
               {publicLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition overflow-hidden cursor-pointer"
+                  className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-lg transition overflow-hidden cursor-pointer"
                   onClick={() => openLogDetail(log)}
                 >
                   <div className="p-4">
@@ -700,7 +700,7 @@ export default function Search({ userId }: SearchProps) {
               <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800"></div>
             </div>
           ) : filteredMyLogs.length === 0 ? (
-            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
+            <div className="text-center py-12 bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border">
               <SearchIcon className="w-12 h-12 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No matching logs found</p>
               <p className="text-slate-500 dark:text-dark-text-muted text-xs mt-1">
@@ -712,7 +712,7 @@ export default function Search({ userId }: SearchProps) {
               {filteredMyLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border hover:shadow-lg transition p-4"
+                  className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-lg transition p-4"
                 >
                   <div className="flex items-start gap-3">
                     {log.image_url && (

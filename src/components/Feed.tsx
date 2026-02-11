@@ -182,7 +182,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
         {logs.map((log) => (
           <div
             key={log.id}
-            className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden cursor-pointer hover:shadow-lg transition"
+            className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden cursor-pointer hover:shadow-card-hover dark:hover:shadow-card-hover-dark transition-all duration-200"
             onClick={() => setSelectedLog(log)}
           >
             <div className="p-3">

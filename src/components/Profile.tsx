@@ -386,7 +386,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       )}
 
       <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden mb-4">
+      <div className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden mb-4">
         <div className="p-4">
           <div className="flex items-start gap-3 mb-4">
             <div
@@ -566,7 +566,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       )}
 
       {logs.length === 0 ? (
-        <div className="text-center py-8 bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border">
+        <div className="text-center py-8 bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border">
           <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-2" />
           <p className="text-slate-600 dark:text-dark-text-secondary text-sm">No posts yet</p>
         </div>
@@ -575,7 +575,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           {logs.map((log) => (
             <div
               key={log.id}
-              className="bg-white dark:bg-dark-panel rounded-lg shadow-md dark:shadow-dark-border/50 border dark:border-dark-border overflow-hidden hover:shadow-lg transition group cursor-pointer"
+              className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden hover:shadow-lg transition group cursor-pointer"
               onClick={() => setSelectedLog(log)}
             >
               {log.image_url ? (

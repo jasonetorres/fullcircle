@@ -101,7 +101,7 @@ function MainApp() {
   }
 
   if (!user) {
-    return <Auth />;
+    return <Landing />;
   }
 
   if (!profile) {
