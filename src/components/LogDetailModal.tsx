@@ -330,7 +330,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
           {comment.profile?.username?.[0]?.toUpperCase() || 'U'}
         </Link>
         <div className="flex-1 min-w-0">
-          <div className="bg-slate-50 rounded-lg p-2">
+          <div className="bg-slate-50 dark:bg-dark-hover rounded-lg p-2">
             <div className="flex items-center gap-2 mb-0.5">
               <Link
                 to={`/profile/${comment.user_id}`}
@@ -338,11 +338,11 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
               >
                 {comment.profile?.display_name || comment.profile?.username}
               </Link>
-              <span className="text-xs text-slate-500 flex-shrink-0">
+              <span className="text-xs text-slate-500 dark:text-dark-text-muted flex-shrink-0">
                 {formatTimeAgo(comment.created_at)}
               </span>
             </div>
-            <p className="text-xs text-slate-700 break-words whitespace-pre-wrap">{comment.content}</p>
+            <p className="text-xs text-slate-700 dark:text-dark-text-secondary break-words whitespace-pre-wrap">{comment.content}</p>
           </div>
 
           <div className="flex items-center gap-3 mt-1 px-2">
@@ -362,7 +362,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                   setReplyingTo(comment.id);
                   setReplyContent(`@${comment.profile?.username} `);
                 }}
-                className="text-xs text-slate-500 hover:text-slate-700 transition font-medium"
+                className="text-xs text-slate-500 dark:text-dark-text-muted hover:text-slate-700 dark:hover:text-dark-text-secondary transition font-medium"
               >
                 Reply
               </button>
@@ -378,12 +378,12 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                   onChange={(e) => setReplyContent(e.target.value)}
                   placeholder="Write a reply..."
                   autoFocus
-                  className="flex-1 px-2 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="flex-1 px-2 py-1.5 text-xs border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 />
                 <button
                   onClick={() => submitReply(comment.id, replyContent)}
                   disabled={!replyContent.trim()}
-                  className="px-2 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 flex-shrink-0"
+                  className="px-2 py-1.5 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 flex-shrink-0"
                 >
                   <Send className="w-3.5 h-3.5" />
                 </button>
@@ -424,7 +424,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-slate-800 dark:text-dark-text-primary truncate">{profile.display_name || profile.username}</p>
-              <p className="text-xs text-slate-500 truncate">@{profile.username}</p>
+              <p className="text-xs text-slate-500 dark:text-dark-text-muted truncate">@{profile.username}</p>
             </div>
           </Link>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:text-dark-text-secondary transition flex-shrink-0">
@@ -453,18 +453,18 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
             <h2 className="text-xl font-bold text-slate-800 dark:text-dark-text-primary mb-2">{log.title}</h2>
 
             {log.description && (
-              <p className="text-sm text-slate-700 mb-3 leading-relaxed whitespace-pre-wrap">{log.description}</p>
+              <p className="text-sm text-slate-700 dark:text-dark-text-secondary mb-3 leading-relaxed whitespace-pre-wrap">{log.description}</p>
             )}
 
             <div className="flex flex-wrap gap-2 mb-3">
               {log.location && (
-                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-dark-text-secondary bg-slate-100 px-2.5 py-1 rounded-full">
+                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-dark-text-secondary bg-slate-100 dark:bg-dark-hover px-2.5 py-1 rounded-full">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                   <span className="truncate">{log.location}</span>
                 </div>
               )}
               {log.trip_name && (
-                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-dark-text-secondary bg-slate-100 px-2.5 py-1 rounded-full">
+                <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-dark-text-secondary bg-slate-100 dark:bg-dark-hover px-2.5 py-1 rounded-full">
                   <Plane className="w-3.5 h-3.5 flex-shrink-0" />
                   <span className="truncate">{log.trip_name}</span>
                 </div>
@@ -495,7 +495,7 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                   <h3 className="font-semibold text-slate-800 dark:text-dark-text-primary mb-2 text-sm">Comments</h3>
                   <div className="space-y-3 mb-3">
                     {comments.length === 0 ? (
-                      <p className="text-center text-slate-500 text-xs py-3">No comments yet</p>
+                      <p className="text-center text-slate-500 dark:text-dark-text-muted text-xs py-3">No comments yet</p>
                     ) : (
                       comments.map((comment) => renderComment(comment))
                     )}
@@ -504,20 +504,20 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                   <form onSubmit={submitComment} className="bg-white dark:bg-dark-panel pt-2 pb-2">
                     <div className="relative">
                       {showMentions && mentionSuggestions.length > 0 && (
-                        <div className="absolute bottom-full mb-1 w-full bg-white dark:bg-dark-panel border border-slate-300 rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
+                        <div className="absolute bottom-full mb-1 w-full bg-white dark:bg-dark-panel border border-slate-300 dark:border-dark-border rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
                           {mentionSuggestions.map((user) => (
                             <button
                               key={user.id}
                               type="button"
                               onClick={() => insertMention(user.username)}
-                              className="w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition flex items-center gap-2"
+                              className="w-full px-3 py-2 text-left text-xs hover:bg-slate-100 dark:hover:bg-dark-hover transition flex items-center gap-2"
                             >
-                              <div className="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                              <div className="w-5 h-5 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                                 {user.username[0].toUpperCase()}
                               </div>
                               <div>
-                                <div className="font-semibold">{user.display_name || user.username}</div>
-                                <div className="text-slate-500">@{user.username}</div>
+                                <div className="font-semibold text-slate-800 dark:text-dark-text-primary">{user.display_name || user.username}</div>
+                                <div className="text-slate-500 dark:text-dark-text-muted">@{user.username}</div>
                               </div>
                             </button>
                           ))}
@@ -530,12 +530,12 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
                           value={newComment}
                           onChange={handleInputChange}
                           placeholder="Write a comment... (use @ to mention)"
-                          className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                          className="flex-1 px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                         />
                         <button
                           type="submit"
                           disabled={!newComment.trim() || submittingComment}
-                          className="px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 touch-manipulation"
+                          className="px-3 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 touch-manipulation"
                         >
                           <Send className="w-4 h-4" />
                         </button>

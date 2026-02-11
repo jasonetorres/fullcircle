@@ -246,7 +246,7 @@ function MainApp() {
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-dark-bg">
+        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-dark-bg scrollbar-hide">
           <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
             {activeTab === 'myLogs' ? (
               <>
