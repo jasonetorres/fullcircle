@@ -114,71 +114,49 @@ export default function Landing() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="bg-gradient-to-b from-[#1a1a1a] to-black rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 group">
-                <div className="mb-6 bg-white/5 rounded-xl p-4 inline-block">
-                  <svg className="w-8 h-8 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 group h-96">
+                <img
+                  src="/dailylog.png"
+                  alt="Daily Logging Interface"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight">Daily Logging</h3>
+                  <p className="text-white/90 leading-relaxed text-[15px]">
+                    Capture each day's stories, thoughts, and highlights diary-style.
+                  </p>
                 </div>
-
-                <div className="mb-6 overflow-hidden rounded-xl">
-                  <img
-                    src="/dailylog.png"
-                    alt="Daily Logging Interface"
-                    className="w-full h-auto"
-                  />
-                </div>
-
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Daily Logging</h3>
-                <p className="text-white/70 leading-relaxed text-[15px]">
-                  Capture each day's stories, thoughts, and highlights diary-style.
-                </p>
               </div>
 
-              <div className="bg-gradient-to-b from-[#1a1a1a] to-black rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 group">
-                <div className="mb-6 bg-white/5 rounded-xl p-4 inline-block">
-                  <svg className="w-8 h-8 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="10" r="3" strokeWidth="2"/>
-                  </svg>
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 group h-96">
+                <img
+                  src="/traveltrack.png"
+                  alt="Travel Tracking Interface"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight">Travel Tracking</h3>
+                  <p className="text-white/90 leading-relaxed text-[15px]">
+                    Pin and explore your visited locations on an interactive global map.
+                  </p>
                 </div>
-
-                <div className="mb-6 overflow-hidden rounded-xl">
-                  <img
-                    src="/traveltrack.png"
-                    alt="Travel Tracking Interface"
-                    className="w-full h-auto"
-                  />
-                </div>
-
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Travel Tracking</h3>
-                <p className="text-white/70 leading-relaxed text-[15px]">
-                  Pin and explore your visited locations on an interactive global map.
-                </p>
               </div>
 
-              <div className="bg-gradient-to-b from-[#1a1a1a] to-black rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 group">
-                <div className="mb-6 bg-white/5 rounded-xl p-4 inline-block">
-                  <svg className="w-8 h-8 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 group h-96">
+                <img
+                  src="/YIR.png"
+                  alt="Year in Review Interface"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight">Year in Review</h3>
+                  <p className="text-white/90 leading-relaxed text-[15px]">
+                    Beautiful yearly recaps that celebrate your journey with stats and highlights.
+                  </p>
                 </div>
-
-                <div className="mb-6 overflow-hidden rounded-xl">
-                  <img
-                    src="/YIR.png"
-                    alt="Year in Review Interface"
-                    className="w-full h-auto"
-                  />
-                </div>
-
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Year in Review</h3>
-                <p className="text-white/70 leading-relaxed text-[15px]">
-                  Beautiful yearly recaps that celebrate your journey with stats and highlights.
-                </p>
               </div>
             </div>
 
