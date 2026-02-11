@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { supabase, Profile } from '../lib/supabase';
-import { X, Upload, User, Loader, Mail, CalendarDays, Key, Copy, Trash2, Plus, Eye, EyeOff } from 'lucide-react';
+import { X, Upload, User, Loader, Mail, CalendarDays, Key, Copy, Trash2, Plus, Eye, EyeOff, Sun, Moon, Monitor } from 'lucide-react';
+import { useTheme } from '../lib/ThemeContext';
 
 interface AccountSettingsProps {
   userId: string;
@@ -23,6 +24,7 @@ export default function AccountSettings({
   onClose,
   onProfileUpdated,
 }: AccountSettingsProps) {
+  const { theme, setTheme } = useTheme();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
@@ -226,18 +228,18 @@ export default function AccountSettings({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4"
+      className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-[60] p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white dark:bg-dark-panel rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-white border-b border-slate-200 p-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-800">Account Settings</h2>
+        <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-dark-text-primary">Account Settings</h2>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 transition touch-target-sm"
+            className="p-2 text-slate-400 dark:text-dark-text-secondary hover:text-slate-600 dark:hover:text-dark-text-primary transition touch-target-sm"
           >
             <X className="w-6 h-6" />
           </button>
@@ -247,8 +249,8 @@ export default function AccountSettings({
           <div
             className={`mx-4 mt-4 p-3 rounded-lg text-sm ${
               message.type === 'success'
-                ? 'bg-green-50 text-green-700 border border-green-200'
-                : 'bg-red-50 text-red-700 border border-red-200'
+                ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+                : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
             }`}
           >
             {message.text}
@@ -289,26 +291,26 @@ export default function AccountSettings({
                 className="hidden"
               />
             </div>
-            <p className="text-xs text-slate-500 text-center">
+            <p className="text-xs text-slate-500 dark:text-dark-text-muted text-center">
               Click the icon to upload a new profile picture
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
               Username
             </label>
             <input
               type="text"
               value={profile?.username || ''}
               disabled
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-500 cursor-not-allowed"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-slate-50 dark:bg-dark-hover text-slate-500 dark:text-dark-text-muted cursor-not-allowed"
             />
-            <p className="text-xs text-slate-500 mt-1">Username cannot be changed</p>
+            <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">Username cannot be changed</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
               Display Name
             </label>
             <input
@@ -317,15 +319,15 @@ export default function AccountSettings({
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Enter your display name"
               maxLength={50}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">
               Your public name (optional)
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
               Bio
             </label>
             <textarea
@@ -334,22 +336,22 @@ export default function AccountSettings({
               placeholder="Tell us about yourself..."
               rows={4}
               maxLength={200}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
             />
-            <div className="flex justify-between text-xs text-slate-500 mt-1">
+            <div className="flex justify-between text-xs text-slate-500 dark:text-dark-text-muted mt-1">
               <span>Your bio (optional)</span>
               <span>{bio.length}/200</span>
             </div>
           </div>
 
-          <div className="border-t border-slate-200 pt-6">
+          <div className="border-t border-slate-200 dark:border-dark-border pt-6">
             <div className="flex items-center gap-3 mb-1">
-              <Mail className="w-4 h-4 text-slate-500" />
-              <span className="text-sm font-medium text-slate-700">Email Notifications</span>
+              <Mail className="w-4 h-4 text-slate-500 dark:text-dark-text-secondary" />
+              <span className="text-sm font-medium text-slate-700 dark:text-dark-text-primary">Email Notifications</span>
             </div>
-            <div className="flex items-center justify-between mt-3 p-3 bg-slate-50 rounded-lg">
+            <div className="flex items-center justify-between mt-3 p-3 bg-slate-50 dark:bg-dark-hover rounded-lg">
               <div className="flex-1 mr-3">
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 dark:text-dark-text-secondary">
                   Receive email alerts for likes, comments, replies, and new followers
                 </p>
               </div>
@@ -358,8 +360,8 @@ export default function AccountSettings({
                 role="switch"
                 aria-checked={emailNotifications}
                 onClick={() => setEmailNotifications(!emailNotifications)}
-                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 ${
-                  emailNotifications ? 'bg-slate-800' : 'bg-slate-300'
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-dark-panel ${
+                  emailNotifications ? 'bg-slate-800 dark:bg-orange-500' : 'bg-slate-300 dark:bg-dark-border'
                 }`}
               >
                 <span
@@ -369,13 +371,13 @@ export default function AccountSettings({
                 />
               </button>
             </div>
-            <div className="flex items-center justify-between mt-3 p-3 bg-slate-50 rounded-lg">
+            <div className="flex items-center justify-between mt-3 p-3 bg-slate-50 dark:bg-dark-hover rounded-lg">
               <div className="flex-1 mr-3">
                 <div className="flex items-center gap-2 mb-1">
-                  <CalendarDays className="w-3.5 h-3.5 text-slate-500" />
-                  <p className="text-sm font-medium text-slate-700">Weekly Recap</p>
+                  <CalendarDays className="w-3.5 h-3.5 text-slate-500 dark:text-dark-text-secondary" />
+                  <p className="text-sm font-medium text-slate-700 dark:text-dark-text-primary">Weekly Recap</p>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-dark-text-muted">
                   Receive a weekly summary of your logs, photos, and engagement
                 </p>
               </div>
@@ -384,8 +386,8 @@ export default function AccountSettings({
                 role="switch"
                 aria-checked={weeklyRecap}
                 onClick={() => setWeeklyRecap(!weeklyRecap)}
-                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 ${
-                  weeklyRecap ? 'bg-slate-800' : 'bg-slate-300'
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-dark-panel ${
+                  weeklyRecap ? 'bg-slate-800 dark:bg-orange-500' : 'bg-slate-300 dark:bg-dark-border'
                 }`}
               >
                 <span
@@ -397,34 +399,88 @@ export default function AccountSettings({
             </div>
           </div>
 
-          <div className="border-t border-slate-200 pt-6">
+          <div className="border-t border-slate-200 dark:border-dark-border pt-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Monitor className="w-4 h-4 text-slate-500 dark:text-dark-text-secondary" />
+              <span className="text-sm font-medium text-slate-700 dark:text-dark-text-primary">Theme</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => setTheme('light')}
+                className={`p-3 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
+                  theme === 'light'
+                    ? 'border-slate-800 dark:border-orange-500 bg-slate-50 dark:bg-dark-hover'
+                    : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover'
+                }`}
+              >
+                <Sun className={`w-5 h-5 ${theme === 'light' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
+                <span className={`text-xs font-medium ${theme === 'light' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
+                  Light
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTheme('dark')}
+                className={`p-3 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
+                  theme === 'dark'
+                    ? 'border-slate-800 dark:border-orange-500 bg-slate-50 dark:bg-dark-hover'
+                    : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover'
+                }`}
+              >
+                <Moon className={`w-5 h-5 ${theme === 'dark' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
+                <span className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
+                  Dark
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTheme('system')}
+                className={`p-3 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
+                  theme === 'system'
+                    ? 'border-slate-800 dark:border-orange-500 bg-slate-50 dark:bg-dark-hover'
+                    : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover'
+                }`}
+              >
+                <Monitor className={`w-5 h-5 ${theme === 'system' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
+                <span className={`text-xs font-medium ${theme === 'system' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
+                  System
+                </span>
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-2">
+              Choose your preferred theme or let it match your system settings
+            </p>
+          </div>
+
+          <div className="border-t border-slate-200 dark:border-dark-border pt-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <Key className="w-4 h-4 text-slate-500" />
-                <span className="text-sm font-medium text-slate-700">Bot API Keys</span>
+                <Key className="w-4 h-4 text-slate-500 dark:text-dark-text-secondary" />
+                <span className="text-sm font-medium text-slate-700 dark:text-dark-text-primary">Bot API Keys</span>
               </div>
               <button
                 type="button"
                 onClick={() => setShowDocsFor(showDocsFor ? null : 'docs')}
-                className="text-xs text-slate-500 hover:text-slate-700 underline"
+                className="text-xs text-slate-500 dark:text-dark-text-secondary hover:text-slate-700 dark:hover:text-dark-text-primary underline"
               >
                 {showDocsFor === 'docs' ? 'Hide' : 'View'} Docs
               </button>
             </div>
 
             {showDocsFor === 'docs' && (
-              <div className="mb-4 p-4 bg-slate-50 rounded-lg text-xs space-y-2">
-                <p className="font-medium text-slate-700">API Documentation</p>
-                <p className="text-slate-600">Create logs programmatically using the Bot API.</p>
+              <div className="mb-4 p-4 bg-slate-50 dark:bg-dark-hover rounded-lg text-xs space-y-2">
+                <p className="font-medium text-slate-700 dark:text-dark-text-primary">API Documentation</p>
+                <p className="text-slate-600 dark:text-dark-text-secondary">Create logs programmatically using the Bot API.</p>
                 <div className="mt-3">
-                  <p className="font-medium text-slate-700 mb-1">Endpoint:</p>
-                  <code className="block bg-white p-2 rounded border border-slate-200 text-slate-800 break-all">
+                  <p className="font-medium text-slate-700 dark:text-dark-text-primary mb-1">Endpoint:</p>
+                  <code className="block bg-white dark:bg-dark-bg p-2 rounded border border-slate-200 dark:border-dark-border text-slate-800 dark:text-dark-text-primary break-all">
                     {import.meta.env.VITE_SUPABASE_URL}/functions/v1/bot-api
                   </code>
                 </div>
                 <div className="mt-3">
-                  <p className="font-medium text-slate-700 mb-1">Example Request:</p>
-                  <pre className="bg-white p-2 rounded border border-slate-200 text-slate-800 overflow-x-auto text-xs">
+                  <p className="font-medium text-slate-700 dark:text-dark-text-primary mb-1">Example Request:</p>
+                  <pre className="bg-white dark:bg-dark-bg p-2 rounded border border-slate-200 dark:border-dark-border text-slate-800 dark:text-dark-text-primary overflow-x-auto text-xs">
 {`curl -X POST \\
   ${import.meta.env.VITE_SUPABASE_URL}/functions/v1/bot-api \\
   -H "X-API-Key: YOUR_API_KEY" \\
@@ -442,8 +498,8 @@ export default function AccountSettings({
             )}
 
             {generatedKey && (
-              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-sm font-medium text-green-800 mb-2">
+              <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                <p className="text-sm font-medium text-green-800 dark:text-green-400 mb-2">
                   Your new API key (copy it now, it won't be shown again):
                 </p>
                 <div className="flex gap-2">
@@ -451,12 +507,12 @@ export default function AccountSettings({
                     type="text"
                     value={generatedKey}
                     readOnly
-                    className="flex-1 px-3 py-2 bg-white border border-green-300 rounded text-sm font-mono"
+                    className="flex-1 px-3 py-2 bg-white dark:bg-dark-bg border border-green-300 dark:border-green-800 rounded text-sm font-mono text-slate-800 dark:text-dark-text-primary"
                   />
                   <button
                     type="button"
                     onClick={() => copyToClipboard(generatedKey)}
-                    className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                    className="px-3 py-2 bg-green-600 dark:bg-green-700 text-white rounded hover:bg-green-700 dark:hover:bg-green-600 transition"
                   >
                     <Copy className="w-4 h-4" />
                   </button>
@@ -464,7 +520,7 @@ export default function AccountSettings({
                 <button
                   type="button"
                   onClick={() => setGeneratedKey(null)}
-                  className="mt-2 text-xs text-green-700 hover:text-green-800 underline"
+                  className="mt-2 text-xs text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 underline"
                 >
                   I've copied it, dismiss
                 </button>
@@ -475,7 +531,7 @@ export default function AccountSettings({
               <button
                 type="button"
                 onClick={() => setShowNewKeyForm(true)}
-                className="w-full p-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-slate-400 hover:text-slate-700 transition flex items-center justify-center gap-2"
+                className="w-full p-3 border-2 border-dashed border-slate-300 dark:border-dark-border rounded-lg text-slate-600 dark:text-dark-text-secondary hover:border-slate-400 dark:hover:border-dark-hover hover:text-slate-700 dark:hover:text-dark-text-primary transition flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Create New API Key
@@ -483,14 +539,14 @@ export default function AccountSettings({
             )}
 
             {showNewKeyForm && (
-              <div className="p-4 bg-slate-50 rounded-lg space-y-3">
+              <div className="p-4 bg-slate-50 dark:bg-dark-hover rounded-lg space-y-3">
                 <input
                   type="text"
                   value={newKeyName}
                   onChange={(e) => setNewKeyName(e.target.value)}
                   placeholder="e.g., My Bot, Automation Script"
                   maxLength={50}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none"
                 />
                 <div className="flex gap-2">
                   <button
@@ -499,7 +555,7 @@ export default function AccountSettings({
                       setShowNewKeyForm(false);
                       setNewKeyName('');
                     }}
-                    className="flex-1 px-3 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition text-sm"
+                    className="flex-1 px-3 py-2 border border-slate-300 dark:border-dark-border text-slate-700 dark:text-dark-text-primary rounded-lg hover:bg-slate-100 dark:hover:bg-dark-bg transition text-sm"
                   >
                     Cancel
                   </button>
@@ -507,7 +563,7 @@ export default function AccountSettings({
                     type="button"
                     onClick={createApiKey}
                     disabled={creatingKey || !newKeyName.trim()}
-                    className="flex-1 px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 text-sm flex items-center justify-center gap-2"
+                    className="flex-1 px-3 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 text-sm flex items-center justify-center gap-2"
                   >
                     {creatingKey ? (
                       <>
@@ -527,17 +583,17 @@ export default function AccountSettings({
                 {apiKeys.map((key) => (
                   <div
                     key={key.id}
-                    className="p-3 bg-white border border-slate-200 rounded-lg"
+                    className="p-3 bg-white dark:bg-dark-hover border border-slate-200 dark:border-dark-border rounded-lg"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate">
+                        <p className="text-sm font-medium text-slate-800 dark:text-dark-text-primary truncate">
                           {key.name}
                         </p>
-                        <p className="text-xs text-slate-500 font-mono mt-1">
+                        <p className="text-xs text-slate-500 dark:text-dark-text-muted font-mono mt-1">
                           {key.key_prefix}...
                         </p>
-                        <div className="flex gap-3 mt-2 text-xs text-slate-500">
+                        <div className="flex gap-3 mt-2 text-xs text-slate-500 dark:text-dark-text-muted">
                           <span>Created {new Date(key.created_at).toLocaleDateString()}</span>
                           {key.last_used_at && (
                             <span>Last used {new Date(key.last_used_at).toLocaleDateString()}</span>
@@ -548,7 +604,7 @@ export default function AccountSettings({
                       <button
                         type="button"
                         onClick={() => deleteApiKey(key.id)}
-                        className="ml-2 p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition"
+                        className="ml-2 p-2 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition"
                         title="Delete API key"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -564,14 +620,14 @@ export default function AccountSettings({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition"
+              className="flex-1 px-4 py-2 border border-slate-300 dark:border-dark-border text-slate-700 dark:text-dark-text-primary rounded-lg hover:bg-slate-50 dark:hover:bg-dark-hover transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {saving ? (
                 <>

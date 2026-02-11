@@ -94,8 +94,8 @@ function MainApp() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 border-t-slate-800"></div>
+      <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500"></div>
       </div>
     );
   }
@@ -110,15 +110,15 @@ function MainApp() {
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm z-40 w-full flex-shrink-0">
+      <div className="h-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-dark-bg">
+        <header className="bg-white dark:bg-dark-panel shadow-sm dark:shadow-dark-border/50 border-b dark:border-dark-border z-40 w-full flex-shrink-0">
           <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
             <button
               onClick={() => window.location.reload()}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
             >
               <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
-              <h1 className="text-lg font-bold text-slate-800">theyear</h1>
+              <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">theyear</h1>
             </button>
 
             <nav className="hidden md:flex items-center gap-1">
@@ -126,8 +126,8 @@ function MainApp() {
                 onClick={() => setActiveTab('myLogs')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'myLogs'
-                    ? 'bg-slate-100 text-slate-900'
-                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
                 <Home className="w-5 h-5" />
@@ -137,8 +137,8 @@ function MainApp() {
                 onClick={() => setActiveTab('feed')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'feed'
-                    ? 'bg-slate-100 text-slate-900'
-                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
                 <Compass className="w-5 h-5" />
@@ -148,8 +148,8 @@ function MainApp() {
                 onClick={() => setActiveTab('search')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'search'
-                    ? 'bg-slate-100 text-slate-900'
-                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
                 <SearchIcon className="w-5 h-5" />
@@ -159,8 +159,8 @@ function MainApp() {
                 onClick={() => setActiveTab('profile')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'profile'
-                    ? 'bg-slate-100 text-slate-900'
-                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
                 <UserIcon className="w-5 h-5" />
@@ -168,10 +168,10 @@ function MainApp() {
               </button>
             </nav>
 
-            <div className="flex items-center gap-1 text-slate-600">
+            <div className="flex items-center gap-1 text-slate-600 dark:text-dark-text-secondary">
               <button
                 onClick={() => setShowQuickLog(true)}
-                className="hidden md:flex items-center gap-2 px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition text-sm font-medium"
+                className="hidden md:flex items-center gap-2 px-3 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition text-sm font-medium"
               >
                 <Plus className="w-4 h-4" />
                 New Log
@@ -179,7 +179,7 @@ function MainApp() {
               <Notifications onNotificationClick={handleNotificationClick} userId={user.id} />
               <button
                 onClick={handleSignOut}
-                className="flex items-center gap-2 hover:text-slate-800 transition p-2 rounded-lg"
+                className="flex items-center gap-2 hover:text-slate-800 dark:hover:text-dark-text-primary transition p-2 rounded-lg"
               >
                 <LogOut className="w-5 h-5" />
                 <span className="hidden sm:inline text-sm">Sign Out</span>
@@ -188,7 +188,7 @@ function MainApp() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-slate-50">
+        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-dark-bg">
           <div className="max-w-4xl mx-auto px-4 py-4">
             {activeTab === 'myLogs' ? (
               <>
@@ -214,12 +214,12 @@ function MainApp() {
           </div>
         </main>
 
-        <nav className="md:hidden bg-white border-t border-slate-200 pb-6 safe-area-bottom z-50 flex-shrink-0">
+        <nav className="md:hidden bg-white dark:bg-dark-panel border-t border-slate-200 dark:border-dark-border pb-6 safe-area-bottom z-50 flex-shrink-0">
           <div className="max-w-4xl mx-auto flex items-center justify-around px-2">
             <button
               onClick={() => setActiveTab('myLogs')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'myLogs' ? 'text-slate-900' : 'text-slate-400'
+                activeTab === 'myLogs' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <Home className={`w-5 h-5 ${activeTab === 'myLogs' ? 'stroke-[2.5]' : ''}`} />
@@ -228,7 +228,7 @@ function MainApp() {
             <button
               onClick={() => setActiveTab('feed')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'feed' ? 'text-slate-900' : 'text-slate-400'
+                activeTab === 'feed' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <Compass className={`w-5 h-5 ${activeTab === 'feed' ? 'stroke-[2.5]' : ''}`} />
@@ -236,14 +236,14 @@ function MainApp() {
             </button>
             <button
               onClick={() => setShowQuickLog(true)}
-              className="flex items-center justify-center w-12 h-12 -mt-4 bg-slate-800 rounded-full shadow-lg shadow-slate-800/30 text-white active:scale-95 transition-transform"
+              className="flex items-center justify-center w-12 h-12 -mt-4 bg-slate-800 dark:bg-orange-500 rounded-full shadow-lg shadow-slate-800/30 dark:shadow-orange-500/30 text-white active:scale-95 transition-transform"
             >
               <Plus className="w-6 h-6" />
             </button>
             <button
               onClick={() => setActiveTab('search')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'search' ? 'text-slate-900' : 'text-slate-400'
+                activeTab === 'search' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <SearchIcon className={`w-5 h-5 ${activeTab === 'search' ? 'stroke-[2.5]' : ''}`} />
@@ -252,7 +252,7 @@ function MainApp() {
             <button
               onClick={() => setActiveTab('profile')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'profile' ? 'text-slate-900' : 'text-slate-400'
+                activeTab === 'profile' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <UserIcon className={`w-5 h-5 ${activeTab === 'profile' ? 'stroke-[2.5]' : ''}`} />

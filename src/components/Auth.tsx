@@ -52,19 +52,19 @@ export default function Auth() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4 overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-dark-bg dark:to-dark-panel flex items-center justify-center p-4 overflow-hidden">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
+        <div className="bg-white dark:bg-dark-panel rounded-2xl shadow-xl dark:shadow-dark-border/50 border dark:border-dark-border p-6">
           <div className="text-center mb-4">
             <img
               src="/lgofc.png"
               alt="theyear"
               className="w-32 h-32 mx-auto mb-3"
             />
-            <h1 className="text-2xl font-bold text-slate-800 mb-1">
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-1">
               theyear
             </h1>
-            <p className="text-slate-600 text-sm">
+            <p className="text-slate-600 dark:text-dark-text-secondary text-sm">
               {isForgotPassword
                 ? 'Reset your password'
                 : 'Capture and share your year, one moment at a time'}
@@ -73,7 +73,7 @@ export default function Auth() {
 
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
                 Email
               </label>
               <input
@@ -81,14 +81,14 @@ export default function Auth() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 placeholder="you@example.com"
               />
             </div>
 
             {!isForgotPassword && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
                   Password
                 </label>
                 <input
@@ -97,20 +97,20 @@ export default function Auth() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                   placeholder="••••••••"
                 />
               </div>
             )}
 
             {error && (
-              <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-xs">
+              <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border dark:border-red-800 px-3 py-2 rounded-lg text-xs">
                 {error}
               </div>
             )}
 
             {successMessage && (
-              <div className="bg-emerald-50 text-emerald-700 px-3 py-2 rounded-lg text-xs">
+              <div className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border dark:border-emerald-800 px-3 py-2 rounded-lg text-xs">
                 {successMessage}
               </div>
             )}
@@ -118,7 +118,7 @@ export default function Auth() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-slate-800 dark:bg-orange-500 hover:bg-slate-900 dark:hover:bg-orange-600 text-white font-semibold text-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
@@ -157,7 +157,7 @@ export default function Auth() {
                   setError('');
                   setSuccessMessage('');
                 }}
-                className="flex items-center justify-center gap-1 text-slate-600 hover:text-slate-800 text-xs transition py-1 mx-auto"
+                className="flex items-center justify-center gap-1 text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary text-xs transition py-1 mx-auto"
               >
                 <ArrowLeft className="w-3 h-3" />
                 Back to sign in
@@ -170,7 +170,7 @@ export default function Auth() {
                       setIsForgotPassword(true);
                       setError('');
                     }}
-                    className="text-slate-600 hover:text-slate-800 text-xs transition py-1 block w-full"
+                    className="text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary text-xs transition py-1 block w-full"
                   >
                     Forgot password?
                   </button>
@@ -180,7 +180,7 @@ export default function Auth() {
                     setIsSignUp(!isSignUp);
                     setError('');
                   }}
-                  className="text-slate-600 hover:text-slate-800 text-xs transition py-1 block w-full"
+                  className="text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary text-xs transition py-1 block w-full"
                 >
                   {isSignUp
                     ? 'Already have an account? Sign in'

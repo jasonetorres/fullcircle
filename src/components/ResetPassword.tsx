@@ -54,16 +54,16 @@ export default function ResetPassword() {
 
   if (success) {
     return (
-      <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+      <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-dark-bg dark:to-dark-panel flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Check className="w-8 h-8 text-emerald-600" />
+          <div className="bg-white dark:bg-dark-panel rounded-2xl shadow-xl dark:shadow-dark-border/50 border dark:border-dark-border p-8 text-center">
+            <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Check className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-2">
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-2">
               Password Reset Successfully
             </h2>
-            <p className="text-slate-600 text-sm">
+            <p className="text-slate-600 dark:text-dark-text-secondary text-sm">
               Redirecting you to the app...
             </p>
           </div>
@@ -73,26 +73,26 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-dark-bg dark:to-dark-panel flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-6">
+        <div className="bg-white dark:bg-dark-panel rounded-2xl shadow-xl dark:shadow-dark-border/50 border dark:border-dark-border p-6">
           <div className="text-center mb-6">
             <img
               src="/lgofc.png"
               alt="theyear"
               className="w-24 h-24 mx-auto mb-3"
             />
-            <h1 className="text-2xl font-bold text-slate-800 mb-1">
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-1">
               Set New Password
             </h1>
-            <p className="text-slate-600 text-sm">
+            <p className="text-slate-600 dark:text-dark-text-secondary text-sm">
               Enter your new password below
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
                 New Password
               </label>
               <input
@@ -101,13 +101,13 @@ export default function ResetPassword() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 placeholder="••••••••"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
                 Confirm Password
               </label>
               <input
@@ -116,13 +116,13 @@ export default function ResetPassword() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 placeholder="••••••••"
               />
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-xs">
+              <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border dark:border-red-800 px-3 py-2 rounded-lg text-xs">
                 {error}
               </div>
             )}
@@ -130,7 +130,7 @@ export default function ResetPassword() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-slate-800 dark:bg-orange-500 hover:bg-slate-900 dark:hover:bg-orange-600 text-white font-semibold text-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>

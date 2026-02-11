@@ -35,6 +35,7 @@ export type Profile = {
   email_notifications: boolean;
   weekly_recap_enabled: boolean;
   unsubscribe_token: string;
+  theme_preference: 'light' | 'dark' | 'system';
 };
 
 export type Follow = {
