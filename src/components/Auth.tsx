@@ -52,28 +52,28 @@ export default function Auth() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-dark-bg dark:to-dark-panel flex items-center justify-center p-4 overflow-hidden">
+    <div className="h-screen bg-black flex items-center justify-center p-6 overflow-hidden">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-dark-panel rounded-2xl shadow-xl dark:shadow-dark-border/50 border dark:border-dark-border p-6">
-          <div className="text-center mb-4">
+        <div className="border border-white/10 rounded-2xl p-8 lg:p-10">
+          <div className="text-center mb-8">
             <img
               src="/lgofc.png"
               alt="theyear"
-              className="w-32 h-32 mx-auto mb-3"
+              className="w-24 h-24 mx-auto mb-4"
             />
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-1">
+            <h1 className="text-2xl font-semibold text-white mb-2 tracking-tight">
               theyear
             </h1>
-            <p className="text-slate-600 dark:text-dark-text-secondary text-sm">
+            <p className="text-white/60 text-[15px]">
               {isForgotPassword
                 ? 'Reset your password'
                 : 'Capture and share your year, one moment at a time'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
+              <label className="block text-sm font-medium text-white/80 mb-2">
                 Email
               </label>
               <input
@@ -81,14 +81,14 @@ export default function Auth() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
                 placeholder="you@example.com"
               />
             </div>
 
             {!isForgotPassword && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
+                <label className="block text-sm font-medium text-white/80 mb-2">
                   Password
                 </label>
                 <input
@@ -97,20 +97,20 @@ export default function Auth() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
                   placeholder="••••••••"
                 />
               </div>
             )}
 
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border dark:border-red-800 px-3 py-2 rounded-lg text-xs">
+              <div className="bg-red-500/10 text-red-400 border border-red-500/20 px-4 py-3 rounded-lg text-sm">
                 {error}
               </div>
             )}
 
             {successMessage && (
-              <div className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border dark:border-emerald-800 px-3 py-2 rounded-lg text-xs">
+              <div className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-4 py-3 rounded-lg text-sm">
                 {successMessage}
               </div>
             )}
@@ -118,7 +118,7 @@ export default function Auth() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-slate-800 dark:bg-orange-500 hover:bg-slate-900 dark:hover:bg-orange-600 text-white font-semibold text-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-white text-black font-medium text-[15px] py-3.5 rounded-lg hover:bg-gray-100 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
@@ -134,22 +134,16 @@ export default function Auth() {
                   {isForgotPassword ? (
                     'Send Reset Link'
                   ) : isSignUp ? (
-                    <>
-                      <UserPlus className="w-4 h-4" />
-                      Create Account
-                    </>
+                    'Create Account'
                   ) : (
-                    <>
-                      <LogIn className="w-4 h-4" />
-                      Sign In
-                    </>
+                    'Sign In'
                   )}
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-3 text-center space-y-2">
+          <div className="mt-6 text-center space-y-3">
             {isForgotPassword ? (
               <button
                 onClick={() => {
@@ -157,9 +151,9 @@ export default function Auth() {
                   setError('');
                   setSuccessMessage('');
                 }}
-                className="flex items-center justify-center gap-1 text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary text-xs transition py-1 mx-auto"
+                className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-sm transition mx-auto"
               >
-                <ArrowLeft className="w-3 h-3" />
+                <ArrowLeft className="w-4 h-4" />
                 Back to sign in
               </button>
             ) : (
@@ -170,7 +164,7 @@ export default function Auth() {
                       setIsForgotPassword(true);
                       setError('');
                     }}
-                    className="text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary text-xs transition py-1 block w-full"
+                    className="text-white/60 hover:text-white text-sm transition block w-full"
                   >
                     Forgot password?
                   </button>
@@ -180,7 +174,7 @@ export default function Auth() {
                     setIsSignUp(!isSignUp);
                     setError('');
                   }}
-                  className="text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary text-xs transition py-1 block w-full"
+                  className="text-white/60 hover:text-white text-sm transition block w-full"
                 >
                   {isSignUp
                     ? 'Already have an account? Sign in'
