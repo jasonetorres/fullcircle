@@ -151,6 +151,39 @@ Deno.serve(async (req: Request) => {
         );
       }
 
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const hundredYearsAgo = new Date();
+      hundredYearsAgo.setFullYear(hundredYearsAgo.getFullYear() - 100);
+      hundredYearsAgo.setHours(0, 0, 0, 0);
+
+      if (eventDate > today) {
+        return new Response(
+          JSON.stringify({
+            error: "Invalid date",
+            message: "event_date cannot be in the future. Please use today or an earlier date.",
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
+      if (eventDate < hundredYearsAgo) {
+        return new Response(
+          JSON.stringify({
+            error: "Invalid date",
+            message: "event_date cannot be more than 100 years in the past.",
+          }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
       const { data: log, error: insertError } = await supabase

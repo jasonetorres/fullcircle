@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { supabase, Profile } from '../lib/supabase';
 import { X, Upload, User, Loader, Mail, CalendarDays, Key, Copy, Trash2, Plus, Eye, EyeOff, Sun, Moon, Monitor } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
@@ -36,6 +36,7 @@ export default function AccountSettings({
     null
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const modalContentRef = useRef<HTMLDivElement>(null);
   const [apiKeys, setApiKeys] = useState<BotApiKey[]>([]);
   const [showNewKeyForm, setShowNewKeyForm] = useState(false);
   const [newKeyName, setNewKeyName] = useState('');
@@ -70,10 +71,19 @@ export default function AccountSettings({
     }
   };
 
-  const showMessage = (type: 'success' | 'error', text: string) => {
+  const showMessage = useCallback((type: 'success' | 'error', text: string, autoClose = false) => {
     setMessage({ type, text });
-    setTimeout(() => setMessage(null), 3000);
-  };
+    modalContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (autoClose && type === 'success') {
+      setTimeout(() => {
+        setMessage(null);
+        onClose();
+      }, 1500);
+    } else {
+      setTimeout(() => setMessage(null), 3000);
+    }
+  }, [onClose]);
 
   const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -133,7 +143,7 @@ export default function AccountSettings({
 
       if (error) throw error;
 
-      showMessage('success', 'Profile updated successfully!');
+      showMessage('success', 'Profile updated successfully!', true);
       onProfileUpdated();
     } catch (err: any) {
       console.error('Error updating profile:', err);
@@ -232,10 +242,11 @@ export default function AccountSettings({
       onClick={onClose}
     >
       <div
+        ref={modalContentRef}
         className="bg-white dark:bg-dark-panel rounded-xl shadow-2xl max-w-md w-full max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border p-4 flex items-center justify-between z-10">
           <h2 className="text-xl font-bold text-slate-800 dark:text-dark-text-primary">Account Settings</h2>
           <button
             onClick={onClose}
@@ -247,7 +258,7 @@ export default function AccountSettings({
 
         {message && (
           <div
-            className={`mx-4 mt-4 p-3 rounded-lg text-sm ${
+            className={`sticky top-[73px] z-10 mx-4 mt-4 p-3 rounded-lg text-sm ${
               message.type === 'success'
                 ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
                 : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'

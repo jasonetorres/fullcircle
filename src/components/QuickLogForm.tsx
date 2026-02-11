@@ -9,9 +9,10 @@ interface QuickLogFormProps {
   onLogAdded: () => void;
   userId: string;
   onClose?: () => void;
+  emailVerified?: boolean;
 }
 
-export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFormProps) {
+export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerified = true }: QuickLogFormProps) {
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -150,6 +151,32 @@ export default function QuickLogForm({ onLogAdded, userId, onClose }: QuickLogFo
     setLoading(true);
 
     try {
+      if (!emailVerified) {
+        alert('Please verify your email address before creating posts. Check your inbox for the verification link.');
+        setLoading(false);
+        return;
+      }
+
+      const eventDate = new Date(formData.event_date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const hundredYearsAgo = new Date();
+      hundredYearsAgo.setFullYear(hundredYearsAgo.getFullYear() - 100);
+      hundredYearsAgo.setHours(0, 0, 0, 0);
+
+      if (eventDate > today) {
+        alert('Event date cannot be in the future. Please select today or an earlier date.');
+        setLoading(false);
+        return;
+      }
+
+      if (eventDate < hundredYearsAgo) {
+        alert('Event date cannot be more than 100 years in the past. Please select a more recent date.');
+        setLoading(false);
+        return;
+      }
+
       let imageUrl = null;
 
       if (imageFile) {

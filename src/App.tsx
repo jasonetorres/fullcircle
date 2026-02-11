@@ -18,7 +18,7 @@ import NotificationToast from './components/NotificationToast';
 import Memories from './components/Memories';
 import { PublicRecap } from './components/PublicRecap';
 import { PublicProfile } from './components/PublicProfile';
-import { LogOut, Home, Compass, Plus, Search as SearchIcon, User as UserIcon } from 'lucide-react';
+import { LogOut, Home, Compass, Plus, Search as SearchIcon, User as UserIcon, Mail, AlertCircle } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 
 function MainApp() {
@@ -27,7 +27,10 @@ function MainApp() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [activeTab, setActiveTab] = useState<'myLogs' | 'feed' | 'search' | 'profile'>('myLogs');
+  const [activeTab, setActiveTab] = useState<'myLogs' | 'feed' | 'search' | 'profile'>(() => {
+    const savedTab = localStorage.getItem('activeTab');
+    return (savedTab as 'myLogs' | 'feed' | 'search' | 'profile') || 'myLogs';
+  });
   const [showSettings, setShowSettings] = useState(false);
   const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
   const [showQuickLog, setShowQuickLog] = useState(false);
@@ -37,6 +40,10 @@ function MainApp() {
       setActiveTab(location.state.tab);
     }
   }, [location]);
+
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -83,9 +90,37 @@ function MainApp() {
     await supabase.auth.signOut();
   };
 
+  const handleResendVerification = async () => {
+    if (!user?.email) return;
+
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: user.email,
+      });
+
+      if (error) throw error;
+      alert('Verification email sent! Please check your inbox.');
+    } catch (err: any) {
+      alert(err.message || 'Failed to send verification email');
+    }
+  };
+
   const handleLogAdded = () => {
     setRefreshTrigger((prev) => prev + 1);
     setShowQuickLog(false);
+    setActiveTab('myLogs');
+
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-[70] animate-fade-in font-medium';
+    toast.textContent = 'Post created successfully!';
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s';
+      setTimeout(() => document.body.removeChild(toast), 300);
+    }, 2000);
   };
 
   const handleNotificationClick = useCallback((logId: string) => {
@@ -189,6 +224,28 @@ function MainApp() {
           </div>
         </header>
 
+        {!user.email_confirmed_at && (
+          <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800/50">
+            <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-1">
+                  Please verify your email address
+                </p>
+                <p className="text-xs text-amber-700 dark:text-amber-300/80 mb-2">
+                  Check your inbox for a verification link. You won't be able to create posts until your email is verified.
+                </p>
+                <button
+                  onClick={handleResendVerification}
+                  className="text-xs font-medium text-amber-800 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 underline transition"
+                >
+                  Resend verification email
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-dark-bg">
           <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
             {activeTab === 'myLogs' ? (
@@ -268,6 +325,7 @@ function MainApp() {
           onLogAdded={handleLogAdded}
           userId={user.id}
           onClose={() => setShowQuickLog(false)}
+          emailVerified={!!user.email_confirmed_at}
         />
       )}
 

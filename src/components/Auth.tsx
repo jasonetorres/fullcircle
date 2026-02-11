@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { LogIn, UserPlus, Loader2, ArrowLeft } from 'lucide-react';
+import { LogIn, UserPlus, Loader2, ArrowLeft, AlertTriangle } from 'lucide-react';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -70,6 +70,8 @@ export default function Auth() {
             setLoading(false);
             return;
           }
+
+          setSuccessMessage('Account created! Check your email to verify your account.');
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -173,6 +175,18 @@ export default function Auth() {
                         className="w-full px-4 py-3 text-[15px] border border-white/20 rounded-lg bg-white/5 text-white placeholder-white/40 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none transition"
                         placeholder="John Doe"
                       />
+                    </div>
+
+                    <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex gap-2">
+                      <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-amber-300 mb-1">
+                          Username is permanent
+                        </p>
+                        <p className="text-xs text-amber-200/80">
+                          Your username cannot be changed after account creation. Choose carefully.
+                        </p>
+                      </div>
                     </div>
 
                     <div>
