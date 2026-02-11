@@ -115,9 +115,10 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
 
   const toggleLike = async (log: FeedLog, e: React.MouseEvent) => {
     e.stopPropagation();
+    const previousLogs = logs;
+
     try {
       if (log.user_liked) {
-        await supabase.from('likes').delete().eq('log_id', log.id).eq('user_id', userId);
         setLogs((prev) =>
           prev.map((l) =>
             l.id === log.id
@@ -125,8 +126,8 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
               : l
           )
         );
+        await supabase.from('likes').delete().eq('log_id', log.id).eq('user_id', userId);
       } else {
-        await supabase.from('likes').insert({ log_id: log.id, user_id: userId });
         setLogs((prev) =>
           prev.map((l) =>
             l.id === log.id
@@ -134,9 +135,11 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
               : l
           )
         );
+        await supabase.from('likes').insert({ log_id: log.id, user_id: userId });
         checkAndAwardBadges(log.user_id);
       }
     } catch (err: any) {
+      setLogs(previousLogs);
       console.error('Error toggling like:', err);
     }
   };

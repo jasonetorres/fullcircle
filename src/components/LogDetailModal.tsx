@@ -120,33 +120,41 @@ export default function LogDetailModal({ log, profile, currentUserId, onClose, s
   };
 
   const toggleLike = async () => {
+    const previousLiked = userLiked;
+    const previousCount = likesCount;
+
     try {
       if (userLiked) {
-        await supabase.from('likes').delete().eq('log_id', log.id).eq('user_id', currentUserId);
         setUserLiked(false);
         setLikesCount(prev => prev - 1);
+        await supabase.from('likes').delete().eq('log_id', log.id).eq('user_id', currentUserId);
       } else {
-        await supabase.from('likes').insert({ log_id: log.id, user_id: currentUserId });
         setUserLiked(true);
         setLikesCount(prev => prev + 1);
+        await supabase.from('likes').insert({ log_id: log.id, user_id: currentUserId });
         checkAndAwardBadges(log.user_id);
       }
     } catch (err: any) {
       console.error('Error toggling like:', err);
+      setUserLiked(previousLiked);
+      setLikesCount(previousCount);
     }
   };
 
   const toggleCommentLike = async (commentId: string, currentlyLiked: boolean) => {
+    const previousComments = comments;
+
     try {
+      setComments(prev => updateCommentLikes(prev, commentId, !currentlyLiked));
+
       if (currentlyLiked) {
         await supabase.from('comment_likes').delete().eq('comment_id', commentId).eq('user_id', currentUserId);
       } else {
         await supabase.from('comment_likes').insert({ comment_id: commentId, user_id: currentUserId });
       }
-
-      setComments(prev => updateCommentLikes(prev, commentId, !currentlyLiked));
     } catch (err: any) {
       console.error('Error toggling comment like:', err);
+      setComments(previousComments);
     }
   };
 

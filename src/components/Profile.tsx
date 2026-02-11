@@ -383,7 +383,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       )}
 
       <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-dark-panel rounded-lg sm:rounded-xl md:rounded-2xl shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden mb-3 sm:mb-4 md:mb-6">
+      <div className="bg-white dark:bg-dark-panel rounded-lg sm:rounded-xl md:rounded-2xl shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border mb-3 sm:mb-4 md:mb-6">
         <div className="p-3 sm:p-4 md:p-6 lg:p-8">
           <div className="flex items-start gap-2.5 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6">
             <div
