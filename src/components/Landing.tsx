@@ -18,12 +18,12 @@ export default function Landing() {
             >
               Sign In
             </button>
-            <a
-              href="#"
+            <button
+              onClick={() => navigate('/docs')}
               className="px-4 py-2 text-[15px] font-medium text-white/80 hover:text-white transition-colors duration-200"
             >
               Docs
-            </a>
+            </button>
             <button
               onClick={() => navigate('/auth?signup=true')}
               className="px-6 py-2.5 text-[15px] font-medium text-white border border-white/30 rounded-lg hover:bg-white/10 transition-all duration-200"

@@ -4,6 +4,7 @@ import { supabase, Profile } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
 import Auth from './components/Auth';
 import Landing from './components/Landing';
+import Docs from './components/Docs';
 import ResetPassword from './components/ResetPassword';
 import ProfileSetup from './components/ProfileSetup';
 import QuickLogForm from './components/QuickLogForm';
@@ -293,6 +294,7 @@ function App() {
       <Routes>
         <Route path="/landing" element={<Landing />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/docs" element={<Docs />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/recap/:userId/:year" element={<PublicRecap />} />
         <Route path="/profile/:userId" element={<PublicProfile />} />
