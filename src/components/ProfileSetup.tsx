@@ -45,21 +45,21 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-dark-bg dark:to-dark-panel flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-dark-panel rounded-xl shadow-xl dark:shadow-dark-border/50 border dark:border-dark-border max-w-md w-full p-6">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-800 rounded-full mb-3">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-800 dark:bg-orange-500 rounded-full mb-3">
             <User className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">Create Your Profile</h2>
-          <p className="text-sm text-slate-600 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary">Create Your Profile</h2>
+          <p className="text-sm text-slate-600 dark:text-dark-text-secondary mt-1">
             Set up your profile to start sharing with the community
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
               Username *
             </label>
             <input
@@ -70,15 +70,15 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
               minLength={3}
               maxLength={20}
               placeholder="johndoe"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">
               3-20 characters, letters, numbers, and underscores only
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
               Display Name
             </label>
             <input
@@ -87,12 +87,12 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
               onChange={(e) => setDisplayName(e.target.value)}
               maxLength={50}
               placeholder="John Doe"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1">
               Bio
             </label>
             <textarea
@@ -101,13 +101,13 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
               maxLength={200}
               rows={3}
               placeholder="Tell us about yourself..."
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
             />
-            <p className="text-xs text-slate-500 mt-1">{bio.length}/200</p>
+            <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">{bio.length}/200</p>
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border dark:border-red-800 px-3 py-2 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -115,7 +115,7 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
           <button
             type="submit"
             disabled={loading || !username}
-            className="w-full py-2 bg-slate-800 text-white rounded-lg font-semibold hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg font-semibold hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating Profile...' : 'Create Profile'}
           </button>

@@ -373,7 +373,7 @@ export default function Search({ userId }: SearchProps) {
                   value={usersQuery}
                   onChange={(e) => setUsersQuery(e.target.value)}
                   placeholder="Search users by name or username..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 />
                 {usersQuery && (
                   <button
@@ -401,7 +401,7 @@ export default function Search({ userId }: SearchProps) {
                   value={publicQuery}
                   onChange={(e) => setPublicQuery(e.target.value)}
                   placeholder="Search public logs..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 />
                 {publicQuery && (
                   <button
@@ -418,7 +418,7 @@ export default function Search({ userId }: SearchProps) {
                   <select
                     value={publicLocationFilter}
                     onChange={(e) => setPublicLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition bg-white"
+                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                   >
                     <option value="">All Locations</option>
                     {publicLocations.map((location) => (
@@ -458,7 +458,7 @@ export default function Search({ userId }: SearchProps) {
                   value={myQuery}
                   onChange={(e) => setMyQuery(e.target.value)}
                   placeholder="Search your logs..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 />
                 {myQuery && (
                   <button
@@ -475,7 +475,7 @@ export default function Search({ userId }: SearchProps) {
                   <select
                     value={myLocationFilter}
                     onChange={(e) => setMyLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition bg-white"
+                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                   >
                     <option value="">All Locations</option>
                     {myLocations.map((location) => (
@@ -565,8 +565,8 @@ export default function Search({ userId }: SearchProps) {
                       onClick={() => handleFollowToggle(user.id, user.is_following)}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition flex-shrink-0 ${
                         user.is_following
-                          ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                          : 'bg-slate-800 dark:bg-orange-500 text-white hover:bg-slate-700'
+                          ? 'bg-slate-100 dark:bg-dark-hover text-slate-700 dark:text-dark-text-primary hover:bg-slate-200 dark:hover:bg-dark-bg'
+                          : 'bg-slate-800 dark:bg-orange-500 text-white hover:bg-slate-700 dark:hover:bg-orange-600'
                       }`}
                     >
                       {user.is_following ? (

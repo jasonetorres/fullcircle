@@ -242,7 +242,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
               placeholder="What happened today?"
               required
               autoFocus
-              className="w-full px-4 py-3 text-base border-2 border-slate-200 dark:border-dark-border rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 text-base border-2 border-slate-200 dark:border-dark-border rounded-xl bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
             />
           </div>
 
@@ -259,7 +259,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
                 max={getMaxDate()}
                 min={getMinDate()}
                 required
-                className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
               />
             </div>
             <div>
@@ -272,7 +272,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
                   value={formData.location}
                   onChange={(value) => setFormData({ ...formData, location: value })}
                   placeholder="Where?"
-                  className="flex-1 px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  className="flex-1 px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 />
                 <button
                   type="button"
@@ -301,12 +301,12 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
               value={formData.trip_name}
               onChange={(e) => setFormData({ ...formData, trip_name: e.target.value })}
               placeholder="Part of a trip? Name it"
-              className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+              className="w-full px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            <label className="block text-sm font-medium text-slate-700 dark:text-dark-text-primary mb-1.5">
               Description
             </label>
             <textarea
@@ -314,7 +314,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Tell the story..."
               rows={3}
-              className="w-full px-3 py-2.5 text-base border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full px-3 py-2.5 text-base border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
             />
           </div>
 
@@ -374,10 +374,10 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-dark-border">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-slate-700">Visibility:</span>
-              <div className="inline-flex bg-slate-100 rounded-lg p-0.5">
+              <span className="text-sm font-medium text-slate-700 dark:text-dark-text-primary">Visibility:</span>
+              <div className="inline-flex bg-slate-100 dark:bg-dark-hover rounded-lg p-0.5">
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, is_public: true })}
