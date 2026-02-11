@@ -190,7 +190,7 @@ function MainApp() {
         </header>
 
         <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-dark-bg">
-          <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
             {activeTab === 'myLogs' ? (
               <>
                 <Memories userId={user.id} />

@@ -383,11 +383,11 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       )}
 
       <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-dark-panel rounded-xl sm:rounded-2xl shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden mb-4 sm:mb-6">
-        <div className="p-4 sm:p-6 md:p-8">
-          <div className="flex items-start gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6">
+      <div className="bg-white dark:bg-dark-panel rounded-lg sm:rounded-xl md:rounded-2xl shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border overflow-hidden mb-3 sm:mb-4 md:mb-6">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8">
+          <div className="flex items-start gap-2.5 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6">
             <div
-              className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-slate-100 to-slate-50 dark:from-white/10 dark:to-white/5 border border-slate-200 dark:border-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center text-slate-800 dark:text-white text-lg sm:text-xl md:text-2xl font-display font-light flex-shrink-0 ${profile.avatar_url ? 'cursor-pointer hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200' : ''}`}
+              className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-slate-100 to-slate-50 dark:from-white/10 dark:to-white/5 border border-slate-200 dark:border-white/10 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-slate-800 dark:text-white text-base sm:text-lg md:text-xl lg:text-2xl font-display font-light flex-shrink-0 ${profile.avatar_url ? 'cursor-pointer hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200' : ''}`}
               onClick={() => profile.avatar_url && setShowAvatarModal(true)}
               style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)' }}
             >
@@ -395,16 +395,16 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 <img
                   src={profile.avatar_url}
                   alt={profile.username}
-                  className="w-full h-full rounded-xl sm:rounded-2xl object-cover"
+                  className="w-full h-full rounded-lg sm:rounded-xl md:rounded-2xl object-cover"
                 />
               ) : (
-                profile.username?.[0]?.toUpperCase() || <User className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" />
+                profile.username?.[0]?.toUpperCase() || <User className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
               )}
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-start gap-2 mb-2 sm:mb-3">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-light text-slate-800 dark:text-white truncate tracking-wide flex-1">
+              <div className="flex items-start gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 md:mb-3">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-display font-light text-slate-800 dark:text-white truncate tracking-wide flex-1">
                   {profile.display_name || profile.username}
                 </h1>
                 {isOwnProfile ? (
@@ -438,9 +438,9 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                   </button>
                 ) : null}
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-dark-text-muted truncate">@{profile.username}</p>
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg">
+                <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-md sm:rounded-lg">
                   <Flame className={`w-3 h-3 sm:w-4 sm:h-4 ${streakData.currentStreak > 0 ? 'text-orange-500 dark:text-white' : 'text-slate-300 dark:text-white/30'}`} />
                   <span className="text-xs sm:text-sm font-medium text-slate-800 dark:text-white/90">{streakData.currentStreak}</span>
                   {streakData.longestStreak > streakData.currentStreak && (
@@ -450,7 +450,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 {badges.length > 0 && (
                   <button
                     onClick={() => setShowAchievements(true)}
-                    className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white rounded-lg transition-all duration-200 active:scale-95"
+                    className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-2.5 lg:px-3 py-0.5 sm:py-1 md:py-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white rounded-md sm:rounded-lg transition-all duration-200 active:scale-95"
                   >
                     <Award className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="text-xs sm:text-sm font-medium">{badges.length}</span>
@@ -461,10 +461,10 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           </div>
 
           {profile.bio && (
-            <p className="text-xs sm:text-sm text-slate-700 dark:text-white/60 mb-4 sm:mb-6 leading-relaxed">{linkifyText(profile.bio)}</p>
+            <p className="text-xs sm:text-sm text-slate-700 dark:text-white/60 mb-3 sm:mb-4 md:mb-6 leading-relaxed">{linkifyText(profile.bio)}</p>
           )}
 
-          <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 pt-4 sm:pt-6 border-t border-slate-200 dark:border-white/5">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 mb-3 sm:mb-4 md:mb-6 pt-3 sm:pt-4 md:pt-6 border-t border-slate-200 dark:border-white/5">
             <button
               onClick={() => setShowStatsModal('posts')}
               className="text-center hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg sm:rounded-xl py-2 sm:py-3 md:py-4 transition-all duration-200"
@@ -496,7 +496,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           </div>
 
           {isOwnProfile && (
-            <div className="flex gap-2 sm:gap-3 pt-4 sm:pt-6 border-t border-slate-200 dark:border-white/5">
+            <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 md:pt-6 border-t border-slate-200 dark:border-white/5">
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -520,10 +520,10 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
       </div>
 
       {isOwnProfile && (
-        <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6 items-center">
+        <div className="flex gap-1.5 sm:gap-2 md:gap-3 mb-3 sm:mb-4 md:mb-6 items-center">
           <button
             onClick={() => setActiveFilter('all')}
-            className={`px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all duration-200 font-medium ${
+            className={`px-2.5 sm:px-3 md:px-4 lg:px-5 py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all duration-200 font-medium ${
               activeFilter === 'all'
                 ? 'bg-slate-800 dark:bg-white text-white dark:text-black shadow-lg'
                 : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10'
@@ -533,7 +533,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           </button>
           <button
             onClick={() => setActiveFilter('public')}
-            className={`px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all duration-200 font-medium ${
+            className={`px-2.5 sm:px-3 md:px-4 lg:px-5 py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all duration-200 font-medium ${
               activeFilter === 'public'
                 ? 'bg-slate-800 dark:bg-white text-white dark:text-black shadow-lg'
                 : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10'
@@ -543,7 +543,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           </button>
           <button
             onClick={() => setActiveFilter('private')}
-            className={`px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all duration-200 font-medium ${
+            className={`px-2.5 sm:px-3 md:px-4 lg:px-5 py-1.5 sm:py-2 md:py-2.5 text-xs sm:text-sm rounded-lg sm:rounded-xl transition-all duration-200 font-medium ${
               activeFilter === 'private'
                 ? 'bg-slate-800 dark:bg-white text-white dark:text-black shadow-lg'
                 : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10'
@@ -554,7 +554,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
           {logs.length > 0 && (
             <button
               onClick={exportLogs}
-              className="ml-auto flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-lg sm:rounded-xl transition-all duration-200 text-xs sm:text-sm font-medium"
+              className="ml-auto flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 md:px-4 lg:px-5 py-1.5 sm:py-2 md:py-2.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-lg sm:rounded-xl transition-all duration-200 text-xs sm:text-sm font-medium"
             >
               <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Export</span>
