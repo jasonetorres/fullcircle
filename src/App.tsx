@@ -131,7 +131,7 @@ function MainApp() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-slate-500"></div>
       </div>
     );
   }
@@ -162,7 +162,7 @@ function MainApp() {
                 onClick={() => setActiveTab('myLogs')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'myLogs'
-                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-slate-400'
                     : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
@@ -173,7 +173,7 @@ function MainApp() {
                 onClick={() => setActiveTab('feed')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'feed'
-                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-slate-400'
                     : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
@@ -184,7 +184,7 @@ function MainApp() {
                 onClick={() => setActiveTab('search')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'search'
-                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-slate-400'
                     : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
@@ -195,7 +195,7 @@ function MainApp() {
                 onClick={() => setActiveTab('profile')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'profile'
-                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-orange-500'
+                    ? 'bg-slate-100 dark:bg-dark-hover text-slate-900 dark:text-slate-400'
                     : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary hover:bg-slate-50 dark:hover:bg-dark-hover'
                 }`}
               >
@@ -207,7 +207,7 @@ function MainApp() {
             <div className="flex items-center gap-1 text-slate-600 dark:text-dark-text-secondary">
               <button
                 onClick={() => setShowQuickLog(true)}
-                className="hidden md:flex items-center gap-2 px-3 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition text-sm font-medium"
+                className="hidden md:flex items-center gap-2 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition text-sm font-medium"
               >
                 <Plus className="w-4 h-4" />
                 <span className="hidden lg:inline">New Log</span>
@@ -277,7 +277,7 @@ function MainApp() {
             <button
               onClick={() => setActiveTab('myLogs')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'myLogs' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
+                activeTab === 'myLogs' ? 'text-slate-900 dark:text-slate-400' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <Home className={`w-5 h-5 ${activeTab === 'myLogs' ? 'stroke-[2.5]' : ''}`} />
@@ -286,7 +286,7 @@ function MainApp() {
             <button
               onClick={() => setActiveTab('feed')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'feed' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
+                activeTab === 'feed' ? 'text-slate-900 dark:text-slate-400' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <Compass className={`w-5 h-5 ${activeTab === 'feed' ? 'stroke-[2.5]' : ''}`} />
@@ -294,14 +294,14 @@ function MainApp() {
             </button>
             <button
               onClick={() => setShowQuickLog(true)}
-              className="flex items-center justify-center w-12 h-12 -mt-4 bg-slate-800 dark:bg-orange-500 rounded-full shadow-lg shadow-slate-800/30 dark:shadow-orange-500/30 text-white active:scale-95 transition-transform"
+              className="flex items-center justify-center w-12 h-12 -mt-4 bg-slate-800 dark:bg-slate-700 rounded-full shadow-lg shadow-slate-800/30 dark:shadow-slate-700/30 text-white active:scale-95 transition-transform"
             >
               <Plus className="w-6 h-6" />
             </button>
             <button
               onClick={() => setActiveTab('search')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'search' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
+                activeTab === 'search' ? 'text-slate-900 dark:text-slate-400' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <SearchIcon className={`w-5 h-5 ${activeTab === 'search' ? 'stroke-[2.5]' : ''}`} />
@@ -310,7 +310,7 @@ function MainApp() {
             <button
               onClick={() => setActiveTab('profile')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 min-w-[56px] transition-colors ${
-                activeTab === 'profile' ? 'text-slate-900 dark:text-orange-500' : 'text-slate-400 dark:text-dark-text-muted'
+                activeTab === 'profile' ? 'text-slate-900 dark:text-slate-400' : 'text-slate-400 dark:text-dark-text-muted'
               }`}
             >
               <UserIcon className={`w-5 h-5 ${activeTab === 'profile' ? 'stroke-[2.5]' : ''}`} />

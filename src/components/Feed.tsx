@@ -159,7 +159,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-slate-700"></div>
       </div>
     );
   }
@@ -191,7 +191,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
                   to={`/profile/${log.user_id}`}
                   state={{ from: 'feed' }}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-8 h-8 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition overflow-hidden"
+                  className="w-8 h-8 bg-slate-800 dark:bg-slate-700 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition overflow-hidden"
                 >
                   {log.profile?.avatar_url ? (
                     <img
@@ -274,7 +274,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
             <button
               onClick={() => fetchFeed(false)}
               disabled={loadingMore}
-              className="px-6 py-3 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingMore ? (
                 <div className="flex items-center gap-2">

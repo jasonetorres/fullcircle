@@ -330,7 +330,7 @@ export default function AccountSettings({
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Enter your display name"
               maxLength={50}
-              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
             />
             <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">
               Your public name (optional)
@@ -347,7 +347,7 @@ export default function AccountSettings({
               placeholder="Tell us about yourself..."
               rows={4}
               maxLength={200}
-              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition resize-none"
             />
             <div className="flex justify-between text-xs text-slate-500 dark:text-dark-text-muted mt-1">
               <span>Your bio (optional)</span>
@@ -371,8 +371,8 @@ export default function AccountSettings({
                 role="switch"
                 aria-checked={emailNotifications}
                 onClick={() => setEmailNotifications(!emailNotifications)}
-                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-dark-panel ${
-                  emailNotifications ? 'bg-slate-800 dark:bg-orange-500' : 'bg-slate-300 dark:bg-dark-border'
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:ring-offset-2 dark:focus:ring-offset-dark-panel ${
+                  emailNotifications ? 'bg-slate-800 dark:bg-slate-700' : 'bg-slate-300 dark:bg-dark-border'
                 }`}
               >
                 <span
@@ -397,8 +397,8 @@ export default function AccountSettings({
                 role="switch"
                 aria-checked={weeklyRecap}
                 onClick={() => setWeeklyRecap(!weeklyRecap)}
-                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-dark-panel ${
-                  weeklyRecap ? 'bg-slate-800 dark:bg-orange-500' : 'bg-slate-300 dark:bg-dark-border'
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:ring-offset-2 dark:focus:ring-offset-dark-panel ${
+                  weeklyRecap ? 'bg-slate-800 dark:bg-slate-700' : 'bg-slate-300 dark:bg-dark-border'
                 }`}
               >
                 <span
@@ -421,12 +421,12 @@ export default function AccountSettings({
                 onClick={() => setTheme('light')}
                 className={`p-3 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
                   theme === 'light'
-                    ? 'border-slate-800 dark:border-orange-500 bg-slate-50 dark:bg-dark-hover'
+                    ? 'border-slate-800 dark:border-slate-700 bg-slate-50 dark:bg-dark-hover'
                     : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover'
                 }`}
               >
-                <Sun className={`w-5 h-5 ${theme === 'light' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
-                <span className={`text-xs font-medium ${theme === 'light' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
+                <Sun className={`w-5 h-5 ${theme === 'light' ? 'text-slate-800 dark:text-slate-400' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
+                <span className={`text-xs font-medium ${theme === 'light' ? 'text-slate-800 dark:text-slate-400' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
                   Light
                 </span>
               </button>
@@ -435,12 +435,12 @@ export default function AccountSettings({
                 onClick={() => setTheme('dark')}
                 className={`p-3 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
                   theme === 'dark'
-                    ? 'border-slate-800 dark:border-orange-500 bg-slate-50 dark:bg-dark-hover'
+                    ? 'border-slate-800 dark:border-slate-700 bg-slate-50 dark:bg-dark-hover'
                     : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover'
                 }`}
               >
-                <Moon className={`w-5 h-5 ${theme === 'dark' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
-                <span className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
+                <Moon className={`w-5 h-5 ${theme === 'dark' ? 'text-slate-800 dark:text-slate-400' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
+                <span className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-800 dark:text-slate-400' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
                   Dark
                 </span>
               </button>
@@ -449,12 +449,12 @@ export default function AccountSettings({
                 onClick={() => setTheme('system')}
                 className={`p-3 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
                   theme === 'system'
-                    ? 'border-slate-800 dark:border-orange-500 bg-slate-50 dark:bg-dark-hover'
+                    ? 'border-slate-800 dark:border-slate-700 bg-slate-50 dark:bg-dark-hover'
                     : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover'
                 }`}
               >
-                <Monitor className={`w-5 h-5 ${theme === 'system' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
-                <span className={`text-xs font-medium ${theme === 'system' ? 'text-slate-800 dark:text-orange-500' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
+                <Monitor className={`w-5 h-5 ${theme === 'system' ? 'text-slate-800 dark:text-slate-400' : 'text-slate-500 dark:text-dark-text-secondary'}`} />
+                <span className={`text-xs font-medium ${theme === 'system' ? 'text-slate-800 dark:text-slate-400' : 'text-slate-600 dark:text-dark-text-secondary'}`}>
                   System
                 </span>
               </button>
@@ -557,7 +557,7 @@ export default function AccountSettings({
                   onChange={(e) => setNewKeyName(e.target.value)}
                   placeholder="e.g., My Bot, Automation Script"
                   maxLength={50}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none"
                 />
                 <div className="flex gap-2">
                   <button
@@ -574,7 +574,7 @@ export default function AccountSettings({
                     type="button"
                     onClick={createApiKey}
                     disabled={creatingKey || !newKeyName.trim()}
-                    className="flex-1 px-3 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 text-sm flex items-center justify-center gap-2"
+                    className="flex-1 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition disabled:opacity-50 text-sm flex items-center justify-center gap-2"
                   >
                     {creatingKey ? (
                       <>
@@ -638,7 +638,7 @@ export default function AccountSettings({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-4 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {saving ? (
                 <>

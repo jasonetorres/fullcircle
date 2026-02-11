@@ -332,7 +332,7 @@ export default function Search({ userId }: SearchProps) {
           >
             Users
             {activeTab === 'users' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-orange-500"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-slate-700"></div>
             )}
           </button>
           <button
@@ -345,7 +345,7 @@ export default function Search({ userId }: SearchProps) {
           >
             Public Logs
             {activeTab === 'public' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-orange-500"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-slate-700"></div>
             )}
           </button>
           <button
@@ -358,7 +358,7 @@ export default function Search({ userId }: SearchProps) {
           >
             My Logs
             {activeTab === 'mine' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-orange-500"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-800 dark:bg-slate-700"></div>
             )}
           </button>
         </div>
@@ -373,7 +373,7 @@ export default function Search({ userId }: SearchProps) {
                   value={usersQuery}
                   onChange={(e) => setUsersQuery(e.target.value)}
                   placeholder="Search users by name or username..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
                 />
                 {usersQuery && (
                   <button
@@ -401,7 +401,7 @@ export default function Search({ userId }: SearchProps) {
                   value={publicQuery}
                   onChange={(e) => setPublicQuery(e.target.value)}
                   placeholder="Search public logs..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
                 />
                 {publicQuery && (
                   <button
@@ -418,7 +418,7 @@ export default function Search({ userId }: SearchProps) {
                   <select
                     value={publicLocationFilter}
                     onChange={(e) => setPublicLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
                   >
                     <option value="">All Locations</option>
                     {publicLocations.map((location) => (
@@ -458,7 +458,7 @@ export default function Search({ userId }: SearchProps) {
                   value={myQuery}
                   onChange={(e) => setMyQuery(e.target.value)}
                   placeholder="Search your logs..."
-                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-10 pr-10 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
                 />
                 {myQuery && (
                   <button
@@ -475,7 +475,7 @@ export default function Search({ userId }: SearchProps) {
                   <select
                     value={myLocationFilter}
                     onChange={(e) => setMyLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                    className="w-full pl-10 pr-4 py-3 text-base border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
                   >
                     <option value="">All Locations</option>
                     {myLocations.map((location) => (
@@ -536,7 +536,7 @@ export default function Search({ userId }: SearchProps) {
                   className="bg-white dark:bg-dark-panel rounded-lg shadow-card dark:shadow-card-dark border border-transparent dark:border-dark-border hover:shadow-lg transition p-4"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    <div className="w-12 h-12 bg-slate-800 dark:bg-slate-700 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                       {user.avatar_url ? (
                         <img
                           src={user.avatar_url}
@@ -566,7 +566,7 @@ export default function Search({ userId }: SearchProps) {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition flex-shrink-0 ${
                         user.is_following
                           ? 'bg-slate-100 dark:bg-dark-hover text-slate-700 dark:text-dark-text-primary hover:bg-slate-200 dark:hover:bg-dark-bg'
-                          : 'bg-slate-800 dark:bg-orange-500 text-white hover:bg-slate-700 dark:hover:bg-orange-600'
+                          : 'bg-slate-800 dark:bg-slate-700 text-white hover:bg-slate-700 dark:hover:bg-slate-600'
                       }`}
                     >
                       {user.is_following ? (
@@ -621,7 +621,7 @@ export default function Search({ userId }: SearchProps) {
                 >
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-8 h-8 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      <div className="w-8 h-8 bg-slate-800 dark:bg-slate-700 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                         {log.author.avatar_url ? (
                           <img
                             src={log.author.avatar_url}

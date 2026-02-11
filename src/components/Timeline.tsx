@@ -105,7 +105,7 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-slate-700"></div>
       </div>
     );
   }
@@ -180,7 +180,7 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
               <div className="space-y-3">
                 {groupLogs.map((log) => (
                 <div key={log.id} className="relative pl-11">
-                  <div className="absolute left-0 w-8 h-8 bg-slate-800 dark:bg-orange-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg text-xs">
+                  <div className="absolute left-0 w-8 h-8 bg-slate-800 dark:bg-slate-700 rounded-full flex items-center justify-center text-white font-bold shadow-lg text-xs">
                     {formatDate(log.event_date).split(' ')[1]}
                   </div>
 

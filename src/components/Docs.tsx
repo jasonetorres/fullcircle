@@ -1,20 +1,19 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Share2, MoreVertical } from 'lucide-react';
 
 export default function Docs() {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-white/[0.08]">
         <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
-          <button
-            onClick={() => navigate('/')}
+          <Link
+            to="/"
             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-[15px] font-medium">Back</span>
-          </button>
+          </Link>
           <div className="flex items-center gap-2.5">
             <img src="/lgofc.png" alt="theyear" className="w-7 h-7" />
             <h1 className="text-[17px] font-semibold tracking-tight">theyear</h1>
@@ -294,15 +293,15 @@ export default function Docs() {
               <p className="text-white/70 mb-8 text-[15px]">
                 Begin documenting your year today.
               </p>
-              <button
-                onClick={() => navigate('/auth?signup=true')}
+              <Link
+                to="/auth?signup=true"
                 className="px-8 py-4 bg-white text-black text-[15px] font-medium rounded-lg hover:bg-gray-100 transition-all inline-flex items-center gap-2"
               >
                 Get Started Now
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </button>
+              </Link>
             </div>
           </section>
         </div>

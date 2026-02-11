@@ -1,7 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Landing() {
-  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-black text-dark-text-primary">
@@ -12,24 +11,24 @@ export default function Landing() {
             <h1 className="text-[15px] sm:text-[17px] font-semibold text-white tracking-tight">theyear</h1>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-3 lg:gap-4">
-            <button
-              onClick={() => navigate('/auth')}
+            <Link
+              to="/auth"
               className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 text-[13px] sm:text-[15px] font-medium text-white/80 hover:text-white transition-colors duration-200"
             >
               Sign In
-            </button>
-            <button
-              onClick={() => navigate('/docs')}
+            </Link>
+            <Link
+              to="/docs"
               className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 text-[13px] sm:text-[15px] font-medium text-white/80 hover:text-white transition-colors duration-200"
             >
               Docs
-            </button>
-            <button
-              onClick={() => navigate('/auth?signup=true')}
+            </Link>
+            <Link
+              to="/auth?signup=true"
               className="px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2 lg:py-2.5 text-[12px] sm:text-[14px] lg:text-[15px] font-medium text-white border border-white/30 rounded-lg hover:bg-white/10 transition-all duration-200"
             >
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -57,12 +56,12 @@ export default function Landing() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <button
-                    onClick={() => navigate('/auth?signup=true')}
-                    className="px-6 sm:px-8 py-3 sm:py-3.5 text-[14px] sm:text-[15px] font-medium text-white border border-white/40 rounded-lg hover:bg-white/10 transition-all duration-200 inline-block"
+                  <Link
+                    to="/auth?signup=true"
+                    className="px-6 sm:px-8 py-3 sm:py-3.5 text-[14px] sm:text-[15px] font-medium text-white border border-white/40 rounded-lg hover:bg-white/10 transition-all duration-200 inline-block text-center"
                   >
                     Get Started
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -138,15 +137,15 @@ export default function Landing() {
             </div>
 
             <div className="text-center mt-8 sm:mt-12 lg:mt-16">
-              <button
-                onClick={() => navigate('/auth?signup=true')}
+              <Link
+                to="/auth?signup=true"
                 className="group px-6 sm:px-8 py-3 sm:py-4 text-[14px] sm:text-[15px] font-medium bg-white text-black rounded-lg hover:bg-gray-100 transition-all duration-200 inline-flex items-center gap-2"
               >
                 Continue
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </button>
+              </Link>
             </div>
           </div>
         </section>

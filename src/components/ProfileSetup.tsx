@@ -48,7 +48,7 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-dark-bg dark:to-dark-panel flex items-center justify-center p-4">
       <div className="bg-white dark:bg-dark-panel rounded-xl shadow-xl dark:shadow-dark-border/50 border dark:border-dark-border max-w-md w-full p-6">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-800 dark:bg-orange-500 rounded-full mb-3">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-800 dark:bg-slate-700 rounded-full mb-3">
             <User className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary">Create Your Profile</h2>
@@ -70,7 +70,7 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
               minLength={3}
               maxLength={20}
               placeholder="johndoe"
-              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
             />
             <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">
               3-20 characters, letters, numbers, and underscores only
@@ -87,7 +87,7 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
               onChange={(e) => setDisplayName(e.target.value)}
               maxLength={50}
               placeholder="John Doe"
-              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition"
             />
           </div>
 
@@ -101,7 +101,7 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
               maxLength={200}
               rows={3}
               placeholder="Tell us about yourself..."
-              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-slate-700 focus:border-transparent outline-none transition resize-none"
             />
             <p className="text-xs text-slate-500 dark:text-dark-text-muted mt-1">{bio.length}/200</p>
           </div>
@@ -115,7 +115,7 @@ export default function ProfileSetup({ userId, onComplete }: ProfileSetupProps) 
           <button
             type="submit"
             disabled={loading || !username}
-            className="w-full py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg font-semibold hover:bg-slate-700 dark:hover:bg-orange-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-700 dark:hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating Profile...' : 'Create Profile'}
           </button>

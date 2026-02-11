@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase, Profile as ProfileType } from '../lib/supabase';
 import { ArrowLeft, User } from 'lucide-react';
 import Profile from './Profile';
@@ -47,7 +47,7 @@ export function PublicProfile() {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-orange-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 dark:border-dark-border border-t-slate-800 dark:border-t-slate-700 mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-dark-text-secondary text-sm">Loading profile...</p>
         </div>
       </div>
@@ -62,19 +62,19 @@ export function PublicProfile() {
           <h2 className="text-2xl font-bold text-slate-800 dark:text-dark-text-primary mb-2">Profile Not Found</h2>
           <p className="text-slate-600 dark:text-dark-text-secondary mb-6">This user does not exist.</p>
           {currentUser ? (
-            <button
-              onClick={() => navigate('/')}
-              className="px-6 py-3 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition"
+            <Link
+              to="/"
+              className="inline-block px-6 py-3 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition"
             >
               Go Home
-            </button>
+            </Link>
           ) : (
-            <button
-              onClick={() => navigate('/auth')}
-              className="px-6 py-3 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition"
+            <Link
+              to="/auth"
+              className="inline-block px-6 py-3 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition"
             >
               Sign In
-            </button>
+            </Link>
           )}
         </div>
       </div>
@@ -90,12 +90,12 @@ export function PublicProfile() {
               <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
               <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">theyear</h1>
             </div>
-            <button
-              onClick={() => navigate('/auth')}
-              className="px-4 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition text-sm"
+            <Link
+              to="/auth"
+              className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition text-sm"
             >
               Sign In
-            </button>
+            </Link>
           </div>
         </header>
 
@@ -135,12 +135,12 @@ export function PublicProfile() {
             <img src="/lgofc.png" alt="theyear" className="w-8 h-8" />
             <h1 className="text-lg font-bold text-slate-800 dark:text-dark-text-primary">theyear</h1>
           </div>
-          <button
-            onClick={() => navigate('/')}
-            className="px-4 py-2 bg-slate-800 dark:bg-orange-500 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-orange-600 transition text-sm"
+          <Link
+            to="/"
+            className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition text-sm"
           >
             Home
-          </button>
+          </Link>
         </div>
       </header>
 
