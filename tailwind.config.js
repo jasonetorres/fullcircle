@@ -11,7 +11,7 @@ export default {
           border: '#38444d',
           hover: '#253341',
           text: {
-            primary: '#ffffff',
+            primary: '#e5e7eb',
             secondary: '#8b98a5',
             muted: '#6b7b8c',
           },

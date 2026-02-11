@@ -5,17 +5,17 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen bg-dark-bg text-dark-text-primary">
       <header className="bg-dark-panel/80 backdrop-blur-md border-b border-dark-border sticky top-0 z-50 shadow-dark-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/lgofc.png" alt="theyear" className="w-9 h-9 drop-shadow-lg" />
-            <h1 className="text-xl font-bold text-white">theyear</h1>
+            <h1 className="text-xl font-bold text-dark-text-primary">theyear</h1>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/auth')}
-              className="px-5 py-2.5 text-sm font-medium text-dark-text-secondary hover:text-white transition-colors duration-200"
+              className="px-5 py-2.5 text-sm font-medium text-dark-text-secondary hover:text-dark-text-primary transition-colors duration-200"
             >
               Sign In
             </button>
@@ -64,7 +64,7 @@ export default function Landing() {
                 </button>
                 <button
                   onClick={() => navigate('/auth')}
-                  className="px-8 py-4 text-base font-semibold bg-dark-panel text-white border border-dark-border rounded-xl hover:bg-dark-hover transition-all duration-200 shadow-card-dark hover:shadow-card-hover-dark"
+                  className="px-8 py-4 text-base font-semibold bg-dark-panel text-dark-text-primary border border-dark-border rounded-xl hover:bg-dark-hover transition-all duration-200 shadow-card-dark hover:shadow-card-hover-dark"
                 >
                   Sign In
                 </button>
@@ -80,7 +80,7 @@ export default function Landing() {
                 <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30">
                   <Calendar className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Daily Logging</h3>
+                <h3 className="text-2xl font-bold text-dark-text-primary mb-3">Daily Logging</h3>
                 <p className="text-dark-text-secondary leading-relaxed">
                   Effortlessly capture your daily moments with photos, locations, and stories. Build your personal timeline of memories.
                 </p>
@@ -90,7 +90,7 @@ export default function Landing() {
                 <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
                   <MapPin className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Travel Tracking</h3>
+                <h3 className="text-2xl font-bold text-dark-text-primary mb-3">Travel Tracking</h3>
                 <p className="text-dark-text-secondary leading-relaxed">
                   Track your adventures and trips. See all the places you've been and relive your favorite travel memories.
                 </p>
@@ -100,7 +100,7 @@ export default function Landing() {
                 <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/30">
                   <Users className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Social Sharing</h3>
+                <h3 className="text-2xl font-bold text-dark-text-primary mb-3">Social Sharing</h3>
                 <p className="text-dark-text-secondary leading-relaxed">
                   Connect with friends, share your experiences, and explore what others are up to. Build your community.
                 </p>
@@ -110,7 +110,7 @@ export default function Landing() {
                 <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/30">
                   <TrendingUp className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Year in Review</h3>
+                <h3 className="text-2xl font-bold text-dark-text-primary mb-3">Year in Review</h3>
                 <p className="text-dark-text-secondary leading-relaxed">
                   Get beautiful yearly recaps that showcase your journey, stats, and highlights. Share your story with the world.
                 </p>
@@ -120,7 +120,7 @@ export default function Landing() {
                 <div className="w-14 h-14 bg-gradient-to-br from-slate-500 to-slate-600 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-slate-500/30">
                   <Lock className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Privacy Control</h3>
+                <h3 className="text-2xl font-bold text-dark-text-primary mb-3">Privacy Control</h3>
                 <p className="text-dark-text-secondary leading-relaxed">
                   Keep moments private or share with the world. You decide what to share and with whom.
                 </p>
@@ -130,7 +130,7 @@ export default function Landing() {
                 <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-rose-500/30">
                   <Globe className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Explore Feed</h3>
+                <h3 className="text-2xl font-bold text-dark-text-primary mb-3">Explore Feed</h3>
                 <p className="text-dark-text-secondary leading-relaxed">
                   Discover public moments from people around the world. Get inspired and connect with new experiences.
                 </p>
@@ -145,7 +145,7 @@ export default function Landing() {
               <div className="absolute inset-0 bg-dark-panel/80 backdrop-blur-sm"></div>
 
               <div className="relative text-center">
-                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                <h2 className="text-4xl lg:text-5xl font-bold text-dark-text-primary mb-6">
                   Ready to capture this year?
                 </h2>
                 <p className="text-xl text-dark-text-secondary mb-8 max-w-2xl mx-auto leading-relaxed">
