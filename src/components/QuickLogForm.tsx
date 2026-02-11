@@ -218,12 +218,12 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
   };
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-3 animate-fade-in overflow-y-auto">
       <div
-        className="bg-white dark:bg-dark-panel w-full max-w-md rounded-2xl max-h-[90dvh] overflow-y-auto shadow-2xl animate-scale-in"
+        className="bg-white dark:bg-dark-panel w-full max-w-md rounded-2xl max-h-[90dvh] overflow-hidden shadow-2xl animate-scale-in my-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border px-4 py-3 flex items-center justify-between z-10 rounded-t-2xl">
+        <div className="sticky top-0 bg-white dark:bg-dark-panel border-b border-slate-200 dark:border-dark-border px-3 sm:px-4 py-3 flex items-center justify-between z-10 rounded-t-2xl flex-shrink-0">
           <h2 className="text-xl font-bold text-slate-800 dark:text-dark-text-primary">New Log</h2>
           <button
             onClick={onClose}
@@ -233,7 +233,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-3">
+        <form onSubmit={handleSubmit} className="p-3 sm:p-4 space-y-3 overflow-y-auto flex-1">
           <div>
             <input
               type="text"
@@ -246,9 +246,9 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-3">
             <div>
-              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1">
+              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1.5">
                 <Calendar className="w-3 h-3" />
                 Date
               </label>
@@ -263,22 +263,22 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
               />
             </div>
             <div>
-              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1">
+              <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1.5">
                 <MapPin className="w-3 h-3" />
                 Location
               </label>
-              <div className="flex gap-1">
+              <div className="flex gap-1.5">
                 <LocationAutocomplete
                   value={formData.location}
                   onChange={(value) => setFormData({ ...formData, location: value })}
                   placeholder="Where?"
-                  className="flex-1 px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
+                  className="flex-1 min-w-0 px-2.5 py-2 text-sm border border-slate-200 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg text-slate-900 dark:text-dark-text-primary placeholder-slate-400 dark:placeholder-dark-text-muted focus:ring-2 focus:ring-slate-500 dark:focus:ring-orange-500 focus:border-transparent outline-none transition"
                 />
                 <button
                   type="button"
                   onClick={getCurrentLocation}
                   disabled={locationLoading}
-                  className="px-2 py-2 border border-slate-200 dark:border-dark-border rounded-lg hover:bg-slate-50 dark:hover:bg-dark-hover transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="flex-shrink-0 px-2.5 py-2 border border-slate-200 dark:border-dark-border rounded-lg hover:bg-slate-50 dark:hover:bg-dark-hover transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                   title="Use current location"
                 >
                   {locationLoading ? (
@@ -292,7 +292,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
           </div>
 
           <div>
-            <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1">
+            <label className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-1.5">
               <Plane className="w-3 h-3" />
               Trip Name
             </label>
@@ -355,36 +355,36 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
                 )}
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-2 min-w-0">
                 <label
                   htmlFor="modal-image-upload"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
+                  className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-500 dark:text-dark-text-secondary hover:bg-slate-50 dark:hover:bg-dark-hover hover:border-slate-300 dark:hover:border-dark-border transition cursor-pointer"
                 >
-                  <Image className="w-4 h-4" />
-                  Gallery
+                  <Image className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">Gallery</span>
                 </label>
                 <label
                   htmlFor="modal-camera-capture"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-300 transition cursor-pointer"
+                  className="flex-1 min-w-0 flex items-center justify-center gap-2 px-3 py-3 border-2 border-dashed border-slate-200 dark:border-dark-border rounded-xl text-sm text-slate-500 dark:text-dark-text-secondary hover:bg-slate-50 dark:hover:bg-dark-hover hover:border-slate-300 dark:hover:border-dark-border transition cursor-pointer"
                 >
-                  <Camera className="w-4 h-4" />
-                  Camera
+                  <Camera className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">Camera</span>
                 </label>
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-dark-border">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-dark-text-primary">Visibility:</span>
-              <div className="inline-flex bg-slate-100 dark:bg-dark-hover rounded-lg p-0.5">
+          <div className="pt-4 border-t border-slate-100 dark:border-dark-border space-y-3">
+            <div>
+              <span className="block text-xs font-medium text-slate-600 dark:text-dark-text-secondary mb-2">Visibility</span>
+              <div className="flex bg-slate-100 dark:bg-dark-hover rounded-lg p-1">
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, is_public: true })}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition text-sm font-medium ${
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md transition text-sm font-medium ${
                     formData.is_public
-                      ? 'bg-white dark:bg-dark-panel text-emerald-700 shadow-sm'
-                      : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:text-dark-text-primary'
+                      ? 'bg-white dark:bg-dark-panel text-emerald-700 dark:text-emerald-500 shadow-sm'
+                      : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary'
                   }`}
                 >
                   <Globe className="w-4 h-4" />
@@ -393,10 +393,10 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, is_public: false })}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition text-sm font-medium ${
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md transition text-sm font-medium ${
                     !formData.is_public
                       ? 'bg-white dark:bg-dark-panel text-slate-800 dark:text-dark-text-primary shadow-sm'
-                      : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:text-dark-text-primary'
+                      : 'text-slate-600 dark:text-dark-text-secondary hover:text-slate-800 dark:hover:text-dark-text-primary'
                   }`}
                 >
                   <Lock className="w-4 h-4" />
@@ -408,7 +408,7 @@ export default function QuickLogForm({ onLogAdded, userId, onClose, emailVerifie
             <button
               type="submit"
               disabled={loading || !formData.title}
-              className="bg-slate-800 dark:bg-orange-500 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold active:scale-95"
+              className="w-full bg-slate-800 dark:bg-orange-500 hover:bg-slate-700 dark:hover:bg-orange-600 text-white px-5 py-3 rounded-xl transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold active:scale-95"
             >
               {loading ? (
                 <>

@@ -50,6 +50,19 @@
     position: -webkit-sticky;
     position: sticky;
   }
+
+  * {
+    max-width: 100%;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  textarea,
+  select {
+    min-width: 0;
+  }
 }
 
 @keyframes fadeIn {
