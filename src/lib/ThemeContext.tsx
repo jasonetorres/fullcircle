@@ -14,14 +14,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('dark');
   const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>('dark');
-  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadTheme = async () => {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (user) {
-        setUserId(user.id);
         const { data: profile } = await supabase
           .from('profiles')
           .select('theme_preference')
@@ -45,6 +43,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     };
 
     loadTheme();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        loadTheme();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -82,11 +90,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
 
-    if (userId) {
-      await supabase
-        .from('profiles')
-        .update({ theme_preference: newTheme })
-        .eq('id', userId);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ theme_preference: newTheme })
+          .eq('id', user.id);
+
+        if (error) {
+          console.error('Failed to save theme preference:', error);
+        }
+      }
+    } catch (err) {
+      console.error('Error saving theme preference:', err);
     }
   };
 
