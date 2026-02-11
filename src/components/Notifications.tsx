@@ -192,7 +192,7 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
       );
     }
     return (
-      <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white text-sm font-bold">
+      <div className="w-10 h-10 rounded-full bg-slate-800 dark:bg-slate-700 flex items-center justify-center text-white text-sm font-bold">
         {actor?.username?.[0]?.toUpperCase() || '?'}
       </div>
     );
@@ -220,12 +220,12 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
           />
           <div className="fixed inset-x-0 bottom-0 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-auto sm:mt-2 z-50 sm:w-96 animate-slide-up sm:animate-fade-in">
             <div className="bg-white dark:bg-dark-panel sm:rounded-xl rounded-t-2xl shadow-2xl border-t sm:border border-slate-200 dark:border-dark-border max-h-[75dvh] sm:max-h-[500px] flex flex-col overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-dark-border flex items-center justify-between flex-shrink-0">
                 <h3 className="font-bold text-slate-800 dark:text-dark-text-primary">Notifications</h3>
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
-                    className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 font-medium transition"
+                    className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 dark:text-dark-text-secondary dark:hover:text-dark-text-primary font-medium transition"
                   >
                     <Check className="w-3.5 h-3.5" />
                     Mark all read
@@ -236,12 +236,12 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
               <div className="overflow-y-auto flex-1 overscroll-contain">
                 {loading ? (
                   <div className="p-8 text-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-slate-300 border-t-slate-800 mx-auto" />
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-slate-300 border-t-slate-800 dark:border-dark-border dark:border-t-dark-text-primary mx-auto" />
                   </div>
                 ) : notifications.length === 0 ? (
                   <div className="p-8 text-center">
-                    <Bell className="w-8 h-8 text-slate-200 mx-auto mb-2" />
-                    <p className="text-sm text-slate-400">No notifications yet</p>
+                    <Bell className="w-8 h-8 text-slate-200 dark:text-dark-border mx-auto mb-2" />
+                    <p className="text-sm text-slate-400 dark:text-dark-text-secondary">No notifications yet</p>
                   </div>
                 ) : (
                   notifications.map(notification => {
@@ -254,10 +254,10 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
                           </div>
                         </div>
                         <div className="flex-1 min-w-0 py-0.5">
-                          <p className="text-sm text-slate-700 leading-snug line-clamp-2">
+                          <p className="text-sm text-slate-700 dark:text-dark-text-primary leading-snug line-clamp-2">
                             {getNotificationText(notification)}
                           </p>
-                          <p className="text-xs text-slate-400 mt-0.5">
+                          <p className="text-xs text-slate-400 dark:text-dark-text-secondary mt-0.5">
                             {getTimeAgo(notification.created_at)}
                           </p>
                         </div>
@@ -268,7 +268,7 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
                     );
 
                     const baseClassName = `block w-full p-3 text-left transition-colors ${
-                      !notification.is_read ? 'bg-blue-50/50' : 'hover:bg-slate-50'
+                      !notification.is_read ? 'bg-blue-50/50 dark:bg-dark-hover' : 'hover:bg-slate-50 dark:hover:bg-dark-hover'
                     }`;
 
                     if (notification.type === 'follow') {
@@ -300,10 +300,10 @@ export default function Notifications({ onNotificationClick, userId }: Notificat
                 )}
               </div>
 
-              <div className="sm:hidden px-4 py-3 border-t border-slate-100 flex-shrink-0">
+              <div className="sm:hidden px-4 py-3 border-t border-slate-100 dark:border-dark-border flex-shrink-0">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-full py-2.5 text-sm font-medium text-slate-600 bg-slate-100 rounded-xl transition hover:bg-slate-200 active:scale-[0.98]"
+                  className="w-full py-2.5 text-sm font-medium text-slate-600 dark:text-dark-text-primary bg-slate-100 dark:bg-dark-hover rounded-xl transition hover:bg-slate-200 dark:hover:bg-dark-border active:scale-[0.98]"
                 >
                   Close
                 </button>
