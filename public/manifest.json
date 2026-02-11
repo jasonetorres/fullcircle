@@ -1,7 +1,7 @@
 {
-  "name": "FullCircle",
-  "short_name": "FullCircle",
-  "description": "Your life's journey in one place - log, share, and relive your experiences",
+  "name": "thisyear",
+  "short_name": "thisyear",
+  "description": "Document your life's journey one moment at a time - log, share, and relive your experiences",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1e293b",

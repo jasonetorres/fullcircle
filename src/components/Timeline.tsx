@@ -3,6 +3,7 @@ import { supabase, Log } from '../lib/supabase';
 import { Calendar, MapPin, Plane, Globe, Lock, Trash2, ChevronDown, ChevronUp, X, Image, Camera } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
 import { compressImage } from '../lib/imageUtils';
+import Tooltip from './Tooltip';
 
 interface TimelineProps {
   userId: string;
@@ -249,9 +250,13 @@ export default function Timeline({ userId, refreshTrigger }: TimelineProps) {
                           <Calendar className="w-3 h-3" />
                           <span>{formatDate(log.event_date)}</span>
                           {log.is_public ? (
-                            <Globe className="w-3 h-3 text-green-600" />
+                            <Tooltip text="Public" position="top">
+                              <Globe className="w-3 h-3 text-green-600" />
+                            </Tooltip>
                           ) : (
-                            <Lock className="w-3 h-3 text-slate-400" />
+                            <Tooltip text="Private" position="top">
+                              <Lock className="w-3 h-3 text-slate-400" />
+                            </Tooltip>
                           )}
                         </div>
                         <h3 className="text-sm font-semibold text-slate-800 leading-tight">

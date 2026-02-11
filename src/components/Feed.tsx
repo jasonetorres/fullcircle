@@ -189,6 +189,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
               <div className="flex items-center gap-2 mb-2">
                 <Link
                   to={`/profile/${log.user_id}`}
+                  state={{ from: 'feed' }}
                   onClick={(e) => e.stopPropagation()}
                   className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 hover:opacity-80 transition overflow-hidden"
                 >
@@ -204,6 +205,7 @@ export default function Feed({ userId, initialLogId, onLogOpened }: FeedProps) {
                 </Link>
                 <Link
                   to={`/profile/${log.user_id}`}
+                  state={{ from: 'feed' }}
                   onClick={(e) => e.stopPropagation()}
                   className="flex-1 min-w-0 hover:opacity-80 transition"
                 >

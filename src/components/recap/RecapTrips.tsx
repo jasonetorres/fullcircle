@@ -6,7 +6,7 @@ type RecapTripsProps = {
 
 export function RecapTrips({ trips }: RecapTripsProps) {
   return (
-    <div className="h-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center">
+    <div className="h-full bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 flex items-center justify-center">
       <div className="max-w-4xl mx-auto px-8 text-white text-center">
         <Plane className="w-16 h-16 mx-auto mb-8 animate-bounce" />
         <h2 className="text-5xl font-bold mb-12">Your Adventures</h2>

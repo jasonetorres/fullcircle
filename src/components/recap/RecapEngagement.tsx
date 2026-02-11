@@ -9,7 +9,7 @@ type RecapEngagementProps = {
 
 export function RecapEngagement({ likes, comments, topPosts }: RecapEngagementProps) {
   return (
-    <div className="h-full bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-600 flex items-center justify-center">
+    <div className="h-full bg-gradient-to-br from-rose-600 via-red-600 to-orange-600 flex items-center justify-center">
       <div className="max-w-4xl mx-auto px-8 text-white text-center">
         <TrendingUp className="w-16 h-16 mx-auto mb-8 animate-bounce" />
         <h2 className="text-5xl font-bold mb-12">Your Impact</h2>

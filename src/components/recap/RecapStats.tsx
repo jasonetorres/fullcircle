@@ -18,7 +18,7 @@ export function RecapStats({ stats }: RecapStatsProps) {
       icon: MapPin,
       value: stats.unique_locations,
       label: stats.unique_locations === 1 ? 'Place Visited' : 'Places Visited',
-      color: 'from-purple-500 to-purple-600'
+      color: 'from-emerald-500 to-emerald-600'
     },
     {
       icon: Camera,

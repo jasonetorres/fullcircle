@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { supabase, Profile } from './lib/supabase';
 import { User } from '@supabase/supabase-js';
 import Auth from './components/Auth';
+import Landing from './components/Landing';
+import ResetPassword from './components/ResetPassword';
 import ProfileSetup from './components/ProfileSetup';
 import QuickLogForm from './components/QuickLogForm';
 import Timeline from './components/Timeline';
@@ -19,6 +21,7 @@ import { LogOut, Home, Compass, Plus, Search as SearchIcon, User as UserIcon } f
 import { Analytics } from '@vercel/analytics/react';
 
 function MainApp() {
+  const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,6 +30,12 @@ function MainApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
   const [showQuickLog, setShowQuickLog] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+    }
+  }, [location]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -108,10 +117,65 @@ function MainApp() {
               onClick={() => window.location.reload()}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
             >
-              <img src="/lgofc.png" alt="FullCircle" className="w-8 h-8" />
-              <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
+              <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
+              <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
             </button>
+
+            <nav className="hidden md:flex items-center gap-1">
+              <button
+                onClick={() => setActiveTab('myLogs')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'myLogs'
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                }`}
+              >
+                <Home className="w-5 h-5" />
+                <span className="text-sm font-medium">Home</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('feed')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'feed'
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                }`}
+              >
+                <Compass className="w-5 h-5" />
+                <span className="text-sm font-medium">Explore</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('search')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'search'
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                }`}
+              >
+                <SearchIcon className="w-5 h-5" />
+                <span className="text-sm font-medium">Search</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('profile')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'profile'
+                    ? 'bg-slate-100 text-slate-900'
+                    : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                }`}
+              >
+                <UserIcon className="w-5 h-5" />
+                <span className="text-sm font-medium">Profile</span>
+              </button>
+            </nav>
+
             <div className="flex items-center gap-1 text-slate-600">
+              <button
+                onClick={() => setShowQuickLog(true)}
+                className="hidden md:flex items-center gap-2 px-3 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition text-sm font-medium"
+              >
+                <Plus className="w-4 h-4" />
+                New Log
+              </button>
               <Notifications onNotificationClick={handleNotificationClick} userId={user.id} />
               <button
                 onClick={handleSignOut}
@@ -150,7 +214,7 @@ function MainApp() {
           </div>
         </main>
 
-        <nav className="bg-white border-t border-slate-200 pb-6 safe-area-bottom z-50 flex-shrink-0">
+        <nav className="md:hidden bg-white border-t border-slate-200 pb-6 safe-area-bottom z-50 flex-shrink-0">
           <div className="max-w-4xl mx-auto flex items-center justify-around px-2">
             <button
               onClick={() => setActiveTab('myLogs')}
@@ -227,6 +291,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/recap/:userId/:year" element={<PublicRecap />} />
         <Route path="/profile/:userId" element={<PublicProfile />} />
         <Route path="*" element={<MainApp />} />

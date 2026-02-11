@@ -13,6 +13,16 @@
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  .touch-target-sm {
+    min-width: 40px;
+    min-height: 40px;
+    touch-action: manipulation;
+  }
 }
 
 @layer base {

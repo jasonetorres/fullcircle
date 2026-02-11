@@ -143,9 +143,12 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black z-50">
+    <div className="fixed inset-0 bg-black z-50" onClick={onClose}>
       <button
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
         className="absolute top-4 right-4 z-10 text-white hover:bg-white/10 p-2 rounded-full transition"
       >
         <X className="w-6 h-6" />
@@ -153,7 +156,10 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
 
       <div className="absolute top-4 right-16 z-10 flex gap-2">
         <button
-          onClick={handleShare}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleShare();
+          }}
           className="text-white hover:bg-white/10 p-2 rounded-full transition"
           title="Share"
         >
@@ -171,7 +177,10 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
       <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
         {currentSlide > 0 && (
           <button
-            onClick={prevSlide}
+            onClick={(e) => {
+              e.stopPropagation();
+              prevSlide();
+            }}
             className="text-white hover:bg-white/10 p-3 rounded-full transition"
           >
             <ChevronLeft className="w-8 h-8" />
@@ -182,7 +191,10 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
       <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
         {currentSlide < slides.length - 1 && (
           <button
-            onClick={nextSlide}
+            onClick={(e) => {
+              e.stopPropagation();
+              nextSlide();
+            }}
             className="text-white hover:bg-white/10 p-3 rounded-full transition"
           >
             <ChevronRight className="w-8 h-8" />
@@ -190,7 +202,7 @@ export function YearRecap({ userId, year, onClose }: YearRecapProps) {
         )}
       </div>
 
-      <div className="w-full h-full overflow-hidden">
+      <div className="w-full h-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
         <div
           className="h-full flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}

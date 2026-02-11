@@ -452,10 +452,10 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
                 {badges.length > 0 && (
                   <button
                     onClick={() => setShowAchievements(true)}
-                    className="flex items-center gap-1 px-2.5 py-1 bg-amber-100 rounded-full border border-amber-200 hover:bg-amber-200 transition"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition shadow-sm active:scale-95"
                   >
-                    <Award className="w-3.5 h-3.5 text-amber-700" />
-                    <span className="text-xs font-bold text-slate-800">{badges.length}</span>
+                    <Award className="w-4 h-4" />
+                    <span className="text-xs font-semibold">{badges.length} Badge{badges.length !== 1 ? 's' : ''}</span>
                   </button>
                 )}
               </div>
@@ -510,7 +510,7 @@ export default function Profile({ userId, currentUserId, onOpenSettings }: Profi
               </select>
               <button
                 onClick={() => setShowRecap(true)}
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition flex-1"
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition flex-1"
               >
                 <Sparkles className="w-4 h-4" />
                 <span className="text-sm font-medium">Recap</span>

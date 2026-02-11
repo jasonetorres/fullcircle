@@ -126,15 +126,21 @@ export default function StatsModal({ userId, type, onClose }: StatsModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-lg rounded-2xl max-h-[80vh] flex flex-col shadow-2xl">
+    <div
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white w-full max-w-lg rounded-2xl max-h-[80vh] flex flex-col shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between p-4 border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-800">{getTitle()}</h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded-full transition"
+            className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 rounded-full transition touch-target-sm"
           >
-            <X className="w-5 h-5 text-slate-600" />
+            <X className="w-6 h-6 text-slate-600" />
           </button>
         </div>
 

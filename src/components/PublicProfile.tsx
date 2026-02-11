@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { supabase, Profile as ProfileType } from '../lib/supabase';
 import { ArrowLeft, User } from 'lucide-react';
 import Profile from './Profile';
@@ -7,6 +7,7 @@ import Profile from './Profile';
 export function PublicProfile() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<ProfileType | null>(null);
@@ -21,7 +22,6 @@ export function PublicProfile() {
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     setCurrentUser(session?.user?.id || null);
-    setLoading(false);
   };
 
   const fetchProfile = async () => {
@@ -38,18 +38,23 @@ export function PublicProfile() {
       setProfile(data);
     } catch (err) {
       console.error('Error fetching profile:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 border-t-slate-800"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-300 border-t-slate-800 mx-auto mb-4"></div>
+          <p className="text-slate-600 text-sm">Loading profile...</p>
+        </div>
       </div>
     );
   }
 
-  if (!profile) {
+  if (!loading && !profile) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
@@ -82,8 +87,8 @@ export function PublicProfile() {
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img src="/lgofc.png" alt="FullCircle" className="w-8 h-8" />
-              <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
+              <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
+              <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
             </div>
             <button
               onClick={() => navigate('/auth')}
@@ -105,20 +110,30 @@ export function PublicProfile() {
     );
   }
 
+  const handleBack = () => {
+    if (location.state?.from === 'feed') {
+      navigate('/', { state: { tab: 'feed' } });
+    } else if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition"
+            onClick={handleBack}
+            className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition touch-target-sm p-2"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-medium">Back</span>
           </button>
           <div className="flex items-center gap-2">
-            <img src="/lgofc.png" alt="FullCircle" className="w-8 h-8" />
-            <h1 className="text-lg font-bold text-slate-800">FullCircle</h1>
+            <img src="/lgofc.png" alt="thisyear" className="w-8 h-8" />
+            <h1 className="text-lg font-bold text-slate-800">thisyear</h1>
           </div>
           <button
             onClick={() => navigate('/')}

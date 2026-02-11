@@ -3,6 +3,7 @@ import { supabase, Log, Profile } from '../lib/supabase';
 import { Calendar, MapPin, Plane, Globe, Lock, Search as SearchIcon, Filter, User, UserPlus, UserMinus, Heart, MessageCircle, X } from 'lucide-react';
 import LogDetailModal from './LogDetailModal';
 import { linkifyText } from '../lib/linkify';
+import Tooltip from './Tooltip';
 
 interface SearchProps {
   userId: string;
@@ -126,7 +127,10 @@ export default function Search({ userId }: SearchProps) {
   };
 
   const searchPublicLogs = async () => {
-    if (!publicQuery.trim() && !publicLocationFilter) return;
+    if (!publicQuery.trim() && !publicLocationFilter) {
+      setPublicLogs([]);
+      return;
+    }
 
     setPublicLoading(true);
     try {
@@ -430,15 +434,16 @@ export default function Search({ userId }: SearchProps) {
                   <span>
                     {publicLogs.length} {publicLogs.length === 1 ? 'result' : 'results'}
                   </span>
-                  <button
-                    onClick={() => {
-                      setPublicQuery('');
-                      setPublicLocationFilter('');
-                    }}
-                    className="text-slate-500 hover:text-slate-700 underline"
-                  >
-                    Clear filters
-                  </button>
+                  {publicLocationFilter && (
+                    <button
+                      onClick={() => {
+                        setPublicLocationFilter('');
+                      }}
+                      className="text-slate-500 hover:text-slate-700 underline text-xs"
+                    >
+                      Clear location
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -485,15 +490,14 @@ export default function Search({ userId }: SearchProps) {
                 <span>
                   {filteredMyLogs.length} {filteredMyLogs.length === 1 ? 'result' : 'results'}
                 </span>
-                {(myQuery || myLocationFilter) && (
+                {myLocationFilter && (
                   <button
                     onClick={() => {
-                      setMyQuery('');
                       setMyLocationFilter('');
                     }}
-                    className="text-slate-500 hover:text-slate-700 underline"
+                    className="text-slate-500 hover:text-slate-700 underline text-xs"
                   >
-                    Clear filters
+                    Clear location
                   </button>
                 )}
               </div>
@@ -725,9 +729,13 @@ export default function Search({ userId }: SearchProps) {
                           <span>{formatDate(log.event_date)}</span>
                         </div>
                         {log.is_public ? (
-                          <Globe className="w-3 h-3 text-green-600" />
+                          <Tooltip text="Public" position="top">
+                            <Globe className="w-3 h-3 text-green-600" />
+                          </Tooltip>
                         ) : (
-                          <Lock className="w-3 h-3 text-slate-400" />
+                          <Tooltip text="Private" position="top">
+                            <Lock className="w-3 h-3 text-slate-400" />
+                          </Tooltip>
                         )}
                       </div>
                       <h3 className="text-sm font-bold text-slate-800 mb-1 line-clamp-1">{log.title}</h3>

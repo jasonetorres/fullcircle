@@ -1,21 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { LogIn, UserPlus, Loader2 } from 'lucide-react';
+import { LogIn, UserPlus, Loader2, ArrowLeft } from 'lucide-react';
 
 export default function Auth() {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [isSignUp, setIsSignUp] = useState(searchParams.get('signup') === 'true');
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    setIsSignUp(searchParams.get('signup') === 'true');
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
     setLoading(true);
 
     try {
-      if (isSignUp) {
+      if (isForgotPassword) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        setSuccessMessage('Check your email for the password reset link');
+        setEmail('');
+      } else if (isSignUp) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -42,13 +58,17 @@ export default function Auth() {
           <div className="text-center mb-4">
             <img
               src="/lgofc.png"
-              alt="FullCircle"
+              alt="thisyear"
               className="w-32 h-32 mx-auto mb-3"
             />
             <h1 className="text-2xl font-bold text-slate-800 mb-1">
-              FullCircle
+              thisyear
             </h1>
-            <p className="text-slate-600 text-sm">Complete your year, one moment at a time</p>
+            <p className="text-slate-600 text-sm">
+              {isForgotPassword
+                ? 'Reset your password'
+                : 'Capture and share your year, one moment at a time'}
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -66,24 +86,32 @@ export default function Auth() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
-                placeholder="••••••••"
-              />
-            </div>
+            {!isForgotPassword && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition"
+                  placeholder="••••••••"
+                />
+              </div>
+            )}
 
             {error && (
               <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-xs">
                 {error}
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="bg-emerald-50 text-emerald-700 px-3 py-2 rounded-lg text-xs">
+                {successMessage}
               </div>
             )}
 
@@ -95,11 +123,17 @@ export default function Auth() {
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  {isSignUp ? 'Creating account...' : 'Signing in...'}
+                  {isForgotPassword
+                    ? 'Sending...'
+                    : isSignUp
+                    ? 'Creating account...'
+                    : 'Signing in...'}
                 </>
               ) : (
                 <>
-                  {isSignUp ? (
+                  {isForgotPassword ? (
+                    'Send Reset Link'
+                  ) : isSignUp ? (
                     <>
                       <UserPlus className="w-4 h-4" />
                       Create Account
@@ -115,18 +149,45 @@ export default function Auth() {
             </button>
           </form>
 
-          <div className="mt-3 text-center">
-            <button
-              onClick={() => {
-                setIsSignUp(!isSignUp);
-                setError('');
-              }}
-              className="text-slate-600 hover:text-slate-800 text-xs transition py-1"
-            >
-              {isSignUp
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"}
-            </button>
+          <div className="mt-3 text-center space-y-2">
+            {isForgotPassword ? (
+              <button
+                onClick={() => {
+                  setIsForgotPassword(false);
+                  setError('');
+                  setSuccessMessage('');
+                }}
+                className="flex items-center justify-center gap-1 text-slate-600 hover:text-slate-800 text-xs transition py-1 mx-auto"
+              >
+                <ArrowLeft className="w-3 h-3" />
+                Back to sign in
+              </button>
+            ) : (
+              <>
+                {!isSignUp && (
+                  <button
+                    onClick={() => {
+                      setIsForgotPassword(true);
+                      setError('');
+                    }}
+                    className="text-slate-600 hover:text-slate-800 text-xs transition py-1 block w-full"
+                  >
+                    Forgot password?
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setIsSignUp(!isSignUp);
+                    setError('');
+                  }}
+                  className="text-slate-600 hover:text-slate-800 text-xs transition py-1 block w-full"
+                >
+                  {isSignUp
+                    ? 'Already have an account? Sign in'
+                    : "Don't have an account? Sign up"}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
