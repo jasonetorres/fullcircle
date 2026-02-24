@@ -1,9 +1,9 @@
-const CACHE_NAME = 'fullcircle-v2';
+const CACHE_NAME = 'fullcircle-v3';
 const STATIC_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/lgofc copy.png'
+  '/lgofc.png'
 ];
 
 self.addEventListener('install', (event) => {
