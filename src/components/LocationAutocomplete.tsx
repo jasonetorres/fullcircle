@@ -61,6 +61,7 @@ export default function LocationAutocomplete({
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<any>(null);
   const [mapsReady, setMapsReady] = useState(false);
+  const isSelectingFromAutocomplete = useRef(false);
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -88,9 +89,17 @@ export default function LocationAutocomplete({
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
       if (place.formatted_address) {
+        isSelectingFromAutocomplete.current = true;
         onChange(place.formatted_address);
+        setTimeout(() => {
+          isSelectingFromAutocomplete.current = false;
+        }, 100);
       } else if (place.name) {
+        isSelectingFromAutocomplete.current = true;
         onChange(place.name);
+        setTimeout(() => {
+          isSelectingFromAutocomplete.current = false;
+        }, 100);
       }
     });
 
@@ -103,12 +112,18 @@ export default function LocationAutocomplete({
     };
   }, [mapsReady, onChange]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isSelectingFromAutocomplete.current) {
+      onChange(e.target.value);
+    }
+  };
+
   return (
     <input
       ref={inputRef}
       type="text"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={handleInputChange}
       onFocus={onFocus}
       placeholder={placeholder}
       required={required}
